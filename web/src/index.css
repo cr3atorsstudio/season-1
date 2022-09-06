@@ -8,14 +8,7 @@
 html {
   font-family: "Noto Sans";
   min-width: 370px;
-  min-height: 900px;
-  background: linear-gradient(
-      190.18deg,
-      rgba(36, 14, 39, 0) 69.08%,
-      #7000ff 87.27%
-    ),
-    #10032b;
-
+  background: #10032b;
   color: #ffffff;
   background-repeat: no-repeat;
   background-size: 100%;

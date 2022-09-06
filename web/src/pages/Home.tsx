@@ -30,7 +30,7 @@ const Home = () => {
         <img
           src='public/images/placeholder.png'
           alt=''
-          className=' w-1/2 rounded-[25px] md:w-3/12 md:rounded-[50px]'
+          className=' w-1/2 rounded-[25px] md:w-4/12 md:rounded-[50px]'
         />
       </div>
 
