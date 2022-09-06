@@ -13,25 +13,25 @@ import { Autoplay } from "swiper";
 const Home = () => {
   return (
     <>
-      <div className='flex flex-col justify-center items-center'>
+      <div className='flex flex-col items-center justify-center'>
         <Navbar />
-        <div className='mt-10 md:mt-28 text-[20px] md:text-[40px] font-semibold mb-10'>
+        <div className='mt-10 mb-10 text-[20px] font-semibold md:mt-28 md:text-[40px]'>
           <p>言葉をつなげて、</p>
           <p>みんなでつくる</p>
         </div>
 
-        <p className='text-[30px] md:text-[60px] mb-20 font-bold'>
+        <p className='mb-20 text-[30px] font-bold md:text-[60px]'>
           ジェネレーティブアート
         </p>
 
         <img
           src='public/images/placeholder.png'
           alt=''
-          className=' w-1/2 md:w-3/12 rounded-[25px] md:rounded-[50px]'
+          className=' w-1/2 rounded-[25px] md:w-3/12 md:rounded-[50px]'
         />
       </div>
 
-      <div className='w-full transform  mt-40 xl:mt-28'>
+      <div className='mt-40 w-full  transform xl:mt-28'>
         <Swiper
           autoplay={{
             delay: 0,
