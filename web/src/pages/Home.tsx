@@ -10,7 +10,10 @@ import "swiper/css";
 // import required modules
 import { Autoplay } from "swiper";
 
+import { useWindowSize } from "hooks/useWindowSize";
+
 const Home = () => {
+  const [width, height] = useWindowSize();
   return (
     <>
       <div className='flex flex-col items-center justify-center'>
@@ -31,14 +34,14 @@ const Home = () => {
         />
       </div>
 
-      <div className='mt-40 w-full  transform xl:mt-28'>
+      <div className='mt-24 w-full transform xl:mt-28'>
         <Swiper
           autoplay={{
             delay: 0,
           }}
-          speed={2500}
+          speed={width < 1400 ? 2500 : 3000}
           modules={[Autoplay]}
-          slidesPerView={8}
+          slidesPerView={width < 1400 ? 6 : 10}
           loop={true}
           allowTouchMove={false}
         >
