@@ -16,8 +16,8 @@ const Home = () => {
   const width = useWindowSize();
   return (
     <>
+      <Navbar />
       <div className='flex flex-col items-center justify-center'>
-        <Navbar />
         <div className='mt-10 mb-10 text-[20px] font-semibold md:mt-28 md:text-[40px]'>
           <p>言葉をつなげて、</p>
           <p>みんなでつくる</p>
