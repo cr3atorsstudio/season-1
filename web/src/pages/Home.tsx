@@ -13,7 +13,7 @@ import { Autoplay } from "swiper";
 import { useWindowSize } from "hooks/useWindowSize";
 
 const Home = () => {
-  const [width, height] = useWindowSize();
+  const width = useWindowSize();
   return (
     <>
       <div className='flex flex-col items-center justify-center'>
