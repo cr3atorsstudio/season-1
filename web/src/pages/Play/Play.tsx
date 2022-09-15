@@ -1,4 +1,3 @@
-import { useCallback, useRef } from "react";
 import { Button } from "components/Button";
 import { Navbar } from "components/Navbar";
 import { WordInput } from "components/WordInput";
@@ -6,15 +5,7 @@ import { WordInput } from "components/WordInput";
 import useHandleAction from "./hooks";
 
 const Play = () => {
-  const { handleConnectWordClick } = useHandleAction();
-  const inputElement = useRef<HTMLInputElement>(null);
-
-  const onClickAction = useCallback(() => {
-    const input = inputElement.current;
-    if (input) {
-      handleConnectWordClick(input.value);
-    }
-  }, []);
+  const { handleWordChange, handleOnClick } = useHandleAction();
 
   return (
     <>
@@ -31,8 +22,8 @@ const Play = () => {
           className='h-20 md:h-auto'
         />
         <div className='flex flex-col items-center justify-center'>
-          <WordInput inputElement={inputElement} />
-          <Button text={"つなげる"} onClick={onClickAction} />
+          <WordInput onChangeAction={handleWordChange} />
+          <Button text={"つなげる"} onClick={handleOnClick} />
         </div>
       </div>
     </>

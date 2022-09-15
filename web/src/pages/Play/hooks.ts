@@ -6,20 +6,26 @@ const { setLastWord, setInputWord, verifyJapaneseWord, setError } = actions;
 const useHandleAction = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const handleConnectWordClick = (input: string) => {
+  const handleWordChange = (input: string) => {
     dispatch(setInputWord(input));
   };
+
+  const handleOnClick = () => {
+  // TODO: kuromoji使ってvalidな単語かどうかの判定するfunction
+    console.log("validate the input", state.inputWord)
+  }
+
 
   useEffect(() => {
     // TODO: 現状の最後の単語をfetchするfunctionを入れる
   });
 
-  // TODO: kuromoji使ってvalidな単語かどうかの判定するfunction
   // TODO: 入力した単語をsetするfunction
 
   return {
     ...state,
-    handleConnectWordClick: handleConnectWordClick,
+    handleWordChange: handleWordChange,
+    handleOnClick:handleOnClick
   };
 };
 
