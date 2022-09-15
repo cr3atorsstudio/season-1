@@ -11,8 +11,10 @@ const useHandleAction = () => {
   };
 
   const handleOnClick = () => {
-  // TODO: kuromoji使ってvalidな単語かどうかの判定するfunction
+    if (state.inputWord) {
+      // TODO: kuromoji使ってvalidな単語かどうかの判定するfunction
     console.log("validate the input", state.inputWord)
+    }
   }
 
 
@@ -25,7 +27,7 @@ const useHandleAction = () => {
   return {
     ...state,
     handleWordChange: handleWordChange,
-    handleOnClick:handleOnClick
+    handleOnClick: handleOnClick
   };
 };
 
