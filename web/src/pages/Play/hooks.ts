@@ -14,7 +14,16 @@ const useHandleAction = () => {
   const handleOnClick = () => {
     if (state.inputWord) {
       // TODO: kuromoji使ってvalidな単語かどうかの判定するfunction
-    console.log("validate the input", state.inputWord)
+      console.log("ゴリラ");
+      kuromoji.builder({ dicPath: "/dict" }).build((err: any, tokenizer: any) => {
+        if(err){
+          console.log(err)
+        } else {
+          const tokens = tokenizer.tokenize(state.inputWord)
+          console.log(tokens)
+        }
+      })
+      console.log("validate the input", state.inputWord)
     }
   }
 
