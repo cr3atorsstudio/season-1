@@ -12,22 +12,65 @@ const useHandleAction = () => {
   };
 
   const handleOnClick = () => {
-    if (state.inputWord) {
-      // TODO: kuromoji使ってvalidな単語かどうかの判定するfunction
-      console.log("ゴリラ");
+    if (state.inputWord, state.lastWord) {
+      let lastLetter = state.lastWord.slice(-1);
+      
+      // 前の単語が特殊文字で終了する場合の最終文字の変形処理
+      if (lastLetter === 'ー') {
+        lastLetter = state.lastWord.slice(0, -1).slice(-1);
+      }
+      switch(lastLetter) {
+        case 'ぁ':
+            lastLetter = 'あ';
+            break;
+        case 'ぃ':
+            lastLetter = 'い';
+            break;
+        case 'ぅ':
+            lastLetter = 'う';
+            break;
+        case 'ぇ':
+            lastLetter = 'え';
+            break;
+        case 'ぉ':
+            lastLetter = 'お';
+            break;
+        case 'っ':
+            lastLetter = 'つ';
+            break;
+        case 'ゃ':
+            lastLetter = 'や';
+            break;
+        case 'ゅ':
+            lastLetter = 'ゆ';
+            break;
+        case 'ょ':
+            lastLetter = 'よ';
+            break;
+        case 'ゎ':
+            lastLetter = 'わ';
+            break;
+        default:
+      }
+
+      // kuromojiを使って入力単語をひらがなに直す処理
       kuromoji.builder({ dicPath: "/dict" }).build((err: any, tokenizer: any) => {
         if(err){
-          console.log(err)
+          console.log(err);
         } else {
-          const tokens = tokenizer.tokenize(state.inputWord)
-          console.log(tokens)
+          const tokens = tokenizer.tokenize(state.inputWord);
+          console.log(tokens);
+          if (tokens.length === 0 || tokens[0]['word_type'] === 'UNKNOWN') {
+            return;
+          }
+          if (tokens.length === 1 && tokens[0].word_type === "KNOWN") {
+            dispatch(verifyJapaneseWord(true));
+          }
         }
       })
-      console.log("validate the input", state.inputWord)
     }
   }
-
-
+  
   useEffect(() => {
     // TODO: 現状の最後の単語をfetchするfunctionを入れる
   });
