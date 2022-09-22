@@ -100,7 +100,9 @@ const useHandleAction = () => {
           dispatch(verifyJapaneseWord(true));
           console.log("the input word is continued!");
         };
-        console.log("the input word is not continued!")
+        if (lastLetter !== hiraganaInputWord.slice(0, 1)) {
+          console.log("the input word is not continued!")
+        };
       })
     }
   }
