@@ -6,9 +6,9 @@ import { LoadingSpinner } from "components/Spinner";
 
 import "./index.css";
 
-const Home = lazy(() => import("pages/Home"));
-const HowToPlay = lazy(() => import("pages/HowToPlay"));
-const Play = lazy(() => import("pages/Play"));
+const Home = lazy(() => import("pages/Home/Home"));
+const HowToPlay = lazy(() => import("pages/HowToPlay/HowToPlay"));
+const Play = lazy(() => import("pages/Play/Play"));
 
 const App = () => (
   <BrowserRouter>
