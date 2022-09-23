@@ -12,45 +12,45 @@ const useHandleAction = () => {
   };
 
   const handleOnClick = () => {
-    let lastLetter: string = state.lastWord.slice(-1);
+    let lastCharacter: string = state.lastWord.slice(-1);
     let hiraganaInputWord: string = "";
 
     // 前の単語が特殊文字で終了する場合の最終文字の変形処理
     if (state.lastWord) {
       
-      if (lastLetter === 'ー') {
-        lastLetter = state.lastWord.slice(0, -1).slice(-1);
+      if (lastCharacter === 'ー') {
+        lastCharacter = state.lastWord.slice(0, -1).slice(-1);
       }
-      switch(lastLetter) {
+      switch(lastCharacter) {
         case 'ぁ':
-            lastLetter = 'あ';
+            lastCharacter = 'あ';
             break;
         case 'ぃ':
-            lastLetter = 'い';
+            lastCharacter = 'い';
             break;
         case 'ぅ':
-            lastLetter = 'う';
+            lastCharacter = 'う';
             break;
         case 'ぇ':
-            lastLetter = 'え';
+            lastCharacter = 'え';
             break;
         case 'ぉ':
-            lastLetter = 'お';
+            lastCharacter = 'お';
             break;
         case 'っ':
-            lastLetter = 'つ';
+            lastCharacter = 'つ';
             break;
         case 'ゃ':
-            lastLetter = 'や';
+            lastCharacter = 'や';
             break;
         case 'ゅ':
-            lastLetter = 'ゆ';
+            lastCharacter = 'ゆ';
             break;
         case 'ょ':
-            lastLetter = 'よ';
+            lastCharacter = 'よ';
             break;
         case 'ゎ':
-            lastLetter = 'わ';
+            lastCharacter = 'わ';
             break;
         default:
       }
@@ -96,12 +96,12 @@ const useHandleAction = () => {
         hiraganaInputWord = data;
       })
       .then((): void => {
-        if (lastLetter === hiraganaInputWord.slice(0, 1)) {
+        if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
           dispatch(verifyJapaneseWord(true));
-          console.log("the input word is continued!");
+          console.log("the input word can follow the previous word!");
         };
-        if (lastLetter !== hiraganaInputWord.slice(0, 1)) {
-          console.log("the input word is not continued!")
+        if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
+          console.log("the input word cannot follow the previous word!")
         };
       })
     }
