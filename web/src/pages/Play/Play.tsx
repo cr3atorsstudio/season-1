@@ -1,16 +1,18 @@
 import { Button } from "components/Button";
 import { Navbar } from "components/Navbar";
 import { WordInput } from "components/WordInput";
-import { State, Actions, initialState, reducer } from "reducers/play";
-import React, { useReducer, createContext } from "react";
 
-export const PlayContext = createContext({} as {
-  state: State;
-  dispatch: React.Dispatch<Actions>;
-})
+import useHandleAction from "./hooks";
 
 const Play = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const {
+    handleWordChange,
+    handleOnClick,
+    isValidJapanese,
+    inputWord,
+    hasWordError,
+    wordErrorMessage,
+  } = useHandleAction();
 
   return (
     <>
@@ -27,11 +29,9 @@ const Play = () => {
           className='h-20 md:h-auto'
         />
         <div className='flex flex-col items-center justify-center'>
-          <PlayContext.Provider value={{ state, dispatch }}>
-            <WordInput />
-            {state.hasWordError && <p className='text-red-500 text-center md:text-xl mt-5'>{state.wordErrorMessage}</p>}
-            <Button />
-          </PlayContext.Provider>
+          <WordInput onChangeAction={handleWordChange} />
+          {hasWordError && <p className='text-red-500 text-center md:text-xl mt-5'>{wordErrorMessage}</p>}
+          <Button text={"つなげる"} onClick={handleOnClick} />
         </div>
       </div>
     </>

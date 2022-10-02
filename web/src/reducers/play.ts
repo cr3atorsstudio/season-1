@@ -29,14 +29,13 @@ const setWordErrorMessage = (wordErrorMessage: string) => {
   return { type: SET_WORD_ERROR_MESSAGE, wordErrorMessage: wordErrorMessage };
 };
 
-
 export const actions = {
   setLastWord,
   setInputWord,
   verifyJapaneseWord,
   setError,
   checkWordError,
-  setWordErrorMessage
+  setWordErrorMessage,
 };
 
 export type Actions =
