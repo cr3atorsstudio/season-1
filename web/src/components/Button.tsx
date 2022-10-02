@@ -89,6 +89,12 @@ export const Button = () => {
       })
     }
 
+    // 入力が無い場合のエラー
+    if(!state.inputWord) {
+      dispatch(checkWordError(true));
+      dispatch(setWordErrorMessage("単語を入力してください。"));
+    }
+
     if(state.inputWord){
       // 前の単語の最終語句と続いているか確認し、繋がっていればstateをtrueに変更する
       changeToHiragana(state.inputWord)
