@@ -29,7 +29,7 @@ const Play = () => {
         <div className='flex flex-col items-center justify-center'>
           <PlayContext.Provider value={{ state, dispatch }}>
             <WordInput />
-            {state.hasWordError && <div>{state.wordErrorMessage}</div>}
+            {state.hasWordError && <p className='text-red-500 text-center md:text-xl mt-5'>{state.wordErrorMessage}</p>}
             <Button />
           </PlayContext.Provider>
         </div>

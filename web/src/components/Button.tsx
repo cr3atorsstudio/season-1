@@ -7,7 +7,6 @@ const { setLastWord, setInputWord, verifyJapaneseWord, setError, checkWordError,
 
 export const Button = () => {
   const { state, dispatch } = React.useContext(PlayContext);
-  console.log(state.hasWordError);
 
   const handleOnClick = () => {
     let lastCharacter: string = state.lastWord.slice(-1);
@@ -67,7 +66,6 @@ export const Button = () => {
             if (tokens.length === 0 || tokens.length > 1) {
               dispatch(checkWordError(true));
               dispatch(setWordErrorMessage("一単語だけ入力してください。"));
-              console.log("呼ばれたよ");
               return;
             }
             if (tokens[0].word_type === 'UNKNOWN') {
@@ -93,7 +91,6 @@ export const Button = () => {
 
     if(state.inputWord){
       // 前の単語の最終語句と続いているか確認し、繋がっていればstateをtrueに変更する
-      console.log(state.inputWord);
       changeToHiragana(state.inputWord)
       .then((data: string): void => {
         console.log(data);
@@ -101,6 +98,8 @@ export const Button = () => {
       })
       .then((): void => {
         if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
+          dispatch(checkWordError(false));
+          dispatch(setWordErrorMessage(""));
           dispatch(verifyJapaneseWord(true));
           console.log("the input word can follow the previous word!");
         };
