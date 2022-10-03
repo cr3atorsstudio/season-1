@@ -13,17 +13,20 @@ const About = () => {
           leftControl={<ArrowLeftCircleIcon className="h-12 w-12 text-blue-500" />}
           rightControl={<ArrowRightCircleIcon className="h-12 w-12 text-blue-500" />}
         >
-          <div className='flex flex-col items-center justify-center'>
-            slide1
-          </div>
-          <div className='flex flex-col items-center justify-center'>
-            slide2
-          </div>
-          <div className='flex flex-col items-center justify-center'>
-            slide3
-          </div>
-          <div className='flex flex-col items-center justify-center'>
-            slide4
+          <div>
+            <div className='flex flex-col items-center justify-center'>
+              <div className='mb-20 text-[30px] font-bold md:text-[60px]'>
+                <p>どんなアプリ？</p>
+              </div>
+              <p className='w-2/3 text-[10px] font-semibold md:text-[40px]'>
+                このアプリは、みんな知っている”しりとり”ゲームとジェネレイティブアートを組み合わせたDappです。
+              </p>
+            </div>
+            <div className='ml-64 flex items-end h-60'>
+              <p　className='text-[30px] md:text-[60px] font-nico '>
+                01/04
+              </p>
+            </div>
           </div>
         </Carousel>
       </div>
