@@ -15,6 +15,8 @@ const useHandleAction = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleWordChange = (input: string) => {
+    dispatch(checkWordError(false));
+    dispatch(setWordErrorMessage(""));
     dispatch(setInputWord(input));
   };
 
@@ -112,8 +114,6 @@ const useHandleAction = () => {
         })
         .then((): void => {
           if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
-            dispatch(checkWordError(false));
-            dispatch(setWordErrorMessage(""));
             dispatch(verifyJapaneseWord(true));
             console.log("the input word can follow the previous word!");
           }
