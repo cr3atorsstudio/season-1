@@ -6,7 +6,7 @@ export const Navbar = () => {
     <div>
       <nav className='px-2 py-8 sm:px-4'>
         <div className='flex flex-nowrap items-center justify-between px-2'>
-          <a className='flex w-56 items-center' href=''>
+          <div className='flex w-56 items-center'>
             <img
               src='public/images/creatorsstudio.jpeg'
               alt='Creators Studio Logo'
@@ -18,7 +18,7 @@ export const Navbar = () => {
             >
               Creators Studio
             </Link>
-          </a>
+          </div>
           <div>
             <ul className='ml-auto flex list-none lg:flex-row'>
               <li>
