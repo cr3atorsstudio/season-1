@@ -5,7 +5,14 @@ import { WordInput } from "components/WordInput";
 import useHandleAction from "./hooks";
 
 const Play = () => {
-  const { handleWordChange, handleOnClick } = useHandleAction();
+  const {
+    handleWordChange,
+    handleOnClick,
+    isValidJapanese,
+    inputWord,
+    hasWordError,
+    wordErrorMessage,
+  } = useHandleAction();
 
   return (
     <>
@@ -23,6 +30,7 @@ const Play = () => {
         />
         <div className='flex flex-col items-center justify-center'>
           <WordInput onChangeAction={handleWordChange} />
+          {hasWordError && <p className='text-red-500 text-center md:text-xl mt-5'>{wordErrorMessage}</p>}
           <Button text={"つなげる"} onClick={handleOnClick} />
         </div>
       </div>
