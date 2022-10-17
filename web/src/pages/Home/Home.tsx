@@ -45,8 +45,8 @@ const Home = () => {
           loop={true}
           allowTouchMove={false}
         >
-          {EMOJIS.map((emoji) => (
-            <SwiperSlide>
+          {EMOJIS.map((emoji, index) => (
+            <SwiperSlide key={index}>
               <EmojiContainer>{emoji}</EmojiContainer>
             </SwiperSlide>
           ))}
