@@ -22,11 +22,14 @@ const Play = lazy(() => import("pages/Play/Play"));
 
 const { chains, provider } = configureChains(
   [chain.polygon],
-  [alchemyProvider({ apiKey: import.meta.env.ALCHEMY_ID }), publicProvider()]
+  [
+    alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_ID }),
+    publicProvider(),
+  ]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "My RainbowKit App",
+  appName: "Shiritori Art",
   chains,
 });
 

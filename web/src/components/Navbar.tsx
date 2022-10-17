@@ -6,7 +6,7 @@ export const Navbar = () => {
     <div>
       <nav className='px-2 py-8 sm:px-4'>
         <div className='flex flex-nowrap items-center justify-between px-2'>
-          <a className='flex w-56 items-center' href=''>
+          <div className='flex w-56 items-center'>
             <img
               src='public/images/creatorsstudio.jpeg'
               alt='Creators Studio Logo'
@@ -18,7 +18,7 @@ export const Navbar = () => {
             >
               Creators Studio
             </Link>
-          </a>
+          </div>
           <div>
             <ul className='ml-auto flex list-none lg:flex-row'>
               <li>
@@ -49,8 +49,6 @@ export const Navbar = () => {
                 openConnectModal,
                 mounted,
               }) => {
-                // Note: If your app doesn't use authentication, you
-                // can remove all 'authenticationStatus' checks
                 const ready = mounted;
                 const connected = ready && account && chain;
 
@@ -86,44 +84,46 @@ export const Navbar = () => {
                         );
                       }
 
-                      return (
-                        <div style={{ display: "flex", gap: 12 }}>
-                          <button
-                            onClick={openChainModal}
-                            style={{ display: "flex", alignItems: "center" }}
-                            type='button'
-                          >
-                            {chain.hasIcon && (
-                              <div
-                                style={{
-                                  background: chain.iconBackground,
-                                  width: 12,
-                                  height: 12,
-                                  borderRadius: 999,
-                                  overflow: "hidden",
-                                  marginRight: 4,
-                                }}
-                              >
-                                {chain.iconUrl && (
-                                  <img
-                                    alt={chain.name ?? "Chain icon"}
-                                    src={chain.iconUrl}
-                                    style={{ width: 12, height: 12 }}
-                                  />
-                                )}
-                              </div>
-                            )}
-                            {chain.name}
-                          </button>
+                      if (connected) {
+                        return (
+                          <div style={{ display: "flex", gap: 12 }}>
+                            <button
+                              onClick={openChainModal}
+                              style={{ display: "flex", alignItems: "center" }}
+                              type='button'
+                            >
+                              {chain.hasIcon && (
+                                <div
+                                  style={{
+                                    background: chain.iconBackground,
+                                    width: 12,
+                                    height: 12,
+                                    borderRadius: 999,
+                                    overflow: "hidden",
+                                    marginRight: 4,
+                                  }}
+                                >
+                                  {chain.iconUrl && (
+                                    <img
+                                      alt={chain.name ?? "Chain icon"}
+                                      src={chain.iconUrl}
+                                      style={{ width: 12, height: 12 }}
+                                    />
+                                  )}
+                                </div>
+                              )}
+                              {chain.name}
+                            </button>
 
-                          <button onClick={openAccountModal} type='button'>
-                            {account.displayName}
-                            {account.displayBalance
-                              ? ` (${account.displayBalance})`
-                              : ""}
-                          </button>
-                        </div>
-                      );
+                            <button onClick={openAccountModal} type='button'>
+                              {account.displayName}
+                              {account.displayBalance
+                                ? ` (${account.displayBalance})`
+                                : ""}
+                            </button>
+                          </div>
+                        );
+                      }
                     })()}
                   </div>
                 );
