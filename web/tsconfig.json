@@ -19,9 +19,15 @@
     "jsx": "react-jsx",
     "baseUrl": "src",
     "paths": {
+      "node-p5": ["src/generativeArt/types/node-p5"],
       "~/*": ["src/*"]
     }
   },
   "exclude": ["node_modules"],
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "node-p5.d.ts",
+    "src/generativeArt/background.js"
+  ]
 }
