@@ -11,22 +11,22 @@ async function generatePinkyImage(hidari, migi) {
     Canvas: Canvas,
     Image: Image
   })
-    .then(
-      b64 => {
-      return new Buffer.from(b64.replace(/^data:image\/\w+;base64,/, ""),'base64');
-      }
-    ).then(
-      decodedFile => {
-        fs.writeFile('hidari.png', decodedFile, (err) => {
-          if(err){
-              console.log(err)
-          }else{
-              console.log('saved')
-          }
-        }
-      )
-      })
+  .then(
+    b64 => {
+    return new Buffer.from(b64.replace(/^data:image\/\w+;base64,/, ""),'base64');
     }
+  ).then(
+    decodedFile => {
+      fs.writeFile('hidari.png', decodedFile, (err) => {
+        if(err){
+            console.log(err)
+        }else{
+            console.log('saved')
+        }
+      }
+    )
+  })
+}
 
 async function imageParts(word) {
   let wordArray = [];
