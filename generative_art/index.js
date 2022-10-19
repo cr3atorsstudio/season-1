@@ -26,6 +26,26 @@ async function generatePinkyImage(hidari, migi) {
       }
     )
   })
+
+  mergeImages(['./images/base_image.png', ...migiParts], {
+    Canvas: Canvas,
+    Image: Image
+  })
+  .then(
+    b64 => {
+    return new Buffer.from(b64.replace(/^data:image\/\w+;base64,/, ""),'base64');
+    }
+  ).then(
+    decodedFile => {
+      fs.writeFile('migi.png', decodedFile, (err) => {
+        if(err){
+            console.log(err)
+        }else{
+            console.log('saved')
+        }
+      }
+    )
+  })
 }
 
 async function imageParts(word) {
