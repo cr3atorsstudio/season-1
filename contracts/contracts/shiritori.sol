@@ -9,33 +9,33 @@ contract Shiritori is ERC1155 {
     // TODO: 「ん」で終わったとき: フロントと相談、isUsedNFlag?的なbooleanを渡す?
     /** 同じ単語は使える */
 
-    // func2: 最後のテキストを受け取る -> Generative Artを生成するAPIを呼ぶ -> mintする
+    // 認証用の一つ前の単語 //TODO: Change value
+    unit256 private authWord = 0;
     /* 最後のテキストを返す */
-    uint256 public constant LAST_WORD = 0;
-    // TODO: ↑これを返す関数が必要(func2)
-
-    uint8 public amount = 1;
+    uint256 public lastWord = 0;
+    // 次に使われるTokenIdを返す
+    uint256 public nextTokenId = 0;
 
     // このjson周りをgenerative Artチームが作成中
-    constructor() ERC1155("https://game.example/api/item/{id}.json") {
-        // _mint が mintする関数
-        _mint(msg.sender, LAST_WORD, 10**18, "");
+    // TODO: change url
+    constructor() ERC1155("https://rlho.github.io/nft_sample/{id}.json") {}
 
-        _purchase(amount, LAST_WORD);
+    // setURI
+    function setURI(string newURI) public onlyOwner {
+        _setURI(newURI);
     }
 
-    /**
-    * function1
-    * openzeplin見て
-    *
-    * @param amount the amount of tokens to purchase
-    * @param text the inputted word
-    */
-    //?? amount 必要なの？
-    function _purchase(uint256 amount, uint256 text) private {
-        // exist text
-        // require(text, "Exist the text");
-        console.log(text);
-        _mint(msg.sender, 0, amount, "");
+    // 単語と認証用の単語を受け取る -> mintする
+    function mint(uint256 word, unit256 authenticationWords) public {
+        if(authenticationWords !== authWord) {
+          return "Error: Authentication failed."
+        } else {
+        _mint(msg.sender, nextTokenId, 1, "");
+
+        // 変数を更新
+        authWord = lastWord;
+        nextTokenId += 1;
+        lastWord = word;
+        }
     }
 }
