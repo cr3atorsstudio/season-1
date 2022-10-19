@@ -21,7 +21,7 @@ async function generatePinkyImage(hidari, migi) {
         if(err){
             console.log(err)
         }else{
-            console.log('saved')
+            console.log('hidari saved')
         }
       }
     )
@@ -41,7 +41,7 @@ async function generatePinkyImage(hidari, migi) {
         if(err){
             console.log(err)
         }else{
-            console.log('saved')
+            console.log('migi saved')
         }
       }
     )
