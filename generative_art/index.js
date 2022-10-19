@@ -7,8 +7,6 @@ async function generatePinkyImage(hidari, migi) {
   const hidariParts = await imageParts(hidari)
   const migiParts = await imageParts(migi)
 
-  console.log(hidariParts)
-
   mergeImages(['./images/base_image.png', ...hidariParts], {
     Canvas: Canvas,
     Image: Image
