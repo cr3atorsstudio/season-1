@@ -49,11 +49,8 @@ async function generatePinkyImage(hidari, migi) {
 }
 
 async function imageParts(word) {
-  let wordArray = [];
-  for (let i = 0; i < word.length; i+=2) {
-    wordArray.push(`./images/${word.slice(i, i+2)}.png`);
-  }
-  return wordArray;
+  let wordArray = word.split("").map(x => `images/${x}.png`)
+  return wordArray
 }
 
 generatePinkyImage("000133", "302200")
