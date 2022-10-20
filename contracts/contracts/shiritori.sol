@@ -29,7 +29,7 @@ contract Shiritori is ERC1155, Ownable {
     // 単語と認証用の単語を受け取る -> mintする
     function mint(uint256 word, uint256 authenticationWords) public {
         require(
-            authenticationWords != authWord,
+            authenticationWords == authWord,
             "Shiritori: Authentication failed."
         );
         _mint(msg.sender, nextTokenId, 1, "");
