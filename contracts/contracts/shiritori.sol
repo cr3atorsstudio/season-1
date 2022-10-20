@@ -5,27 +5,37 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract Shiritori is ERC1155 {
-    // func2: 最後のテキストを受け取る -> Generative Artを生成するAPIを呼ぶ -> mintする
+    // func1: 最後のテキストを返す
+    // TODO: 「ん」で終わったとき: フロントと相談、isUsedNFlag?的なbooleanを渡す?
+    /** 同じ単語は使える */
 
-    uint256 public LAST_WORD;
-    // TODO: ↑これを返す関数が必要(func2)
+    // 認証用の一つ前の単語 //TODO: Change value
+    unit256 private authWord = 0;
+    /* 最後のテキストを返す */
+    uint256 public lastWord = 0;
+    // 次に使われるTokenIdを返す
+    uint256 public nextTokenId = 0;
 
     // このjson周りをgenerative Artチームが作成中
-    constructor() ERC1155("https://game.example/api/item/{id}.json") {
-        // _mint が mintする関数
-        _mint(msg.sender, LAST_WORD, 10**18, "");
+    // TODO: change url
+    constructor() ERC1155("https://rlho.github.io/nft_sample/{id}.json") {}
 
-        returnLastWord();
+    // setURI
+    function setURI(string newURI) public onlyOwner {
+        _setURI(newURI);
     }
 
-    /**
-    * function1: 最後のテキストを返す
-    * 同じ単語は使える
-    * 
-    * 
-    // TODO: 「ん」で終わったとき: フロントと相談、isUsedNFlag?的なbooleanを渡す?
-    */
-    function returnLastWord() public view returns (uint256) {
-        return LAST_WORD;
+    // 単語と認証用の単語を受け取る -> mintする
+    function mint(uint256 word, unit256 authenticationWords) public {
+        if(authenticationWords !== authWord) {
+          return "Error: Authentication failed."
+        } else {
+        _mint(msg.sender, nextTokenId, 1, "");
+
+        // 変数を更新
+        authWord = lastWord;
+        nextTokenId += 1;
+        lastWord = word;
+        }
     }
 }
