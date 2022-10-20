@@ -10,10 +10,13 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.11",
     "@rainbow-me/rainbowkit": "^0.5.0",
     "@types/kuromoji": "^0.1.1",
     "@types/path-browserify": "^1.0.0",
     "ethers": "^5.7.0",
+    "flowbite": "^1.5.3",
+    "flowbite-react": "^0.1.11",
     "framer-motion": "^7.2.1",
     "kuromoji": "^0.1.2",
     "path-browserify": "^1.0.1",
