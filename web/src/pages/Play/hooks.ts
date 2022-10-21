@@ -2,6 +2,7 @@ import { useEffect, useReducer } from "react";
 import { actions, initialState, reducer } from "reducers/play";
 import kuromoji from "kuromoji";
 import { mintNFT } from "lib/mint";
+import { furiganaList } from "constants/furigana";
 
 const {
   setLastWord,
