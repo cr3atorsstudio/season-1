@@ -1,6 +1,7 @@
 import { Button } from "components/Button";
 import { Navbar } from "components/Navbar";
 import { WordInput } from "components/WordInput";
+import { contractAddress } from "constants/contract";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import abi from "../../utils/Shiritori.json";
@@ -22,7 +23,6 @@ const Play = () => {
     getWordNumber()
   }, [])
 
-  const contractAddress = "0x69247961dA41CFACB379C30508120C6E04bB65F1";
   const contractABI = abi.abi;
 
   const getWordNumber = async () => {
