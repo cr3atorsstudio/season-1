@@ -11,6 +11,8 @@ const {
   setWordErrorMessage,
 } = actions;
 
+const maxLength = 5;
+
 const useHandleAction = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -124,6 +126,34 @@ const useHandleAction = () => {
         });
     }
   };
+
+  const hiragana = ["あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "り", "る", "れ", "ろ", "わ", "を", "ん", "が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で", "ど", "ば", "び", "ぶ", "べ", "ぼ", "ぱ", "ぴ", "ぷ", "ぺ", "ぽ", "ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "っ", "ゃ", "ゅ", "ょ"];
+
+  const encode = (word: string) => {
+    let encoded = 0;
+
+    for (let i = 0; i < maxLength; i++) {
+      if (word.length > i) {
+        const charCode = hiragana.indexOf(word.charAt(i));
+        encoded += charCode << i * 6;
+      } else {
+        encoded += 0 << i * 6;
+      }
+    }
+
+    return encoded;
+  };
+
+  const decode = (encoded) => {
+    let word = "";
+
+    for (let i = 0; i < maxLength; i++) {
+      const charCode = (encoded & (0b111111 << i * 6)) >> i * 6;
+      word += hiragana[charCode];
+    }
+
+    return word;
+  }
 
   useEffect(() => {
     // TODO: 現状の最後の単語をfetchするfunctionを入れる
