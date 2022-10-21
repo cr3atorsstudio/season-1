@@ -19,10 +19,6 @@ const Play = () => {
   } = useHandleAction();
   const [wordNumber, setWordNumber] = useState(0)
 
-  useEffect(() => {
-    getWordNumber()
-  }, [])
-
   const contractABI = abi.abi;
 
   const getWordNumber = async () => {
@@ -46,6 +42,10 @@ const Play = () => {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    getWordNumber()
+  }, [])
 
   return (
     <>
