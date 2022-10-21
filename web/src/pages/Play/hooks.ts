@@ -130,6 +130,7 @@ const useHandleAction = () => {
   });
 
   // TODO: 入力した単語をsetするfunction
+  // TODO: スマコンに送る auth word を定義
 
   return {
     ...state,
