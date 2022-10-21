@@ -1,6 +1,7 @@
 import { useEffect, useReducer } from "react";
 import { actions, initialState, reducer } from "reducers/play";
 import kuromoji from "kuromoji";
+import { mintNFT } from "lib/mint";
 
 const {
   setLastWord,
@@ -201,10 +202,15 @@ const useHandleAction = () => {
 
   useEffect(() => {
     // TODO: 現状の最後の単語をfetchするfunctionを入れる
-  });
+
+    // TODO: change word to a variable number
+    // useEffect内に入れない方が良い
+    const word = 0;
+    if (word) mintNFT(word);
+    // TODO: add some dependencies
+  }, []);
 
   // TODO: 入力した単語をsetするfunction
-  // TODO: スマコンに送る auth word を定義
 
   return {
     ...state,
