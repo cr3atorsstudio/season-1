@@ -10,7 +10,7 @@ contract Shiritori is ERC1155 {
     /** 同じ単語は使える */
 
     // 認証用の一つ前の単語 //TODO: Change value
-    unit256 private authWord = 0;
+    uint256 private authWord = 0;
     /* 最後のテキストを返す */
     uint256 public lastWord = 0;
     // 次に使われるTokenIdを返す
@@ -27,8 +27,8 @@ contract Shiritori is ERC1155 {
 
     // 単語と認証用の単語を受け取る -> mintする
     function mint(uint256 word, unit256 authenticationWords) public {
-        if(authenticationWords !== authWord) {
-          return "Error: Authentication failed."
+        if(authenticationWords != authWord) {
+          return "Error: Authentication failed.";
         } else {
         _mint(msg.sender, nextTokenId, 1, "");
 
