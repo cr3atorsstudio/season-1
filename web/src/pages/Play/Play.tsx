@@ -12,11 +12,11 @@ const Play = () => {
   const {
     handleWordChange,
     handleOnClick,
-    isValidJapanese,
-    inputWord,
+    lastWord,
     hasWordError,
     wordErrorMessage,
   } = useHandleAction();
+
   const [wordNumber, setWordNumber] = useState(0)
 
   const contractABI = abi.abi;
@@ -58,7 +58,7 @@ const Play = () => {
         <div className='mt-20'>
           <p className='text-center md:text-xl'>現在の最後の単語は...</p>
           {/* TODO: 数値から単語に変換した文字に変更 */}
-          <p className='font-nico text-[80px] md:text-[128px]'>{wordNumber}</p>
+          <p className='font-nico text-[80px] md:text-[128px]'>{lastWord}</p>
         </div>
         <img
           src='public/images/arrow.png'

@@ -4,10 +4,8 @@ import kuromoji from "kuromoji";
 import { mintNFT } from "lib/mint";
 
 const {
-  setLastWord,
   setInputWord,
   verifyJapaneseWord,
-  setError,
   checkWordError,
   setWordErrorMessage,
 } = actions;
