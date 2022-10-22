@@ -127,64 +127,77 @@ const useHandleAction = () => {
     }
   };
 
+  const bitSize = 7;
   const hiraganaList = [
-      "",
-      ..."あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽぁぃぅぇぉっゃゅょー".split(""),
-    ];
+    "",
+    ..."あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん".split(""),
+    ..."がぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽぁぃぅぇぉゃゅょー".split(""),
+  ];
 
-    // The size of hiraganaList must be less than 65 including the first empty string.
-    console.log(`The size of hiraganaList = ${hiraganaList.length}`)
+  console.log(`The size of hiraganaList = ${hiraganaList.length}`)
+  const mask = (function calculateMask() {
+    let mask = 0;
 
-    const encode = (word) => {
-      // Validate word length. Exception would be better.
-      if (word.length > maxLength) { return -1; }
-
-      let encoded = 0;
-
-      word.split("").forEach((c, i) => {
-        const hiraganaIdx = hiraganaList.indexOf(c);
-        encoded += hiraganaIdx << i * 7;
-      })
-
-      return encoded;
-    };
-
-    const decode = (encoded) => {
-      if (encoded === -1) { return ""; }
-
-      let word = "";
-
-      for (let i = 0; i < maxLength; i++) {
-        const hiraganaIdx = (encoded & (0b1111111 << i * 7)) >> i * 7;
-        word += hiraganaList[hiraganaIdx];
-      }
-
-      return word;
+    for (let i = 0; i < bitSize; i++) {
+      mask |= 1 << i;
     }
 
-    const test = (function() {
-      let counter = 0;
+    return mask;
+  })();
 
-      return (word) => {
-        console.log(`\n======== Test ${counter} ========\n`);
-        console.log(`Original word = '${word}'`);
+  const encode = (word) => {
+    // Validate word length. Exception would be better.
+    if (word.length > maxLength) { return -1; }
 
-        const enc = encode(word);
-        console.log(`Encoded code  = ${enc}`);
+    let encoded = 0;
 
-        const dec = decode(enc);
-        console.log(`Decoded word  = '${dec}'`);
+    word.split("").forEach((c) => {
+      encoded <<= bitSize;
+      const hiraganaIdx = hiraganaList.indexOf(c);
+      encoded |= hiraganaIdx
+    })
 
-        counter++;
-      }
-    })();
+    return encoded;
+  };
 
-    test("あいうえお");
-    test("おかき");
-    test("くりえいと");
-    test("ととととと");
-    test("なが〜〜〜〜い");
-    test("じゃんぷ")
+  const decode = (encoded) => {
+    if (encoded === -1) { return ""; }
+
+    let word = "";
+
+    for (let i = 0; i < maxLength; i++) {
+      const hiraganaIdx = encoded & mask;
+      encoded = encoded >>> bitSize;
+      word = hiraganaList[hiraganaIdx] + word;
+    }
+
+    return word;
+  }
+
+  /* ------- Test code -------- */
+
+  const test = (function() {
+    let counter = 0;
+
+    return (word) => {
+      console.log(`\n======== Test ${counter} ========\n`);
+      console.log(`Original word = '${word}'`);
+
+      const enc = encode(word);
+      console.log(`Encoded code  = ${enc}`);
+
+      const dec = decode(enc);
+      console.log(`Decoded word  = '${dec}'`);
+
+      counter++;
+    }
+  })();
+
+  test("あいうえお");
+  test("おかき");
+  test("くりえいと");
+  test("じゃんぷ");
+  test("なが〜〜〜〜い");
 
   useEffect(() => {
     // TODO: 現状の最後の単語をfetchするfunctionを入れる
