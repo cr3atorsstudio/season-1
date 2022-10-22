@@ -44,5 +44,5 @@ export const furiganaList = [
   "ろ",
   "わ",
   "を",
-  "ん"
+  "ん",
 ] as const;
