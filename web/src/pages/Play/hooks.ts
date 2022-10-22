@@ -127,33 +127,64 @@ const useHandleAction = () => {
     }
   };
 
-  const hiragana = ["あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "り", "る", "れ", "ろ", "わ", "を", "ん", "が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で", "ど", "ば", "び", "ぶ", "べ", "ぼ", "ぱ", "ぴ", "ぷ", "ぺ", "ぽ", "ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "っ", "ゃ", "ゅ", "ょ"];
+  const hiraganaList = [
+      "",
+      ..."あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽぁぃぅぇぉっゃゅょー".split(""),
+    ];
 
-  const encode = (word: string) => {
-    let encoded = 0;
+    // The size of hiraganaList must be less than 65 including the first empty string.
+    console.log(`The size of hiraganaList = ${hiraganaList.length}`)
 
-    for (let i = 0; i < maxLength; i++) {
-      if (word.length > i) {
-        const charCode = hiragana.indexOf(word.charAt(i));
-        encoded += charCode << i * 6;
-      } else {
-        encoded += 0 << i * 6;
+    const encode = (word) => {
+      // Validate word length. Exception would be better.
+      if (word.length > maxLength) { return -1; }
+
+      let encoded = 0;
+
+      word.split("").forEach((c, i) => {
+        const hiraganaIdx = hiraganaList.indexOf(c);
+        encoded += hiraganaIdx << i * 7;
+      })
+
+      return encoded;
+    };
+
+    const decode = (encoded) => {
+      if (encoded === -1) { return ""; }
+
+      let word = "";
+
+      for (let i = 0; i < maxLength; i++) {
+        const hiraganaIdx = (encoded & (0b1111111 << i * 7)) >> i * 7;
+        word += hiraganaList[hiraganaIdx];
       }
+
+      return word;
     }
 
-    return encoded;
-  };
+    const test = (function() {
+      let counter = 0;
 
-  const decode = (encoded) => {
-    let word = "";
+      return (word) => {
+        console.log(`\n======== Test ${counter} ========\n`);
+        console.log(`Original word = '${word}'`);
 
-    for (let i = 0; i < maxLength; i++) {
-      const charCode = (encoded & (0b111111 << i * 6)) >> i * 6;
-      word += hiragana[charCode];
-    }
+        const enc = encode(word);
+        console.log(`Encoded code  = ${enc}`);
 
-    return word;
-  }
+        const dec = decode(enc);
+        console.log(`Decoded word  = '${dec}'`);
+
+        counter++;
+      }
+    })();
+
+    test("あいうえお");
+    test("おかき");
+    test("くりえいと");
+    test("ととととと");
+    test("なが〜〜〜〜い");
+    test("じゃんぷ")
 
   useEffect(() => {
     // TODO: 現状の最後の単語をfetchするfunctionを入れる
