@@ -21,8 +21,7 @@ const About = lazy(() => import("pages/About/About"));
 const Play = lazy(() => import("pages/Play/Play"));
 
 const { chains, provider } = configureChains(
-  // TODO: remove goerli later
-  [chain.polygon, chain.goerli],
+  [chain.polygon],
   [
     alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_ID }),
     publicProvider(),
