@@ -32,12 +32,8 @@ const Play = () => {
           contractABI,
           signer
         )
-        const address = await provider.getCode(contractAddress)
-        console.log(address)
         console.log("fetching shiritori contract");
-        console.log(shiritori)
         const wordBigInt = await shiritori.lastWord();
-        console.log(wordBigInt)
         setWordNumber(wordBigInt.toNumber())
       } else {
         console.log("wallet is not connected");

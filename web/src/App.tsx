@@ -21,7 +21,7 @@ const About = lazy(() => import("pages/About/About"));
 const Play = lazy(() => import("pages/Play/Play"));
 
 const { chains, provider } = configureChains(
-  [chain.polygon],
+  [chain.polygon, chain.polygonMumbai],
   [
     alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_ID }),
     publicProvider(),
