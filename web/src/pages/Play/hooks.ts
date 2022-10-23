@@ -13,6 +13,7 @@ const {
   verifyJapaneseWord,
   checkWordError,
   setWordErrorMessage,
+  setCurrentWordNum,
 } = actions;
 
 const maxLength = 5;
@@ -131,6 +132,8 @@ const useHandleAction = () => {
           }
           if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
             dispatch(verifyJapaneseWord(true));
+            const wordNum = encode(hiraganaInputWord, maxLength);
+            dispatch(setCurrentWordNum(wordNum));
             console.log("the input word can follow the previous word!");
           }
           if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
@@ -140,31 +143,6 @@ const useHandleAction = () => {
         });
     }
   };
-
-  /* ------- Test code -------- */
-
-  const test = (function() {
-    let counter = 0;
-
-    return (word: string) => {
-      console.log(`\n======== Test ${counter} ========\n`);
-      console.log(`Original word = '${word}'`);
-
-      const enc = encode(word, maxLength);
-      console.log(`Encoded code  = ${enc}`);
-
-      const dec = decode(enc, maxLength);
-      console.log(`Decoded word  = '${dec}'`);
-
-      counter++;
-    }
-  })();
-
-  test("りんご");
-  test("おかき");
-  test("くりえいと");
-  test("じゃんぷ");
-  test("なが〜〜〜〜い");
 
   // 現状の最後の単語をfetchするfunction
   // & 現状の最後の単語の数値から単語に変換する
@@ -201,10 +179,10 @@ const useHandleAction = () => {
 
   useEffect(() => {
     // useEffect内に入れない方が良い
-    const word = 0;
-    if (word) mintNFT(word);
+    console.log(state.currentWordNum);
+    if (state.currentWordNum) mintNFT(state.currentWordNum);
     // TODO: add some dependencies
-  }, []);
+  }, [state.currentWordNum]);
 
   // TODO: 入力した単語をsetするfunction
 
