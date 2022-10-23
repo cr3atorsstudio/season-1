@@ -177,6 +177,7 @@ const useHandleAction = () => {
     getLastWord();
   }, []);
 
+  // TODO: 入力した単語をsetするfunction
   useEffect(() => {
     // useEffect内に入れない方が良い
     console.log(state.currentWordNum);
@@ -184,7 +185,6 @@ const useHandleAction = () => {
     // TODO: add some dependencies
   }, [state.currentWordNum]);
 
-  // TODO: 入力した単語をsetするfunction
 
   return {
     ...state,
