@@ -161,9 +161,9 @@ const useHandleAction = () => {
           signer
         )
         console.log("fetching shiritori contract");
-        // const wordBigInt = await shiritori.lastWord();
-        // const lastWordNum: number = wordBigInt.toNumber();
-        const lastWord: string = decode(661299, maxLength);
+        const wordBigInt = await shiritori.lastWord();
+        const lastWordNum: number = wordBigInt.toNumber();
+        const lastWord: string = decode(lastWordNum, maxLength);
         dispatch(setLastWord(lastWord));
       } else {
         console.log("wallet is not connected");
@@ -188,7 +188,6 @@ const useHandleAction = () => {
 
   return {
     ...state,
-    // getLastWord: getLastWord,
     handleWordChange: handleWordChange,
     handleOnClick: handleOnClick,
   };
