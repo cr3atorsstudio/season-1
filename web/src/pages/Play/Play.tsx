@@ -1,11 +1,10 @@
 import { Button } from "components/Button";
 import { Navbar } from "components/Navbar";
 import { WordInput } from "components/WordInput";
-import { contractAddress } from "constants/contract";
-import { ethers } from "ethers";
-import { useEffect, useState } from "react";
-import abi from "../../utils/Shiritori.json";
-
+// import { contractAddress } from "constants/contract";
+// import { ethers } from "ethers";
+// import { useEffect } from "react";
+// import abi from "../../utils/Shiritori.json";
 import useHandleAction from "./hooks";
 
 const Play = () => {
@@ -17,35 +16,35 @@ const Play = () => {
     wordErrorMessage,
   } = useHandleAction();
   
-  const [wordNumber, setWordNumber] = useState(0)
+  // const [wordNumber, setWordNumber] = useState(0)
 
-  const contractABI = abi.abi;
+  // const contractABI = abi.abi;
 
-  const getWordNumber = async () => {
-    try {
-      const { ethereum } = window;
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum as any);
-        const signer = provider.getSigner();
-        const shiritori = new ethers.Contract(
-          contractAddress,
-          contractABI,
-          signer
-        )
-        console.log("fetching shiritori contract");
-        const wordBigInt = await shiritori.lastWord();
-        setWordNumber(wordBigInt.toNumber())
-      } else {
-        console.log("wallet is not connected");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // const getWordNumber = async () => {
+  //   try {
+  //     const { ethereum } = window;
+  //     if (ethereum) {
+  //       const provider = new ethers.providers.Web3Provider(ethereum as any);
+  //       const signer = provider.getSigner();
+  //       const shiritori = new ethers.Contract(
+  //         contractAddress,
+  //         contractABI,
+  //         signer
+  //       )
+  //       console.log("fetching shiritori contract");
+  //       const wordBigInt = await shiritori.lastWord();
+  //       setWordNumber(wordBigInt.toNumber())
+  //     } else {
+  //       console.log("wallet is not connected");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
-  useEffect(() => {
-    getWordNumber()
-  }, [])
+  // useEffect(() => {
+  //   getLastWord;
+  // }, [])
 
   return (
     <>

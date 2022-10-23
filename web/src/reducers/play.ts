@@ -56,7 +56,7 @@ export type State = {
 };
 
 export const initialState: State = {
-  lastWord: "りんご",
+  lastWord: "",
   inputWord: "",
   isValidJapanese: false,
   error: undefined,
