@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react";
 import { actions, initialState, reducer } from "reducers/play";
 import kuromoji from "kuromoji";
 import { mintNFT } from "lib/mint";
-import { encode, decode } from "constants/encodeDecode";
+import { encode, decode, test } from "constants/encodeDecode";
 import { contractAddress } from "constants/contract";
 import { ethers } from "ethers";
 import abi from "../../utils/Shiritori.json";
@@ -144,6 +144,12 @@ const useHandleAction = () => {
     }
   };
 
+  test("りんご", maxLength);
+  // test("おかき", maxLength);
+  // test("くりえいと", maxLength);
+  // test("じゃんぷ", maxLength);
+  // test("なが〜〜〜〜い", maxLength);
+
   // 現状の最後の単語をfetchするfunction
   // & 現状の最後の単語の数値から単語に変換する
   // & 現状の最後の単語をstate(lastWord)に格納する
@@ -177,12 +183,9 @@ const useHandleAction = () => {
     getLastWord();
   }, []);
 
-  // TODO: 入力した単語をsetするfunction
   useEffect(() => {
-    // useEffect内に入れない方が良い
     console.log(state.currentWordNum);
     if (state.currentWordNum) mintNFT(state.currentWordNum);
-    // TODO: add some dependencies
   }, [state.currentWordNum]);
 
 

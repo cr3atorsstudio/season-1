@@ -47,25 +47,19 @@ export const decode = (encoded: number, maxLength: number) => {
 
 /* ------- Test code -------- */
 
-// const test = (function() {
-//   let counter = 0;
+export const test = (function() {
+  let counter = 0;
 
-//   return (word: string) => {
-//     console.log(`\n======== Test ${counter} ========\n`);
-//     console.log(`Original word = '${word}'`);
+  return (word: string, maxLength: number) => {
+    console.log(`\n======== Test ${counter} ========\n`);
+    console.log(`Original word = '${word}'`);
 
-//     const enc = encode(word, maxLength);
-//     console.log(`Encoded code  = ${enc}`);
+    const enc = encode(word, maxLength);
+    console.log(`Encoded code  = ${enc}`);
 
-//     const dec = decode(enc, maxLength);
-//     console.log(`Decoded word  = '${dec}'`);
+    const dec = decode(enc, maxLength);
+    console.log(`Decoded word  = '${dec}'`);
 
-//     counter++;
-//   }
-// })();
-
-// test("ごりら");
-// test("おかき");
-// test("くりえいと");
-// test("じゃんぷ");
-// test("なが〜〜〜〜い");
+    counter++;
+  }
+})();
