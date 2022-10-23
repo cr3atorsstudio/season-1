@@ -4,6 +4,7 @@ const VERIFY_JAPANESE_WORD = "VERIFY_JAPANESE_WORD" as const;
 const SET_ERROR = "SET_ERROR" as const;
 const CHECK_WORD_ERROR = "CHECK_WORD_ERROR" as const;
 const SET_WORD_ERROR_MESSAGE = "SET_WORD_ERROR_MESSAGE" as const;
+const SET_CURRENT_WORD = "SET_CURRENT_WORD" as const;
 const SET_CURRENT_WORD_NUM = "SET_CURRENT_WORD_NUM" as const;
 
 const setLastWord = (word: string) => {
@@ -30,6 +31,10 @@ const setWordErrorMessage = (wordErrorMessage: string) => {
   return { type: SET_WORD_ERROR_MESSAGE, wordErrorMessage: wordErrorMessage };
 };
 
+const setCurrentWord = (currentWord: string) => {
+  return { type: SET_CURRENT_WORD, currentWord: currentWord };
+};
+
 const setCurrentWordNum = (currentWordNum: number) => {
   return { type: SET_CURRENT_WORD_NUM, currentWordNum: currentWordNum };
 };
@@ -41,6 +46,7 @@ export const actions = {
   setError,
   checkWordError,
   setWordErrorMessage,
+  setCurrentWord,
   setCurrentWordNum,
 };
 
@@ -51,6 +57,7 @@ export type Actions =
   | ReturnType<typeof setError>
   | ReturnType<typeof checkWordError>
   | ReturnType<typeof setWordErrorMessage>
+  | ReturnType<typeof setCurrentWord>
   | ReturnType<typeof setCurrentWordNum>;
 
 export type State = {
@@ -60,6 +67,7 @@ export type State = {
   error?: Error;
   hasWordError: boolean;
   wordErrorMessage: string;
+  currentWord: string;
   currentWordNum: number;
 };
 
@@ -70,6 +78,7 @@ export const initialState: State = {
   error: undefined,
   hasWordError: false,
   wordErrorMessage: "",
+  currentWord: "",
   currentWordNum: 0,
 };
 
@@ -104,6 +113,11 @@ export const reducer = (state: State, action: Actions): State => {
       return {
         ...state,
         wordErrorMessage: action.wordErrorMessage,
+      };
+    case SET_CURRENT_WORD:
+      return {
+        ...state,
+        currentWord: action.currentWord,
       };
     case SET_CURRENT_WORD_NUM:
       return {

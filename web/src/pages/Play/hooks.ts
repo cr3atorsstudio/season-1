@@ -13,6 +13,7 @@ const {
   verifyJapaneseWord,
   checkWordError,
   setWordErrorMessage,
+  setCurrentWord,
   setCurrentWordNum,
 } = actions;
 
@@ -132,6 +133,7 @@ const useHandleAction = () => {
           }
           if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
             dispatch(verifyJapaneseWord(true));
+            dispatch(setCurrentWord(hiraganaInputWord));
             const wordNum = encode(hiraganaInputWord, maxLength);
             dispatch(setCurrentWordNum(wordNum));
             console.log("the input word can follow the previous word!");
