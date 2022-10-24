@@ -1,0 +1,13 @@
+{
+  "name": "generative_art",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "risacan",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "canvas": "^2.10.1",
+    "merge-images": "^2.0.0",
+    "image-data-uri": "^2.0.1"
+  }
+}
