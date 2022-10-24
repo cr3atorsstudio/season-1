@@ -2,6 +2,7 @@ import { useEffect, useReducer } from "react";
 import { actions, initialState, reducer } from "reducers/play";
 import kuromoji from "kuromoji";
 import { mintNFT } from "lib/mint";
+import { furiganaList } from "constants/furigana";
 
 const {
   setLastWord,
@@ -116,6 +117,11 @@ const useHandleAction = () => {
           hiraganaInputWord = data;
         })
         .then((): void => {
+          if (hiraganaInputWord.length > 5) {
+            dispatch(checkWordError(true));
+            dispatch(setWordErrorMessage("6文字以上の単語は入力できません。"));
+            return;
+          }
           if (hiraganaInputWord.slice(-1) === "ん") {
             dispatch(checkWordError(true));
             dispatch(setWordErrorMessage("最後が「ん」で終わる単語は入力できません。"));
