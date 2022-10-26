@@ -1,15 +1,22 @@
-const mergeImages = require("merge-images");
-const fs = require("fs");
-const { Canvas, Image } = require("canvas");
+import fs from "fs";
+import { Canvas, Image } from "canvas";
+import mergeImages from "merge-images";
 
-export const generatePinkyImage = async (hidari: string, migi: string) => {
+export const generatePinkyImage = async (
+  hidari: string,
+  migi: string,
+  pinkyFileName: string
+) => {
   const hidariParts = await imageParts(hidari, "left");
   const migiParts = await imageParts(migi, "right");
 
-  mergeImages(["./images/base_image.png", ...hidariParts, ...migiParts], {
-    Canvas: Canvas,
-    Image: Image,
-  })
+  await mergeImages(
+    ["src/generative_art/images/base_image.png", ...hidariParts, ...migiParts],
+    {
+      Canvas: Canvas,
+      Image: Image,
+    }
+  )
     .then((b64: string) => {
       //@ts-ignore
       return new Buffer.from(
@@ -17,19 +24,21 @@ export const generatePinkyImage = async (hidari: string, migi: string) => {
         "base64"
       );
     })
-    .then((decodedFile: any) => {
-      fs.writeFile(`../art${}.png`, decodedFile, (err: any) => {
-        if (err) {
-          console.log(err);
+    .then((decodedFile) => {
+      fs.writeFile(`${pinkyFileName}.png`, decodedFile, (err: any) => {
+        if (!err) {
+          return pinkyFileName;
         } else {
-          console.log("saved");
+          console.log(err);
         }
       });
     });
 };
 
 async function imageParts(word: string, side: string) {
-  let wordArray = word.split("").map((x) => `images/${side}/${x}.png`);
+  let wordArray = word
+    .split("")
+    .map((x) => `src/generative_art/images/${side}/${x}.png`);
   return wordArray;
 }
 
