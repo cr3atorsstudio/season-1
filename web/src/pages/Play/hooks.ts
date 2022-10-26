@@ -2,15 +2,22 @@ import { useEffect, useReducer } from "react";
 import { actions, initialState, reducer } from "reducers/play";
 import kuromoji from "kuromoji";
 import { mintNFT } from "lib/mint";
+import { encode, decode, test } from "constants/encodeDecode";
+import { contractAddress } from "constants/contract";
+import { ethers } from "ethers";
+import abi from "../../utils/Shiritori.json";
 
 const {
   setLastWord,
   setInputWord,
   verifyJapaneseWord,
-  setError,
   checkWordError,
   setWordErrorMessage,
+  setCurrentWord,
+  setCurrentWordNum,
 } = actions;
+
+const maxLength = 5;
 
 const useHandleAction = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -139,6 +146,9 @@ const useHandleAction = () => {
           }
           if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
             dispatch(verifyJapaneseWord(true));
+            dispatch(setCurrentWord(hiraganaInputWord));
+            const wordNum = encode(hiraganaInputWord, maxLength);
+            dispatch(setCurrentWordNum(wordNum));
             console.log("the input word can follow the previous word!");
           }
           if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
@@ -149,42 +159,50 @@ const useHandleAction = () => {
     }
   };
 
-  /* ------- Test code -------- */
+  test("りんご", maxLength);
+  // test("おかき", maxLength);
+  // test("くりえいと", maxLength);
+  // test("じゃんぷ", maxLength);
+  // test("なが〜〜〜〜い", maxLength);
 
-  //  const test = (function () {
-  //    let counter = 0;
-  //
-  //    return (word) => {
-  //      console.log(`\n======== Test ${counter} ========\n`);
-  //      console.log(`Original word = '${word}'`);
-  //
-  //      const enc = encode(word);
-  //      console.log(`Encoded code  = ${enc}`);
-  //
-  //      const dec = encode(enc);
-  //      console.log(`Decoded word  = '${dec}'`);
-  //
-  //      counter++;
-  //    };
-  //  })();
-  //
-  //  test("あいうえお");
-  //  test("おかき");
-  //  test("くりえいと");
-  //  test("じゃんぷ");
-  //  test("なが〜〜〜〜い");
-  //
+  // 現状の最後の単語をfetchするfunction
+  // & 現状の最後の単語の数値から単語に変換する
+  // & 現状の最後の単語をstate(lastWord)に格納する
+  const contractABI = abi.abi;
+
+  const getLastWord = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum as any);
+        const signer = provider.getSigner();
+        const shiritori = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        )
+        console.log("fetching shiritori contract");
+        const wordBigInt = await shiritori.lastWord();
+        const lastWordNum: number = wordBigInt.toNumber();
+        const lastWord: string = decode(lastWordNum, maxLength);
+        dispatch(setLastWord(lastWord));
+      } else {
+        console.log("wallet is not connected");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    // TODO: 現状の最後の単語をfetchするfunctionを入れる
-
-    // TODO: change word to a variable number
-    // useEffect内に入れない方が良い
-    const word = 0;
-    if (word) mintNFT(word);
-    // TODO: add some dependencies
+    getLastWord();
   }, []);
 
-  // TODO: 入力した単語をsetするfunction
+  useEffect(() => {
+    console.log(state.currentWordNum);
+    if (state.currentWordNum) mintNFT(state.currentWordNum);
+  }, [state.currentWordNum]);
+
 
   return {
     ...state,
