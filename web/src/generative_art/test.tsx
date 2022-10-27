@@ -9,8 +9,8 @@ const sketch = (
 ) => {
   // @ts-expect-error: Because node-p5 doesn't support typescript
   return (p) => {
-    let color1 = 220;
-    let color2 = 25;
+    let color1 = startIndex;
+    let color2 = endIndex;
     let yoff = 0.0;
     let count = 0;
 
@@ -20,12 +20,11 @@ const sketch = (
       p.pixelDensity(4);
       p.smooth();
       p.noStroke();
-      const fileName = `${imagesSaveDir}/${startIndex}_${endIndex}`;
       setTimeout(() => {
-        p.saveCanvas(canvas, fileName, "png").then((filename: any) => {
+        p.saveCanvas(canvas, imagesSaveDir, "png").then((filename: any) => {
           console.log(`saved the canvas as ${filename}`);
         });
-      }, 4000);
+      }, 2000);
     };
     p.draw = () => {
       if (count >= 120) {
