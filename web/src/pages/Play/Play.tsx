@@ -12,6 +12,10 @@ const Play = () => {
     wordErrorMessage,
   } = useHandleAction();
 
+  const errorTexts = wordErrorMessage.split("\n").map((text, index) => {
+    return <div key={index}>{text}<br /></div>
+  })
+
   return (
     <>
       <Navbar />
@@ -27,7 +31,7 @@ const Play = () => {
         />
         <div className='flex flex-col items-center justify-center'>
           <WordInput onChangeAction={handleWordChange} />
-          {hasWordError && <p className='text-red-500 text-center md:text-xl mt-5'>{wordErrorMessage}</p>}
+          {hasWordError && <p className='text-red-500 text-left md:text-xl mt-5' >{errorTexts}</p>}
           <Button text={"つなげる"} onClick={handleOnClick} />
         </div>
       </div>

@@ -85,23 +85,23 @@ const useHandleAction = () => {
               console.log(tokens);
               if (tokens.length === 0 || tokens.length > 1) {
                 dispatch(checkWordError(true));
-                dispatch(setWordErrorMessage("一単語だけ入力してください。"));
+                dispatch(setWordErrorMessage(
+                  "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
+                ));
                 return;
               }
               if (tokens[0].word_type === "UNKNOWN") {
                 dispatch(checkWordError(true));
-                dispatch(
-                  setWordErrorMessage("実際に存在する単語を入力してください。")
-                );
+                dispatch(setWordErrorMessage(
+                  "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
+                ));
                 return;
               }
               if (!tokens[0].reading) {
                 dispatch(checkWordError(true));
-                dispatch(
-                  setWordErrorMessage(
-                    "認識できませんでした。別の単語を入力してください。"
-                  )
-                );
+                dispatch(setWordErrorMessage(
+                  "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
+                ));
                 return;
               }
               let reading: string = tokens[0].reading;
@@ -182,9 +182,10 @@ const useHandleAction = () => {
           signer
         )
         console.log("fetching shiritori contract");
-        const wordBigInt = await shiritori.lastWord();
-        const lastWordNum: number = wordBigInt.toNumber();
-        const lastWord: string = decode(lastWordNum, maxLength);
+        // const wordBigInt = await shiritori.lastWord();
+        // const lastWordNum: number = wordBigInt.toNumber();
+        // const lastWord: string = decode(lastWordNum, maxLength);
+        const lastWord: string = decode(661299, maxLength);
         dispatch(setLastWord(lastWord));
       } else {
         console.log("wallet is not connected");
