@@ -30,7 +30,7 @@ async function saveImage(): Promise<any> {
   await mergeImages(
     [
       `${backgroundFileName}.png`,
-      { src: `${pinkyFileName}.png`, x: 0, y: 300 },
+      { src: `${pinkyFileName}.png`, x: 100, y: 300 },
     ],
     {
       Canvas: Canvas,
