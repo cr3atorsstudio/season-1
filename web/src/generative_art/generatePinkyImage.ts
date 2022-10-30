@@ -41,6 +41,3 @@ async function imageParts(word: string, side: string) {
     .map((x) => `src/generative_art/images/${side}/${x}.png`);
   return wordArray;
 }
-
-// MEMO: sample
-// generatePinkyImage("いか", "かし")

@@ -19,10 +19,12 @@ export const sendFileToIPFS = async (imageData: any) => {
   pinata
     .pinFileToIPFS(imageData, options)
     .then((result: any) => {
-      `https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`;
+      console.log(result);
+      return result;
     })
     .catch((err: any) => {
       //handle error here
       console.log(err);
+      throw Error(err);
     });
 };
