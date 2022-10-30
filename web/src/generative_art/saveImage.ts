@@ -2,8 +2,10 @@ import { Canvas, Image } from "canvas";
 import dayjs from "dayjs";
 import fs from "fs";
 import mergeImages from "merge-images";
+//import { uploadToS3 } from "utils/uploadToS3";
 import { generatePinkyImage } from "./generatePinkyImage";
 import { genImages } from "./test";
+import { sendFileToIPFS } from "./UploadToPinata";
 
 const imagesSaveDir = "./src/generative_art/dist";
 const formatted = dayjs().format("YYYYMMDDHHmm");
@@ -20,11 +22,11 @@ function delay(ms: number) {
 async function saveImage(): Promise<any> {
   await genImages(220, 25, backgroundFileName);
   console.log("generatedBackground");
-  await generatePinkyImage("いか", "かし", pinkyFileName);
+  await generatePinkyImage(lastWord, currentWord, pinkyFileName);
   console.log("generatedPinky");
+  const fileName = `shiritoriArt_${formatted}.png`;
+  const filePath = `${imagesSaveDir}/${fileName}`;
   await delay(3000);
-  console.log(backgroundFileName);
-  console.log(pinkyFileName);
   await mergeImages(
     [
       `${backgroundFileName}.png`,
@@ -43,18 +45,19 @@ async function saveImage(): Promise<any> {
       );
     })
     .then((decodedFile: any) => {
-      const fileName = `${imagesSaveDir}/shiritoriArt_${formatted}.png`;
-      fs.writeFile(fileName, decodedFile, (err: any) => {
+      fs.writeFile(filePath, decodedFile, (err: any) => {
         if (err) {
-          return fileName;
+          return filePath;
         } else {
           console.log("saved");
         }
       });
     });
   //TODO: Merge risacan's generative art
-  //const readableStreamForFile = fs.createReadStream(`./dist/${fileName}.png`);
-  //sendFileToIPFS(readableStreamForFile);
+  const readableStreamForFile = fs.createReadStream(filePath);
+  const hash = await sendFileToIPFS(readableStreamForFile);
+  console.log(hash);
+  //uploadToS3(hash, 0);
 }
 
 saveImage();
