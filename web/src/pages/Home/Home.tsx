@@ -28,7 +28,7 @@ const Home = () => {
         </p>
 
         <img
-          src='public/images/placeholder.png'
+          src='public/images/placeholder.gif'
           alt=''
           className=' w-1/2 rounded-[25px] md:w-4/12 md:rounded-[50px]'
         />
