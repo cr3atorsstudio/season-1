@@ -6,10 +6,10 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Shiritori is ERC1155, Ownable {
-    // func1: 最後のテキストを返す
     // TODO: 「ん」で終わったとき: フロントと相談、isUsedNFlag?的なbooleanを渡す?
-    /** 同じ単語は使える */
 
+    string public name;
+    string public symbol;
     // 認証用の一つ前の単語 //TODO: Change value
     uint256 private authWord = 0;
     /* 最後のテキストを返す */
@@ -17,9 +17,14 @@ contract Shiritori is ERC1155, Ownable {
     // 次に使われるTokenIdを返す
     uint256 public nextTokenId = 0;
 
-    // このjson周りをgenerative Artチームが作成中
-    // TODO: change url
-    constructor() ERC1155("https://rlho.github.io/nft_sample/{id}.json") {}
+    constructor(
+        string memory _name,
+        string memory _symbol,
+        string memory _uri
+    ) ERC1155(_uri) {
+        name = _name;
+        symbol = _symbol;
+    }
 
     // setURI
     function setURI(string memory newURI) public onlyOwner {
