@@ -4,15 +4,11 @@ pragma solidity ^0.8.9;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract Shiritori is ERC1155, Ownable {
+    // func1: 最後のテキストを返す
     // TODO: 「ん」で終わったとき: フロントと相談、isUsedNFlag?的なbooleanを渡す?
-
-    string public name;
-    string public symbol;
-    string private metadataURIprefix;
-    string private metadataURIsuffix;
+    /** 同じ単語は使える */
 
     // 認証用の一つ前の単語 //TODO: Change value
     uint256 private authWord = 0;
@@ -21,32 +17,13 @@ contract Shiritori is ERC1155, Ownable {
     // 次に使われるTokenIdを返す
     uint256 public nextTokenId = 0;
 
-    constructor() ERC1155("") {
-        // TODO: change url
-        metadataURIprefix = "https://rlho.github.io/nft_sample/";
-        metadataURIsuffix = ".json";
-        name = "Shiritori";
-        symbol = "SRT";
-    }
+    // このjson周りをgenerative Artチームが作成中
+    // TODO: change url
+    constructor() ERC1155("https://rlho.github.io/nft_sample/{id}.json") {}
 
     // setURI
-    function setMetadataURI(string memory _prefix, string memory _suffix)
-        public
-        onlyOwner
-    {
-        metadataURIprefix = _prefix;
-        metadataURIsuffix = _suffix;
-    }
-
-    function uri(uint256 _id) public view override returns (string memory) {
-        return
-            string(
-                abi.encodePacked(
-                    metadataURIprefix,
-                    Strings.toString(_id),
-                    metadataURIsuffix
-                )
-            );
+    function setURI(string memory newURI) public onlyOwner {
+        _setURI(newURI);
     }
 
     // 単語と認証用の単語を受け取る -> mintする

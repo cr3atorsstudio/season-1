@@ -20,15 +20,13 @@ describe("Shiritori contract", function () {
 
     const shiritori = await Shiritori.deploy();
     expect(await shiritori.uri(0)).to.equal(
-      "https://rlho.github.io/nft_sample/0.json"
+      "https://rlho.github.io/nft_sample/{id}.json"
     );
-    await shiritori.setMetadataURI("https://example.com/", ".json");
-    expect(await shiritori.uri(0)).to.equal("https://example.com/0.json");
+    await shiritori.setURI("https://example.com/{id}.json");
+    expect(await shiritori.uri(0)).to.equal("https://example.com/{id}.json");
 
     await expect(
-      shiritori
-        .connect(alice)
-        .setMetadataURI("https://example.com/alice/", ".json")
+      shiritori.connect(alice).setURI("https://example.com/alice/{id}.json")
     ).to.be.revertedWith("Ownable: caller is not the owner");
   });
 

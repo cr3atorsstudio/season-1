@@ -1,22 +1,19 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 
-require("dotenv").config();
-const { API_URL, PRIVATE_KEY, ETHERSCAN_API } = process.env;
+require('dotenv').config()
+const { API_URL, PRIVATE_KEY } = process.env;
 
 const config: HardhatUserConfig = {
   solidity: "0.8.17",
-  defaultNetwork: "hardhat",
+  defaultNetwork: "mumbai",
   networks: {
     hardhat: {},
     mumbai: {
       url: API_URL,
-      accounts: [`0x${PRIVATE_KEY}`],
-    },
-  },
-  etherscan: {
-    apiKey: ETHERSCAN_API,
-  },
+      accounts: [`0x${PRIVATE_KEY}`]
+    }
+  }
 };
 
 export default config;
