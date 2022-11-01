@@ -11,7 +11,10 @@ describe("Shiritori contract", function () {
     const shiritori = await Shiritori.deploy(
       "shiritori",
       "symbol",
-      "https://rlho.github.io/nft_sample/{id}.json"
+      "https://rlho.github.io/nft_sample/{id}.json",
+      999,
+      0,
+      0
     );
 
     expect(await shiritori.lastWord()).to.equal(0);
@@ -20,6 +23,7 @@ describe("Shiritori contract", function () {
     expect(await shiritori.uri(0)).to.equal(
       "https://rlho.github.io/nft_sample/{id}.json"
     );
+    expect(await shiritori.nextTokenId()).to.equal(0);
   });
 
   it("it set URI", async function () {
@@ -30,7 +34,10 @@ describe("Shiritori contract", function () {
     const shiritori = await Shiritori.deploy(
       "shiritori",
       "symbol",
-      "https://rlho.github.io/nft_sample/{id}.json"
+      "https://rlho.github.io/nft_sample/{id}.json",
+      999,
+      0,
+      0
     );
     expect(await shiritori.uri(0)).to.equal(
       "https://rlho.github.io/nft_sample/{id}.json"
@@ -51,9 +58,12 @@ describe("Shiritori contract", function () {
     const shiritori = await Shiritori.deploy(
       "shiritori",
       "symbol",
-      "https://rlho.github.io/nft_sample/{id}.json"
+      "https://rlho.github.io/nft_sample/{id}.json",
+      999,
+      0,
+      0
     );
-    await shiritori.mint(1, 0);
+    await shiritori.mint(1, 999);
     expect(await shiritori.balanceOf(owner.address, 0)).to.equal(1);
     expect(await shiritori.lastWord()).to.equal(1);
     expect(await shiritori.nextTokenId()).to.equal(1);

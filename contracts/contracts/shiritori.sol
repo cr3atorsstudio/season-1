@@ -10,20 +10,27 @@ contract Shiritori is ERC1155, Ownable {
 
     string public name;
     string public symbol;
-    // 認証用の一つ前の単語 //TODO: Change value
-    uint256 private authWord = 0;
+
+    // 認証用の単語（一つ前の単語）
+    uint256 private authWord;
     /* 最後のテキストを返す */
-    uint256 public lastWord = 0;
+    uint256 public lastWord;
     // 次に使われるTokenIdを返す
-    uint256 public nextTokenId = 0;
+    uint256 public nextTokenId;
 
     constructor(
         string memory _name,
         string memory _symbol,
-        string memory _uri
+        string memory _uri,
+        uint256 _authWord,
+        uint256 _lastWord,
+        uint256 _nextTokenId
     ) ERC1155(_uri) {
         name = _name;
         symbol = _symbol;
+        authWord = _authWord;
+        lastWord = _lastWord;
+        nextTokenId = _nextTokenId;
     }
 
     // setURI
