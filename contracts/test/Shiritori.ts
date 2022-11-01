@@ -15,6 +15,11 @@ describe("Shiritori contract", function () {
     );
 
     expect(await shiritori.lastWord()).to.equal(0);
+    expect(await shiritori.name()).to.equal("shiritori");
+    expect(await shiritori.symbol()).to.equal("symbol");
+    expect(await shiritori.uri(0)).to.equal(
+      "https://rlho.github.io/nft_sample/{id}.json"
+    );
   });
 
   it("it set URI", async function () {
