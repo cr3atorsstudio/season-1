@@ -4,10 +4,8 @@ export const sendFileToIPFS = async (imageData: any) => {
   imageData;
   // Use the api keys by specifying your api key and api secret
   const pinata = pinataSDK({
-    pinataApiKey: "",
-    pinataSecretApiKey: "",
-    //pinataApiKey: import.meta.env.VITE_APP_PINATA_API_KEY,
-    //pinataSecretApiKey: import.meta.env.VITE_APP_PINATA_API_SECRET,
+    pinataApiKey: process.env.PINATA_API_KEY,
+    pinataSecretApiKey: process.env.PINATA_API_SECRET,
   });
 
   const options = {
