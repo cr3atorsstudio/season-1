@@ -2,13 +2,13 @@ import { Canvas, Image } from "canvas";
 import dayjs from "dayjs";
 import fs from "fs";
 import mergeImages from "merge-images";
-import { generatePinkyImage } from "./generatePinkyImage";
-import { genImages } from "./test";
+import { generatePinkyImage } from "./generative_art/generatePinkyImage";
+import { genImages } from "./generative_art/test";
 
-const imagesSaveDir = "./src/generative_art/dist";
+const imagesSaveDir = "./generative_art/dist";
 const formatted = dayjs().format("YYYYMMDDHHmm");
-const backgroundFileName = `./src/generative_art/dist/background_${formatted}`;
-const pinkyFileName = `./src/generative_art/dist/pinky_${formatted}`;
+const backgroundFileName = `./generative_art/dist/background_${formatted}`;
+const pinkyFileName = `./generative_art/dist/pinky_${formatted}`;
 
 if (!fs.existsSync(imagesSaveDir)) {
   fs.mkdirSync(imagesSaveDir);
@@ -17,9 +17,9 @@ if (!fs.existsSync(imagesSaveDir)) {
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-async function saveImage(): Promise<any> {
-  await genImages(220, 25, backgroundFileName);
-  console.log("generatedBackground");
+export const saveImage = async () => {
+  await genImages(220, 25, backgroundFileName),
+    console.log("generatedBackground");
   await generatePinkyImage("いか", "かし", pinkyFileName);
   console.log("generatedPinky");
   await delay(3000);
@@ -28,7 +28,7 @@ async function saveImage(): Promise<any> {
   await mergeImages(
     [
       `${backgroundFileName}.png`,
-      { src: `${pinkyFileName}.png`, x: 0, y: 300 },
+      { src: `${pinkyFileName}.png`, x: 100, y: 300 },
     ],
     {
       Canvas: Canvas,
@@ -55,6 +55,4 @@ async function saveImage(): Promise<any> {
   //TODO: Merge risacan's generative art
   //const readableStreamForFile = fs.createReadStream(`./dist/${fileName}.png`);
   //sendFileToIPFS(readableStreamForFile);
-}
-
-saveImage();
+};
