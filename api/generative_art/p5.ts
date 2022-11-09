@@ -9,8 +9,8 @@ const sketch = (
 ) => {
   // @ts-expect-error: Because node-p5 doesn't support typescript
   return (p) => {
-    let color1 = startIndex;
-    let color2 = endIndex;
+    let color1 = p.map(startIndex, 0, 100, 0, 255);
+    let color2 = p.map(endIndex, 0, 100, 0, 255);
     let yoff = 0.0;
     let count = 0;
 
@@ -68,10 +68,12 @@ const sketch = (
   };
 };
 
-export const genImages = async (
-  startIndex: number,
-  endIndex: number,
+export const generateBackgroundImage = async (
+  startIndex: string,
+  endIndex: string,
   imagesSaveDir: string
 ) => {
-  await p5.createSketch(sketch(startIndex, endIndex, imagesSaveDir));
+  await p5.createSketch(
+    sketch(parseInt(startIndex), parseInt(endIndex), imagesSaveDir)
+  );
 };

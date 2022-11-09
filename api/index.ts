@@ -20,10 +20,18 @@ const options = {
 
 const server = fastify().register(fastifyEnv, options);
 
-server.get("/ping", async (request, reply) => {
+server.get<{
+  Querystring: {
+    lastWord: string;
+    currentWord: string;
+    tokenId: string;
+  };
+}>("/ping", async (request, reply) => {
+  const { lastWord, currentWord, tokenId } = request.query;
+  //TODO: Confirmation of existence of tokenId's metadata
   console.log(process.env.pinataApiKey);
-  saveImage();
-  return "pong\n";
+  await saveImage(lastWord, currentWord, tokenId);
+  return "pong";
 });
 
 server.listen({ port: 8080 }, (err, address) => {

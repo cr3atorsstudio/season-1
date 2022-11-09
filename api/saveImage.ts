@@ -2,13 +2,19 @@ import { Canvas, Image } from "canvas";
 import dayjs from "dayjs";
 import fs from "fs";
 import mergeImages from "merge-images";
+import { encode } from "./encode";
 import { generatePinkyImage } from "./generative_art/generatePinkyImage";
-import { genImages } from "./generative_art/test";
+import { generateBackgroundImage } from "./generative_art/p5";
+import { sendFileToIPFS } from "./generative_art/UploadToPinata";
+import { uploadToS3 } from "./generative_art/uploadToS3";
 
 const imagesSaveDir = "./generative_art/dist";
 const formatted = dayjs().format("YYYYMMDDHHmm");
 const backgroundFileName = `./generative_art/dist/background_${formatted}`;
 const pinkyFileName = `./generative_art/dist/pinky_${formatted}`;
+const fileName = `${imagesSaveDir}/shiritoriArt_${formatted}`;
+
+const MAX_LENGTH = 5;
 
 if (!fs.existsSync(imagesSaveDir)) {
   fs.mkdirSync(imagesSaveDir);
@@ -17,15 +23,26 @@ if (!fs.existsSync(imagesSaveDir)) {
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-export const saveImage = async () => {
-  await genImages(220, 25, backgroundFileName),
-    console.log("generatedBackground");
-  await generatePinkyImage("いか", "かし", pinkyFileName);
-  console.log("generatedPinky");
+
+export const saveImage = async (
+  lastWord: string,
+  currentWord: string,
+  tokenId: string
+) => {
+  const lastWordNumber = encode(lastWord, MAX_LENGTH).toString().slice(0, 2);
+  const currentWordNumber = encode(currentWord, MAX_LENGTH)
+    .toString()
+    .slice(0, 2);
+  const metadataUrl = `https://shiriitori.s3.amazonaws.com/metadata/${tokenId}.json`;
+  await generateBackgroundImage(
+    lastWordNumber,
+    currentWordNumber,
+    backgroundFileName
+  );
+  await generatePinkyImage(lastWord, currentWord, pinkyFileName);
+
   await delay(3000);
-  console.log(backgroundFileName);
-  console.log(pinkyFileName);
-  await mergeImages(
+  const b64 = await mergeImages(
     [
       `${backgroundFileName}.png`,
       { src: `${pinkyFileName}.png`, x: 100, y: 300 },
@@ -34,25 +51,23 @@ export const saveImage = async () => {
       Canvas: Canvas,
       Image: Image,
     }
-  )
-    .then((b64: string) => {
-      //@ts-ignore
-      return new Buffer.from(
-        b64.replace(/^data:image\/\w+;base64,/, ""),
-        "base64"
-      );
-    })
-    .then((decodedFile: any) => {
-      const fileName = `${imagesSaveDir}/shiritoriArt_${formatted}.png`;
-      fs.writeFile(fileName, decodedFile, (err: any) => {
-        if (err) {
-          return fileName;
-        } else {
-          console.log("saved");
-        }
-      });
-    });
-  //TODO: Merge risacan's generative art
-  //const readableStreamForFile = fs.createReadStream(`./dist/${fileName}.png`);
-  //sendFileToIPFS(readableStreamForFile);
+  );
+  //@ts-ignore
+  const decodedFile = new Buffer.from(
+    b64.replace(/^data:image\/\w+;base64,/, ""),
+    "base64"
+  );
+  fs.writeFile(`${fileName}.png`, decodedFile, async (err: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      const readableStreamForFile = fs.createReadStream(`${fileName}.png`);
+      const imageHash = await sendFileToIPFS(readableStreamForFile, tokenId);
+      if (imageHash !== undefined) {
+        uploadToS3(imageHash, tokenId);
+        console.log("uploaded metadata!");
+        return metadataUrl;
+      }
+    }
+  });
 };

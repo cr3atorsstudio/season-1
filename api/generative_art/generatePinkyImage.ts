@@ -11,7 +11,9 @@ export const generatePinkyImage = async (
   const migiParts = await imageParts(migi, "right");
 
   await mergeImages(
-    ["generative_art/images/base_image.png", ...hidariParts, ...migiParts],
+    //TODO:
+    //["./generative_art/images/base_image.png", ...hidariParts, ...migiParts],
+    ["./generative_art/images/base_image.png"],
     {
       Canvas: Canvas,
       Image: Image,
@@ -38,9 +40,6 @@ export const generatePinkyImage = async (
 async function imageParts(word: string, side: string) {
   let wordArray = word
     .split("")
-    .map((x) => `generative_art/images/${side}/${x}.png`);
+    .map((x) => `./generative_art/images/${side}/${x}.png`);
   return wordArray;
 }
-
-// MEMO: sample
-// generatePinkyImage("いか", "かし")
