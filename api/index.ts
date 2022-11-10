@@ -1,6 +1,7 @@
 import fastify from "fastify";
 import { saveImage } from "./saveImage";
 import fastifyEnv from "@fastify/env";
+import cors from "@fastify/cors";
 
 const schema = {
   type: "object",
@@ -19,19 +20,20 @@ const options = {
 };
 
 const server = fastify().register(fastifyEnv, options);
+server.register(cors, { origin: true });
 
-server.get<{
-  Querystring: {
+server.post<{
+  Body: {
     lastWord: string;
     currentWord: string;
     tokenId: string;
   };
-}>("/ping", async (request, reply) => {
-  const { lastWord, currentWord, tokenId } = request.query;
+}>("/generate", async (request, reply) => {
+  const { lastWord, currentWord, tokenId } = request.body;
   //TODO: Confirmation of existence of tokenId's metadata
   console.log(process.env.pinataApiKey);
   await saveImage(lastWord, currentWord, tokenId);
-  return "pong";
+  return "completed!";
 });
 
 server.listen({ port: 8080 }, (err, address) => {
