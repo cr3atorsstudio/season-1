@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { actions, initialState, reducer } from "reducers/play";
 import kuromoji from "kuromoji";
 import { mintNFT } from "lib/mint";
@@ -6,7 +6,6 @@ import { encode, decode, test } from "constants/encodeDecode";
 import { contractAddress } from "constants/contract";
 import { ethers } from "ethers";
 import abi from "../../utils/Shiritori.json";
-import { json } from "express";
 
 const {
   setLastWord,
@@ -30,9 +29,7 @@ const useHandleAction = () => {
   };
 
   const handleOnClick = () => {
-    console.log(state.lastWord);
     let lastCharacter: string = state.lastWord.slice(-1);
-    //let lastCharacter: string = "り";
     let hiraganaInputWord: string = "";
 
     // 前の単語が特殊文字で終了する場合の最終文字の変形処理
@@ -132,12 +129,11 @@ const useHandleAction = () => {
       dispatch(checkWordError(true));
       dispatch(setWordErrorMessage("単語を入力してください。"));
     }
-    [[]];
     // 前の単語の最終語句と続いているか確認し、繋がっていればstateをtrueに変更する
     if (state.inputWord) {
       changeToHiragana(state.inputWord)
         .then((data: string): void => {
-          console.log(data);
+          console.log("changeToHiragana", data);
           hiraganaInputWord = data;
         })
         .then((): void => {
@@ -156,7 +152,9 @@ const useHandleAction = () => {
           if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
             dispatch(verifyJapaneseWord(true));
             dispatch(setCurrentWord(hiraganaInputWord));
+            console.log("hiraganaInputWord", hiraganaInputWord);
             const wordNum = encode(hiraganaInputWord, maxLength);
+            console.log("decoded", decode(wordNum, maxLength));
             dispatch(setCurrentWordNum(wordNum));
             console.log("the input word can follow the previous word!");
           }
@@ -226,6 +224,7 @@ const useHandleAction = () => {
       const body = {
         lastWord: state.lastWord,
         currentWord: state.currentWord,
+        currentWordNum: state.currentWordNum,
         tokenId: id,
       };
       const response = await window.fetch(
@@ -239,17 +238,16 @@ const useHandleAction = () => {
         }
       );
 
-      const { word, errors } = await response.json();
+      const { word: lastLastWord, errors } = await response.json();
       if (!response.ok) {
-        // handle the graphql errors
         const error = new Error(
           errors?.map((e: any) => e.message).join("\n") ?? "unknown"
         );
         return Promise.reject(error);
       }
 
-      if (word !== undefined && state.currentWordNum) {
-        const encodedWord = encode(word, maxLength);
+      if (lastLastWord !== undefined && state.currentWordNum) {
+        const encodedWord = encode(lastLastWord, maxLength);
         mintNFT(encodedWord, state.currentWordNum);
       }
     })();

@@ -2,7 +2,7 @@ import { Canvas, Image } from "canvas";
 import dayjs from "dayjs";
 import fs from "fs";
 import mergeImages from "merge-images";
-import { encode } from "./encode";
+import { decode, encode } from "./encode";
 import { generatePinkyImage } from "./generative_art/generatePinkyImage";
 import { generateBackgroundImage } from "./generative_art/p5";
 import { sendFileToIPFS } from "./generative_art/UploadToPinata";
@@ -28,6 +28,7 @@ function delay(ms: number) {
 export const saveImage = async (
   lastWord: string,
   currentWord: string,
+  currentWordNum: number,
   tokenId: number
 ) => {
   const lastWordNumber = encode(lastWord, MAX_LENGTH).toString().slice(0, 2);
@@ -67,7 +68,7 @@ export const saveImage = async (
       //const imageHash = await sendFileToIPFS(readableStreamForFile, tokenId);
       const imageHash = "QmPwaF6fcLj4E631W6opGdxbkRsC2GtDQLHWBGYrF1aRJ8";
       if (imageHash !== undefined) {
-        uploadToS3(currentWord, imageHash, tokenId);
+        uploadToS3(currentWordNum, imageHash, tokenId);
       }
     }
   });

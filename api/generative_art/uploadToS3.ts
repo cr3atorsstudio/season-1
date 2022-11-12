@@ -6,7 +6,7 @@ AWS.config.logger = console;
 const bucketName = "shiriitori";
 
 export const uploadToS3 = (
-  currentWord: string,
+  currentWord: number,
   imagePath: string,
   id: number
 ) => {
@@ -27,9 +27,9 @@ export const uploadToS3 = (
   const json = Buffer.from(JSON.stringify(data));
   const param: S3.Types.PutObjectRequest = {
     Bucket: bucketName,
-    Key: `metadata/${id}.json`, // ファイル絶対パス
-    Body: json, // ファイルの内容
-    ACL: "public-read", // インターネットから誰でもダウンロードできるように
+    Key: `metadata/${id}.json`,
+    Body: json,
+    ACL: "public-read",
     ContentType: "text/plain",
   };
   bucket.upload(param, (err: Error, data: S3.ManagedUpload.SendData) => {

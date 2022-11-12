@@ -7,7 +7,6 @@ import abi from "../utils/Shiritori.json";
 const contractABI = abi.abi;
 
 export const mintNFT = async (authenticationWord: number, word: number) => {
-  console.log("mint!");
   try {
     const { ethereum } = window;
     if (ethereum) {
@@ -18,7 +17,7 @@ export const mintNFT = async (authenticationWord: number, word: number) => {
         contractABI,
         signer
       );
-      shiritori.mint(word, 0, { gasLimit: 300000 });
+      shiritori.mint(word, authenticationWord, { gasLimit: 300000 });
     } else {
       console.log("wallet is not connected");
     }

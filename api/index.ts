@@ -26,10 +26,12 @@ server.post<{
   Body: {
     lastWord: string;
     currentWord: string;
+    currentWordNum: number;
     tokenId: string;
   };
 }>("/generate", async (request, reply) => {
-  const { lastWord, currentWord, tokenId } = request.body;
+  const { lastWord, currentWord, currentWordNum, tokenId } = request.body;
+  console.log(currentWordNum);
   if (!lastWord && !currentWord) {
     //TODO: return 4xx error
     throw new Error("Wrong words");
@@ -38,6 +40,7 @@ server.post<{
   const lastLastWord: any = await saveImage(
     lastWord,
     currentWord,
+    currentWordNum,
     parseInt(tokenId)
   );
   return { success: true, word: lastLastWord };

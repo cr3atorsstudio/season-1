@@ -11,7 +11,7 @@ export const generatePinkyImage = async (
   const migiParts = await imageParts(migi, "right");
 
   await mergeImages(
-    //TODO:
+    //TODO: Merge stuffs.
     //["./generative_art/images/base_image.png", ...hidariParts, ...migiParts],
     ["./generative_art/images/base_image.png"],
     {
