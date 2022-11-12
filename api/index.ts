@@ -30,10 +30,17 @@ server.post<{
   };
 }>("/generate", async (request, reply) => {
   const { lastWord, currentWord, tokenId } = request.body;
+  if (!lastWord && !currentWord) {
+    //TODO: return 4xx error
+    throw new Error("Wrong words");
+  }
   //TODO: Confirmation of existence of tokenId's metadata
-  console.log(process.env.pinataApiKey);
-  await saveImage(lastWord, currentWord, tokenId);
-  return "completed!";
+  const lastLastWord: any = await saveImage(
+    lastWord,
+    currentWord,
+    parseInt(tokenId)
+  );
+  return { success: true, word: lastLastWord };
 });
 
 server.listen({ port: 8080 }, (err, address) => {

@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { actions, initialState, reducer } from "reducers/play";
 import kuromoji from "kuromoji";
 import { mintNFT } from "lib/mint";
@@ -6,6 +6,7 @@ import { encode, decode, test } from "constants/encodeDecode";
 import { contractAddress } from "constants/contract";
 import { ethers } from "ethers";
 import abi from "../../utils/Shiritori.json";
+import { json } from "express";
 
 const {
   setLastWord,
@@ -29,7 +30,9 @@ const useHandleAction = () => {
   };
 
   const handleOnClick = () => {
-    let lastCharacter: string = state.lastWord.slice(-1);
+    console.log(state.lastWord);
+    //let lastCharacter: string = state.lastWord.slice(-1);
+    let lastCharacter: string = "り";
     let hiraganaInputWord: string = "";
 
     // 前の単語が特殊文字で終了する場合の最終文字の変形処理
@@ -85,23 +88,29 @@ const useHandleAction = () => {
               console.log(tokens);
               if (tokens.length === 0 || tokens.length > 1) {
                 dispatch(checkWordError(true));
-                dispatch(setWordErrorMessage(
-                  "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
-                ));
+                dispatch(
+                  setWordErrorMessage(
+                    "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
+                  )
+                );
                 return;
               }
               if (tokens[0].word_type === "UNKNOWN") {
                 dispatch(checkWordError(true));
-                dispatch(setWordErrorMessage(
-                  "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
-                ));
+                dispatch(
+                  setWordErrorMessage(
+                    "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
+                  )
+                );
                 return;
               }
               if (!tokens[0].reading) {
                 dispatch(checkWordError(true));
-                dispatch(setWordErrorMessage(
-                  "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
-                ));
+                dispatch(
+                  setWordErrorMessage(
+                    "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
+                  )
+                );
                 return;
               }
               let reading: string = tokens[0].reading;
@@ -123,7 +132,7 @@ const useHandleAction = () => {
       dispatch(checkWordError(true));
       dispatch(setWordErrorMessage("単語を入力してください。"));
     }
-
+    [[]];
     // 前の単語の最終語句と続いているか確認し、繋がっていればstateをtrueに変更する
     if (state.inputWord) {
       changeToHiragana(state.inputWord)
@@ -151,6 +160,7 @@ const useHandleAction = () => {
             dispatch(setCurrentWordNum(wordNum));
             console.log("the input word can follow the previous word!");
           }
+          console.log("lastCharactoer", lastCharacter);
           if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
             dispatch(checkWordError(true));
             dispatch(setWordErrorMessage("前の単語につながりません。"));
@@ -159,15 +169,6 @@ const useHandleAction = () => {
     }
   };
 
-  test("りんご", maxLength);
-  // test("おかき", maxLength);
-  // test("くりえいと", maxLength);
-  // test("じゃんぷ", maxLength);
-  // test("なが〜〜〜〜い", maxLength);
-
-  // 現状の最後の単語をfetchするfunction
-  // & 現状の最後の単語の数値から単語に変換する
-  // & 現状の最後の単語をstate(lastWord)に格納する
   const contractABI = abi.abi;
 
   const getLastWord = async () => {
@@ -180,11 +181,12 @@ const useHandleAction = () => {
           contractAddress,
           contractABI,
           signer
-        )
+        );
         console.log("fetching shiritori contract");
         const wordBigInt = await shiritori.lastWord();
         const lastWordNum: number = wordBigInt.toNumber();
         const lastWord: string = decode(lastWordNum, maxLength);
+        console.log("lastword", lastWord);
         dispatch(setLastWord(lastWord));
       } else {
         console.log("wallet is not connected");
@@ -192,16 +194,66 @@ const useHandleAction = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  const getTokenId = async (): Promise<number> => {
+    const { ethereum } = window;
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum as any);
+      const signer = provider.getSigner();
+      const shiritori = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        signer
+      );
+      console.log("fetching shiritori contract");
+      const tokenId = await shiritori.nextTokenId();
+      const id = tokenId.toNumber();
+      return id;
+    } else {
+      throw new Error("wallet is not connected");
+    }
+  };
 
   useEffect(() => {
     getLastWord();
   }, []);
 
   useEffect(() => {
-    if (state.currentWordNum) mintNFT(state.currentWordNum);
-  }, [state.currentWordNum]);
+    //TODO: API読んでいる間、ローディングアニメーションを表示する
+    (async () => {
+      const id = await getTokenId();
+      const body = {
+        lastWord: state.lastWord,
+        currentWord: state.currentWord,
+        tokenId: id,
+      };
+      const response = await window.fetch(
+        `${import.meta.env.VITE_API_URL}/generate`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json;charset=UTF-8",
+          },
+          body: JSON.stringify(body),
+        }
+      );
 
+      const { word, errors } = await response.json();
+      if (!response.ok) {
+        // handle the graphql errors
+        const error = new Error(
+          errors?.map((e: any) => e.message).join("\n") ?? "unknown"
+        );
+        return Promise.reject(error);
+      }
+
+      if (word !== undefined && state.currentWordNum) {
+        const encodedWord = encode(word, maxLength);
+        mintNFT(encodedWord, state.currentWordNum);
+      }
+    })();
+  }, [state.currentWordNum]);
 
   return {
     ...state,

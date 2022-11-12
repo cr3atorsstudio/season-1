@@ -1,13 +1,13 @@
-import { ethers } from 'ethers';
-import { contractAddress } from 'constants/contract';
+import { ethers } from "ethers";
+import { contractAddress } from "constants/contract";
 import abi from "../utils/Shiritori.json";
 
 // TODO: authenticationWordsを取得する関数の作成
-const authenticationWords = "authWord"
 
-const contractABI = abi.abi
+const contractABI = abi.abi;
 
-export const mintNFT = async (word: number) => {
+export const mintNFT = async (authenticationWord: number, word: number) => {
+  console.log("mint!");
   try {
     const { ethereum } = window;
     if (ethereum) {
@@ -17,13 +17,12 @@ export const mintNFT = async (word: number) => {
         contractAddress,
         contractABI,
         signer
-      )
-      console.log("fetching shiritori contract");
-      shiritori.mint(word, authenticationWords)
+      );
+      shiritori.mint(word, authenticationWord);
     } else {
       console.log("wallet is not connected");
     }
   } catch (error) {
     console.log(error);
   }
-}
+};

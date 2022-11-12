@@ -7,6 +7,7 @@ import { generatePinkyImage } from "./generative_art/generatePinkyImage";
 import { generateBackgroundImage } from "./generative_art/p5";
 import { sendFileToIPFS } from "./generative_art/UploadToPinata";
 import { uploadToS3 } from "./generative_art/uploadToS3";
+import { fetch } from "cross-fetch";
 
 const imagesSaveDir = "./generative_art/dist";
 const formatted = dayjs().format("YYYYMMDDHHmm");
@@ -27,7 +28,7 @@ function delay(ms: number) {
 export const saveImage = async (
   lastWord: string,
   currentWord: string,
-  tokenId: string
+  tokenId: number
 ) => {
   const lastWordNumber = encode(lastWord, MAX_LENGTH).toString().slice(0, 2);
   const currentWordNumber = encode(currentWord, MAX_LENGTH)
@@ -59,15 +60,20 @@ export const saveImage = async (
   );
   fs.writeFile(`${fileName}.png`, decodedFile, async (err: any) => {
     if (err) {
-      console.log(err);
+      return new Error(err);
     } else {
       const readableStreamForFile = fs.createReadStream(`${fileName}.png`);
-      const imageHash = await sendFileToIPFS(readableStreamForFile, tokenId);
+      //const imageHash = await sendFileToIPFS(readableStreamForFile, tokenId);
+      const imageHash = "QmPwaF6fcLj4E631W6opGdxbkRsC2GtDQLHWBGYrF1aRJ8";
       if (imageHash !== undefined) {
-        uploadToS3(imageHash, tokenId);
-        console.log("uploaded metadata!");
-        return metadataUrl;
+        uploadToS3(currentWord, imageHash, tokenId);
       }
     }
   });
+  const lastTokenId = tokenId > 2 ? tokenId - 2 : 0;
+  const response = await fetch(
+    `https://shiriitori.s3.us-east-1.amazonaws.com/metadata/${lastTokenId}.json`
+  );
+  const data = await response.json();
+  return data.word;
 };

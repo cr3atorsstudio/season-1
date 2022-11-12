@@ -5,7 +5,11 @@ AWS.config.logger = console;
 
 const bucketName = "shiriitori";
 
-export const uploadToS3 = (imagePath: string, id: string) => {
+export const uploadToS3 = (
+  currentWord: string,
+  imagePath: string,
+  id: number
+) => {
   const accessKeyId = process.env.AWS_ACCESS_KEY;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   const bucket = new S3({
@@ -18,6 +22,7 @@ export const uploadToS3 = (imagePath: string, id: string) => {
     description:
       "Shiritori Art App is an application to play Shiritori using Japanese words on the blockchain. Generative art based on Shiritori words is generated and distributed as NFT.",
     image: imagePath,
+    word: currentWord,
   };
   const json = Buffer.from(JSON.stringify(data));
   const param: S3.Types.PutObjectRequest = {
