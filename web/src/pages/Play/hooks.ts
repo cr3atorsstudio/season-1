@@ -31,8 +31,8 @@ const useHandleAction = () => {
 
   const handleOnClick = () => {
     console.log(state.lastWord);
-    //let lastCharacter: string = state.lastWord.slice(-1);
-    let lastCharacter: string = "り";
+    let lastCharacter: string = state.lastWord.slice(-1);
+    //let lastCharacter: string = "り";
     let hiraganaInputWord: string = "";
 
     // 前の単語が特殊文字で終了する場合の最終文字の変形処理

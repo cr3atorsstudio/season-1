@@ -63,6 +63,7 @@ export const saveImage = async (
       return new Error(err);
     } else {
       const readableStreamForFile = fs.createReadStream(`${fileName}.png`);
+      //TODO: 画像をあげなおすように修正
       //const imageHash = await sendFileToIPFS(readableStreamForFile, tokenId);
       const imageHash = "QmPwaF6fcLj4E631W6opGdxbkRsC2GtDQLHWBGYrF1aRJ8";
       if (imageHash !== undefined) {

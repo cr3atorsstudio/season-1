@@ -18,7 +18,7 @@ export const mintNFT = async (authenticationWord: number, word: number) => {
         contractABI,
         signer
       );
-      shiritori.mint(word, authenticationWord);
+      shiritori.mint(word, 0, { gasLimit: 300000 });
     } else {
       console.log("wallet is not connected");
     }
