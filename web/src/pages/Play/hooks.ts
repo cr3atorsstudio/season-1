@@ -247,8 +247,7 @@ const useHandleAction = () => {
       }
 
       if (lastLastWord !== undefined && state.currentWordNum) {
-        const encodedWord = encode(lastLastWord, maxLength);
-        mintNFT(encodedWord, state.currentWordNum);
+        mintNFT(lastLastWord, state.currentWordNum);
       }
     })();
   }, [state.currentWordNum]);
