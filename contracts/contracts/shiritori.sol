@@ -33,7 +33,7 @@ contract Shiritori is ERC1155, Ownable {
         nextTokenId = _nextTokenId;
     }
 
-    event NFTMinted();
+    event NFTMinted(uint256 nextTokenId);
 
 
     // setURI
@@ -54,6 +54,6 @@ contract Shiritori is ERC1155, Ownable {
         nextTokenId += 1;
         lastWord = word;
 
-        emit NFTMinted();
+        emit NFTMinted(nextTokenId);
     }
 }
