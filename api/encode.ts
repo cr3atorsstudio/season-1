@@ -22,21 +22,25 @@ const mask = (function calculateMask() {
 
 export const encode = (word: string, maxLength: number) => {
   // Validate word length. Exception would be better.
-  if (word.length > maxLength) { return -1; }
+  if (word.length > maxLength) {
+    return -1;
+  }
 
   let encoded = 0;
 
   word.split("").forEach((c) => {
     encoded <<= bitSize;
     const hiraganaIdx = hiraganaList.indexOf(c);
-    encoded |= hiraganaIdx
-  })
+    encoded |= hiraganaIdx;
+  });
 
   return encoded;
 };
 
 export const decode = (encoded: number, maxLength: number) => {
-  if (encoded === -1) { return ""; }
+  if (encoded === -1) {
+    return "";
+  }
 
   let word = "";
 
@@ -47,11 +51,11 @@ export const decode = (encoded: number, maxLength: number) => {
   }
 
   return word;
-}
+};
 
 /* ------- Test code -------- */
 
-export const test = (function() {
+export const test = (function () {
   let counter = 0;
 
   return (word: string, maxLength: number) => {
@@ -65,5 +69,5 @@ export const test = (function() {
     console.log(`Decoded word  = '${dec}'`);
 
     counter++;
-  }
+  };
 })();
