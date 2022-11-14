@@ -17,24 +17,24 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className='flex flex-col items-center justify-center'>
-        <div className='mt-10 mb-10 text-[20px] font-semibold md:mt-28 md:text-[40px]'>
+      <div className="flex flex-col items-center justify-center">
+        <div className="mt-10 mb-10 text-[20px] font-semibold md:mt-28 md:text-[40px]">
           <p>言葉をつなげて、</p>
           <p>みんなでつくる</p>
         </div>
 
-        <p className='mb-20 text-[30px] font-bold md:text-[60px]'>
+        <p className="mb-20 text-[30px] font-bold md:text-[60px]">
           ジェネレーティブアート
         </p>
 
         <img
-          src='public/images/placeholder.gif'
-          alt=''
-          className=' w-1/2 rounded-[25px] md:w-4/12 md:rounded-[50px]'
+          src="/images/placeholder.gif"
+          alt=""
+          className=" w-1/2 rounded-[25px] md:w-4/12 md:rounded-[50px]"
         />
       </div>
 
-      <div className='mt-24 w-full transform xl:mt-28'>
+      <div className="mt-24 w-full transform xl:mt-28">
         <Swiper
           autoplay={{
             delay: 0,

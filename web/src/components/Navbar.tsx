@@ -4,26 +4,26 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 export const Navbar = () => {
   return (
     <div>
-      <nav className='px-2 py-8 sm:px-4'>
-        <div className='flex flex-nowrap items-center justify-between px-2'>
-          <div className='flex w-56 items-center'>
+      <nav className="px-2 py-8 sm:px-4">
+        <div className="flex flex-nowrap items-center justify-between px-2">
+          <div className="flex w-56 items-center">
             <img
-              src='public/images/creatorsstudio.jpeg'
-              alt='Creators Studio Logo'
-              className='ml-10 mr-5 h-full rounded-lg object-contain sm:h-11'
+              src="/images/creatorsstudio.jpeg"
+              alt="Creators Studio Logo"
+              className="ml-10 mr-5 h-full rounded-lg object-contain sm:h-11"
             />
             <Link
-              className='self-center whitespace-nowrap text-xl text-white'
+              className="self-center whitespace-nowrap text-xl text-white"
               to={"/"}
             >
               Creators Studio
             </Link>
           </div>
           <div>
-            <ul className='ml-auto flex list-none lg:flex-row'>
+            <ul className="ml-auto flex list-none lg:flex-row">
               <li>
                 <Link
-                  className='flex w-40 items-center px-9 py-2 text-white hover:opacity-75'
+                  className="flex w-40 items-center px-9 py-2 text-white hover:opacity-75"
                   to={"/about"}
                 >
                   説明
@@ -31,7 +31,7 @@ export const Navbar = () => {
               </li>
               <li>
                 <Link
-                  className='flex w-40 items-center px-9 py-2 text-white hover:opacity-75'
+                  className="flex w-40 items-center px-9 py-2 text-white hover:opacity-75"
                   to={"/play"}
                 >
                   参加する
@@ -39,7 +39,7 @@ export const Navbar = () => {
               </li>
             </ul>
           </div>
-          <div className='w-56'>
+          <div className="w-56">
             <ConnectButton.Custom>
               {({
                 account,
@@ -68,8 +68,8 @@ export const Navbar = () => {
                         return (
                           <button
                             onClick={openConnectModal}
-                            type='button'
-                            className='rounded-3xl border border-accent p-3'
+                            type="button"
+                            className="rounded-3xl border border-accent p-3"
                           >
                             Connect Wallet
                           </button>
@@ -78,7 +78,7 @@ export const Navbar = () => {
 
                       if (chain.unsupported) {
                         return (
-                          <button onClick={openChainModal} type='button'>
+                          <button onClick={openChainModal} type="button">
                             Wrong network
                           </button>
                         );
@@ -90,7 +90,7 @@ export const Navbar = () => {
                             <button
                               onClick={openChainModal}
                               style={{ display: "flex", alignItems: "center" }}
-                              type='button'
+                              type="button"
                             >
                               {chain.hasIcon && (
                                 <div
@@ -115,7 +115,7 @@ export const Navbar = () => {
                               {chain.name}
                             </button>
 
-                            <button onClick={openAccountModal} type='button'>
+                            <button onClick={openAccountModal} type="button">
                               {account.displayName}
                               {account.displayBalance
                                 ? ` (${account.displayBalance})`
