@@ -14,6 +14,8 @@ const {
   checkWordError,
   setWordErrorMessage,
   setLoading,
+  setContract,
+  setNextTokenId,
 } = actions;
 
 const maxLength = 5;
@@ -185,16 +187,15 @@ const useHandleAction = () => {
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum as any);
         const signer = provider.getSigner();
-        const shiritori = new ethers.Contract(
-          contractAddress,
-          contractABI,
-          signer
-        );
-        console.log("fetching shiritori contract");
+        const shiritori = state.contract
+          ? state.contract
+          : new ethers.Contract(contractAddress, contractABI, signer);
+
         const wordBigInt = await shiritori.lastWord();
         const lastWordNum: number = wordBigInt.toNumber();
         const lastWord: string = decode(lastWordNum, maxLength);
         console.log("lastword", lastWord);
+
         dispatch(setLastWord(lastWord));
       } else {
         console.log("wallet is not connected");
@@ -209,14 +210,14 @@ const useHandleAction = () => {
     if (ethereum) {
       const provider = new ethers.providers.Web3Provider(ethereum as any);
       const signer = provider.getSigner();
-      const shiritori = new ethers.Contract(
-        contractAddress,
-        contractABI,
-        signer
-      );
+      const shiritori = state.contract
+        ? state.contract
+        : new ethers.Contract(contractAddress, contractABI, signer);
+
       console.log("fetching shiritori contract");
       const tokenId = await shiritori.nextTokenId();
       const id = tokenId.toNumber();
+      dispatch(setNextTokenId(id));
       return id;
     } else {
       throw new Error("wallet is not connected");
@@ -224,8 +225,42 @@ const useHandleAction = () => {
   };
 
   useEffect(() => {
+    const { ethereum } = window;
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum as any);
+      const signer = provider.getSigner();
+      const shiritori = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        signer
+      );
+
+      dispatch(setContract(shiritori));
+    }
+  }, []);
+
+  useEffect(() => {
+    const onMintComplete = (nextTokenId: number) => {
+      getLastWord();
+      dispatch(setNextTokenId(nextTokenId));
+      dispatch(setLoading(false));
+    };
+
+    if (state.contract) {
+      state.contract.on("NFTMinted", onMintComplete);
+    }
+
+    return () => {
+      if (state.contract) {
+        state.contract.off("NFTMinted", onMintComplete);
+      }
+    };
+  }, [state.contract]);
+
+  useEffect(() => {
     getLastWord();
-  }, [state.lastWord]);
+    getTokenId();
+  }, [state.nextTokenId]);
 
   const mint = async (currentWord: string, currentWordNum: number) => {
     const id = await getTokenId();
@@ -251,14 +286,20 @@ const useHandleAction = () => {
       const error = new Error(
         errors?.map((e: any) => e.message).join("\n") ?? "unknown"
       );
+      dispatch(setLoading(false));
       return Promise.reject(error);
     }
-    if (lastLastWord !== undefined && currentWordNum) {
-      const isMinted = await mintNFT(lastLastWord, currentWordNum);
 
-      console.log(isMinted);
+    if (lastLastWord !== undefined && currentWordNum && state.contract) {
+      const isMinted = await mintNFT(
+        state.contract,
+        lastLastWord,
+        currentWordNum
+      );
 
-      dispatch(setLoading(false));
+      if (!isMinted) {
+        dispatch(setLoading(false));
+      }
     }
   };
 
