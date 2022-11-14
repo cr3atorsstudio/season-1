@@ -33,6 +33,9 @@ contract Shiritori is ERC1155, Ownable {
         nextTokenId = _nextTokenId;
     }
 
+    event NFTMinted(uint256 nextTokenId);
+
+
     // setURI
     function setURI(string memory newURI) public onlyOwner {
         _setURI(newURI);
@@ -50,5 +53,7 @@ contract Shiritori is ERC1155, Ownable {
         authWord = lastWord;
         nextTokenId += 1;
         lastWord = word;
+
+        emit NFTMinted(nextTokenId);
     }
 }
