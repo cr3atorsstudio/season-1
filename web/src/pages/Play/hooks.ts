@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react";
 import { actions, initialState, reducer } from "reducers/play";
 import kuromoji from "kuromoji";
 import { mintNFT } from "lib/mint";
-import { encode, decode, test } from "constants/encodeDecode";
+import { encode, decode } from "constants/encodeDecode";
 import { contractAddress } from "constants/contract";
 import { ethers } from "ethers";
 import abi from "../../utils/Shiritori.json";
@@ -13,8 +13,7 @@ const {
   verifyJapaneseWord,
   checkWordError,
   setWordErrorMessage,
-  setCurrentWord,
-  setCurrentWordNum,
+  setLoading,
 } = actions;
 
 const maxLength = 5;
@@ -28,7 +27,8 @@ const useHandleAction = () => {
     dispatch(setInputWord(input));
   };
 
-  const handleOnClick = () => {
+  const handleOnClick = async () => {
+    dispatch(setLoading(true));
     let lastCharacter: string = state.lastWord.slice(-1);
     let hiraganaInputWord: string = "";
 
@@ -85,6 +85,7 @@ const useHandleAction = () => {
               console.log(tokens);
               if (tokens.length === 0 || tokens.length > 1) {
                 dispatch(checkWordError(true));
+                dispatch(setLoading(false));
                 dispatch(
                   setWordErrorMessage(
                     "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
@@ -94,6 +95,7 @@ const useHandleAction = () => {
               }
               if (tokens[0].word_type === "UNKNOWN") {
                 dispatch(checkWordError(true));
+                dispatch(setLoading(false));
                 dispatch(
                   setWordErrorMessage(
                     "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
@@ -103,6 +105,7 @@ const useHandleAction = () => {
               }
               if (!tokens[0].reading) {
                 dispatch(checkWordError(true));
+                dispatch(setLoading(false));
                 dispatch(
                   setWordErrorMessage(
                     "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
@@ -136,10 +139,11 @@ const useHandleAction = () => {
           console.log("changeToHiragana", data);
           hiraganaInputWord = data;
         })
-        .then((): void => {
+        .then(async (): Promise<void> => {
           if (hiraganaInputWord.length > 5) {
             dispatch(checkWordError(true));
             dispatch(setWordErrorMessage("6文字以上の単語は入力できません。"));
+            dispatch(setLoading(false));
             return;
           }
           if (hiraganaInputWord.slice(-1) === "ん") {
@@ -147,21 +151,27 @@ const useHandleAction = () => {
             dispatch(
               setWordErrorMessage("最後が「ん」で終わる単語は入力できません。")
             );
+            dispatch(setLoading(false));
             return;
           }
+          // 成功の場合ここにくる
           if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
+            console.log("hiraganaInputWord", hiraganaInputWord);
+
             dispatch(verifyJapaneseWord(true));
-            dispatch(setCurrentWord(hiraganaInputWord));
             console.log("hiraganaInputWord", hiraganaInputWord);
             const wordNum = encode(hiraganaInputWord, maxLength);
             console.log("decoded", decode(wordNum, maxLength));
-            dispatch(setCurrentWordNum(wordNum));
+
             console.log("the input word can follow the previous word!");
+
+            await mint(hiraganaInputWord, wordNum);
           }
           console.log("lastCharactoer", lastCharacter);
           if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
             dispatch(checkWordError(true));
             dispatch(setWordErrorMessage("前の単語につながりません。"));
+            dispatch(setLoading(false));
           }
         });
     }
@@ -215,42 +225,42 @@ const useHandleAction = () => {
 
   useEffect(() => {
     getLastWord();
-  }, []);
+  }, [state.lastWord]);
 
-  useEffect(() => {
-    //TODO: API読んでいる間、ローディングアニメーションを表示する
-    (async () => {
-      const id = await getTokenId();
-      const body = {
-        lastWord: state.lastWord,
-        currentWord: state.currentWord,
-        currentWordNum: state.currentWordNum,
-        tokenId: id,
-      };
-      const response = await window.fetch(
-        `${import.meta.env.VITE_API_URL}/generate`,
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json;charset=UTF-8",
-          },
-          body: JSON.stringify(body),
-        }
+  const mint = async (currentWord: string, currentWordNum: number) => {
+    const id = await getTokenId();
+    const body = {
+      lastWord: state.lastWord,
+      currentWord: currentWord,
+      currentWordNum: currentWordNum,
+      tokenId: id,
+    };
+    const response = await window.fetch(
+      `${import.meta.env.VITE_API_URL}/generate`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+
+    const { word: lastLastWord, errors } = await response.json();
+    if (!response.ok) {
+      const error = new Error(
+        errors?.map((e: any) => e.message).join("\n") ?? "unknown"
       );
+      return Promise.reject(error);
+    }
+    if (lastLastWord !== undefined && currentWordNum) {
+      const isMinted = await mintNFT(lastLastWord, currentWordNum);
 
-      const { word: lastLastWord, errors } = await response.json();
-      if (!response.ok) {
-        const error = new Error(
-          errors?.map((e: any) => e.message).join("\n") ?? "unknown"
-        );
-        return Promise.reject(error);
-      }
+      console.log(isMinted);
 
-      if (lastLastWord !== undefined && state.currentWordNum) {
-        mintNFT(lastLastWord, state.currentWordNum);
-      }
-    })();
-  }, [state.currentWordNum]);
+      dispatch(setLoading(false));
+    }
+  };
 
   return {
     ...state,

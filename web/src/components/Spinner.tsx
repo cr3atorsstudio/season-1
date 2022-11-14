@@ -1,5 +1,5 @@
 export const LoadingSpinner = () => (
-  <div className='h-screen flex justify-center items-center'>
-    <div className='animate-spin h-40 w-40 border-8 border-accent rounded-full border-t-transparent'></div>
+  <div className='mt-32 flex items-center justify-center'>
+    <div className='h-40 w-40 animate-spin rounded-full border-8 border-accent border-t-transparent'></div>
   </div>
 );

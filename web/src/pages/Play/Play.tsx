@@ -2,6 +2,7 @@ import { Button } from "components/Button";
 import { Navbar } from "components/Navbar";
 import { WordInput } from "components/WordInput";
 import useHandleAction from "./hooks";
+import { LoadingSpinner } from "components/Spinner";
 
 const Play = () => {
   const {
@@ -10,11 +11,17 @@ const Play = () => {
     lastWord,
     hasWordError,
     wordErrorMessage,
+    isLoading,
   } = useHandleAction();
 
   const errorTexts = wordErrorMessage.split("\n").map((text, index) => {
-    return <div key={index}>{text}<br /></div>
-  })
+    return (
+      <div key={index}>
+        {text}
+        <br />
+      </div>
+    );
+  });
 
   return (
     <>
@@ -30,9 +37,22 @@ const Play = () => {
           className='h-20 md:h-auto'
         />
         <div className='flex flex-col items-center justify-center'>
-          <WordInput onChangeAction={handleWordChange} />
-          {hasWordError && <p className='text-red-500 text-left md:text-xl mt-5' >{errorTexts}</p>}
-          <Button text={"つなげる"} onClick={handleOnClick} />
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <WordInput
+                onChangeAction={handleWordChange}
+                lastWord={lastWord}
+              />
+              {hasWordError && (
+                <p className='mt-5 text-left text-red-500 md:text-xl'>
+                  {errorTexts}
+                </p>
+              )}
+              <Button text={"つなげる"} onClick={handleOnClick} />
+            </>
+          )}
         </div>
       </div>
     </>
