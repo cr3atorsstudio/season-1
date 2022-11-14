@@ -1,3 +1,6 @@
+import { ethers } from "ethers";
+
+const SET_LOADING = "SET_LOADING" as const;
 const SET_LAST_WORD = "SET_LAST_WORD" as const;
 const SET_INPUT_WORD = "SET_INPUT_WORD" as const;
 const VERIFY_JAPANESE_WORD = "VERIFY_JAPANESE_WORD" as const;
@@ -6,6 +9,12 @@ const CHECK_WORD_ERROR = "CHECK_WORD_ERROR" as const;
 const SET_WORD_ERROR_MESSAGE = "SET_WORD_ERROR_MESSAGE" as const;
 const SET_CURRENT_WORD = "SET_CURRENT_WORD" as const;
 const SET_CURRENT_WORD_NUM = "SET_CURRENT_WORD_NUM" as const;
+const SET_CONTRACT = "SET_CONTRACT" as const;
+const SET_NEXT_TOKEN_ID = "SET_NEXT_TOKEN_ID" as const;
+
+const setLoading = (isLoading: boolean) => {
+  return { type: SET_LOADING, isLoading: isLoading };
+};
 
 const setLastWord = (word: string) => {
   return { type: SET_LAST_WORD, word: word };
@@ -39,7 +48,16 @@ const setCurrentWordNum = (currentWordNum: number) => {
   return { type: SET_CURRENT_WORD_NUM, currentWordNum: currentWordNum };
 };
 
+const setContract = (contract: ethers.Contract) => {
+  return { type: SET_CONTRACT, contract: contract };
+};
+
+const setNextTokenId = (nextTokenId: number) => {
+  return { type: SET_NEXT_TOKEN_ID, nextTokenId: nextTokenId };
+};
+
 export const actions = {
+  setLoading,
   setLastWord,
   setInputWord,
   verifyJapaneseWord,
@@ -48,6 +66,8 @@ export const actions = {
   setWordErrorMessage,
   setCurrentWord,
   setCurrentWordNum,
+  setContract,
+  setNextTokenId,
 };
 
 export type Actions =
@@ -58,7 +78,10 @@ export type Actions =
   | ReturnType<typeof checkWordError>
   | ReturnType<typeof setWordErrorMessage>
   | ReturnType<typeof setCurrentWord>
-  | ReturnType<typeof setCurrentWordNum>;
+  | ReturnType<typeof setCurrentWordNum>
+  | ReturnType<typeof setLoading>
+  | ReturnType<typeof setContract>
+  | ReturnType<typeof setNextTokenId>;
 
 export type State = {
   lastWord: string;
@@ -69,6 +92,9 @@ export type State = {
   wordErrorMessage: string;
   currentWord: string;
   currentWordNum: number;
+  isLoading: boolean;
+  contract: ethers.Contract | null;
+  nextTokenId: number;
 };
 
 export const initialState: State = {
@@ -80,6 +106,9 @@ export const initialState: State = {
   wordErrorMessage: "",
   currentWord: "",
   currentWordNum: 0,
+  isLoading: false,
+  contract: null,
+  nextTokenId: 0,
 };
 
 export const reducer = (state: State, action: Actions): State => {
@@ -123,6 +152,21 @@ export const reducer = (state: State, action: Actions): State => {
       return {
         ...state,
         currentWordNum: action.currentWordNum,
+      };
+    case SET_LOADING:
+      return {
+        ...state,
+        isLoading: action.isLoading,
+      };
+    case SET_CONTRACT:
+      return {
+        ...state,
+        contract: action.contract,
+      };
+    case SET_NEXT_TOKEN_ID:
+      return {
+        ...state,
+        nextTokenId: action.nextTokenId,
       };
     default:
       return state;
