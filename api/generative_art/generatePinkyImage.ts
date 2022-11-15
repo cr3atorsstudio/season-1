@@ -1,6 +1,7 @@
 import fs from "fs";
 import { Canvas, Image } from "canvas";
 import mergeImages from "merge-images";
+import hepburn from "hepburn";
 
 export const generatePinkyImage = async (
   hidari: string,
@@ -12,8 +13,8 @@ export const generatePinkyImage = async (
 
   await mergeImages(
     //TODO: Merge stuffs.
-    //["./generative_art/images/base_image.png", ...hidariParts, ...migiParts],
-    ["./generative_art/images/base_image.png"],
+    ["./generative_art/images/base_image.png", ...hidariParts, ...migiParts],
+    //["./generative_art/images/base_image.png"],
     {
       Canvas: Canvas,
       Image: Image,
@@ -38,8 +39,11 @@ export const generatePinkyImage = async (
 };
 
 async function imageParts(word: string, side: string) {
-  let wordArray = word
-    .split("")
-    .map((x) => `./generative_art/images/${side}/${x}.png`);
+  let wordArray = word.split("").map((x) => {
+    const romaji1 = hepburn.fromKana(x).toLowerCase();
+    console.log(romaji1);
+
+    return `./generative_art/images/${side}/${romaji1}.png`;
+  });
   return wordArray;
 }
