@@ -21,8 +21,6 @@ async function main() {
   await txn.wait();
 
   const lastWordNum = await nft.lastWord();
-
-  console.log("lastWordNum is:", lastWordNum);
 }
 
 main()
