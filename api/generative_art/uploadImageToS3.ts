@@ -5,11 +5,7 @@ AWS.config.logger = console;
 
 const bucketName = "shiriitori";
 
-export const uploadToS3 = (
-  currentWord: number,
-  imagePath: string,
-  id: number
-) => {
+export const uploadImageToS3 = (image: any, id: number) => {
   const accessKeyId = process.env.AWS_ACCESS_KEY;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   const bucket = new S3({
@@ -17,20 +13,12 @@ export const uploadToS3 = (
     secretAccessKey: secretAccessKey,
     region: "ap-northeast-1",
   });
-  const data = {
-    name: "Shiritori Art App",
-    description:
-      "Shiritori Art App is an application to play Shiritori using Japanese words on the blockchain. Generative art based on Shiritori words is generated and distributed as NFT.",
-    image: imagePath,
-    word: currentWord,
-  };
-  const json = Buffer.from(JSON.stringify(data));
   const param: S3.Types.PutObjectRequest = {
     Bucket: bucketName,
-    Key: `metadata/${id}.json`,
-    Body: json,
+    Key: `images/${id}.png`,
+    Body: image,
     ACL: "public-read",
-    ContentType: "text/plain",
+    ContentType: "image/png",
   };
   bucket.upload(param, (err: Error, data: S3.ManagedUpload.SendData) => {
     if (err) {

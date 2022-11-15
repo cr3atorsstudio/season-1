@@ -5,21 +5,11 @@ import mergeImages from "merge-images";
 import { decode, encode } from "./encode";
 import { generatePinkyImage } from "./generative_art/generatePinkyImage";
 import { generateBackgroundImage } from "./generative_art/p5";
-import { sendFileToIPFS } from "./generative_art/UploadToPinata";
-import { uploadToS3 } from "./generative_art/uploadToS3";
+import { uploadMetadataToS3 } from "./generative_art/uploadMetadataToS3";
 import { fetch } from "cross-fetch";
-
-const imagesSaveDir = "./generative_art/dist";
-const formatted = dayjs().format("YYYYMMDDHHmm");
-const backgroundFileName = `./generative_art/dist/background_${formatted}`;
-const pinkyFileName = `./generative_art/dist/pinky_${formatted}`;
-const fileName = `${imagesSaveDir}/shiritoriArt_${formatted}`;
+import { uploadImageToS3 } from "./generative_art/uploadImageToS3";
 
 const MAX_LENGTH = 5;
-
-if (!fs.existsSync(imagesSaveDir)) {
-  fs.mkdirSync(imagesSaveDir);
-}
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -31,11 +21,18 @@ export const saveImage = async (
   currentWordNum: number,
   tokenId: number
 ) => {
+  const formatted = dayjs().format("YYYYMMDDHHmm");
+  const imagesSaveDir = "./generative_art/dist";
+  const backgroundFileName = `./generative_art/dist/background_${formatted}`;
+  const pinkyFileName = `./generative_art/dist/pinky_${formatted}`;
+  const fileName = `${imagesSaveDir}/shiritoriArt_${formatted}`;
   const lastWordNumber = encode(lastWord, MAX_LENGTH).toString().slice(0, 2);
   const currentWordNumber = encode(currentWord, MAX_LENGTH)
     .toString()
     .slice(0, 2);
   const metadataUrl = `https://shiriitori.s3.amazonaws.com/metadata/${tokenId}.json`;
+  console.log(lastWordNumber);
+  console.log(currentWordNumber);
   await generateBackgroundImage(
     lastWordNumber,
     currentWordNumber,
@@ -64,12 +61,8 @@ export const saveImage = async (
       return new Error(err);
     } else {
       const readableStreamForFile = fs.createReadStream(`${fileName}.png`);
-      //TODO: 画像をあげなおすように修正
-      //const imageHash = await sendFileToIPFS(readableStreamForFile, tokenId);
-      const imageHash = "QmPwaF6fcLj4E631W6opGdxbkRsC2GtDQLHWBGYrF1aRJ8";
-      if (imageHash !== undefined) {
-        uploadToS3(currentWordNum, imageHash, tokenId);
-      }
+      uploadImageToS3(readableStreamForFile, tokenId);
+      uploadMetadataToS3(currentWordNum, tokenId);
     }
   });
   const lastTokenId = tokenId > 2 ? tokenId - 2 : 0;

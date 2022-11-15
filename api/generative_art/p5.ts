@@ -9,8 +9,8 @@ const sketch = (
 ) => {
   // @ts-expect-error: Because node-p5 doesn't support typescript
   return (p) => {
-    let color1 = p.map(startIndex, 0, 100, 0, 255);
-    let color2 = p.map(endIndex, 0, 100, 0, 255);
+    let color1 = p.map(startIndex, 0, 99, 0, 255);
+    let color2 = p.map(endIndex, 0, 99, 0, 255);
     let yoff = 0.0;
     let count = 0;
 
@@ -45,7 +45,7 @@ const sketch = (
       }
       for (let x = 0; x < p.width + d; x += d) {
         let ny = p.map(p.noise(xoff, yoff), 0, 1, -200, 800);
-        noiseWave(x, ny, color2, color1);
+        noiseWave2(x, ny, color2, color1);
         xoff += 10;
       }
 
@@ -58,9 +58,17 @@ const sketch = (
       for (let i = 0; i < 20; i++) {
         p.push();
         p.translate(x, y);
-        //p.fill(255, 204, 0);
-        p.fill(color1, color2, p.map(color1 + color2, 0, 255, 1, 255), 5);
-        //p.fill(color1, color2, p.map(color1 + color2, 0, 255, 1, 255), 20);
+        p.fill(color1, color2, p.map(color1 + color2, 0, 200, 1, 255), 5);
+        p.ellipse(0, 0, i * 8);
+        p.pop();
+      }
+    }
+
+    function noiseWave2(x: number, y: number, color1: number, color2: number) {
+      for (let i = 0; i < 20; i++) {
+        p.push();
+        p.translate(x, y);
+        p.fill(color1, color2, (color1 + color2) / 2, 5);
         p.ellipse(0, 0, i * 8);
         p.pop();
       }
