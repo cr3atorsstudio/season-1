@@ -3,16 +3,19 @@ import { Navbar } from "components/Navbar";
 import { WordInput } from "components/WordInput";
 import useHandleAction from "./hooks";
 import { LoadingSpinner } from "components/Spinner";
+import { Notification } from "components/Notification";
 
 const Play = () => {
   const {
     handleWordChange,
     handleOnClick,
+    handleOnClickNotification,
     lastWord,
     hasWordError,
     wordErrorMessage,
     isLoading,
     nextTokenId,
+    process,
   } = useHandleAction();
 
   const errorTexts = wordErrorMessage.split("\n").map((text, index) => {
@@ -42,7 +45,9 @@ const Play = () => {
         />
         <div className="flex flex-col items-center justify-center">
           {isLoading ? (
-            <LoadingSpinner />
+            <>
+              <LoadingSpinner />
+            </>
           ) : (
             <>
               <WordInput
@@ -58,6 +63,13 @@ const Play = () => {
             </>
           )}
         </div>
+
+        {process.show && (
+          <Notification
+            process={process}
+            onClickAction={handleOnClickNotification}
+          />
+        )}
       </div>
     </>
   );

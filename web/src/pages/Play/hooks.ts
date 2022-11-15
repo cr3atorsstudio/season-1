@@ -16,6 +16,7 @@ const {
   setLoading,
   setContract,
   setNextTokenId,
+  setMintProcess,
 } = actions;
 
 const maxLength = 5;
@@ -179,6 +180,15 @@ const useHandleAction = () => {
     }
   };
 
+  const handleOnClickNotification = () => {
+    dispatch(
+      setMintProcess({
+        show: false,
+        message: "",
+      })
+    );
+  };
+
   const contractABI = abi.abi;
 
   const getLastWord = async () => {
@@ -244,6 +254,16 @@ const useHandleAction = () => {
       getLastWord();
       dispatch(setNextTokenId(nextTokenId));
       dispatch(setLoading(false));
+      dispatch(
+        setMintProcess({
+          show: true,
+          message: "ミントが完了しました！",
+        })
+      );
+
+      setTimeout(() => {
+        dispatch(setMintProcess({ show: false, message: "" }));
+      }, 5000);
     };
 
     if (state.contract) {
@@ -287,18 +307,43 @@ const useHandleAction = () => {
         errors?.map((e: any) => e.message).join("\n") ?? "unknown"
       );
       dispatch(setLoading(false));
+      dispatch(
+        setMintProcess({
+          show: false,
+          message: "",
+        })
+      );
       return Promise.reject(error);
     }
 
     if (lastLastWord !== undefined && currentWordNum && state.contract) {
+      dispatch(
+        setMintProcess({
+          show: true,
+          message: "WalletでAcceptを押すとミントが始まります！",
+        })
+      );
       const isMinted = await mintNFT(
         state.contract,
         lastLastWord,
         currentWordNum
       );
 
+      dispatch(
+        setMintProcess({
+          show: true,
+          message: "ミント中...",
+        })
+      );
+
       if (!isMinted) {
         dispatch(setLoading(false));
+        dispatch(
+          setMintProcess({
+            show: false,
+            message: "",
+          })
+        );
       }
     }
   };
@@ -307,6 +352,7 @@ const useHandleAction = () => {
     ...state,
     handleWordChange: handleWordChange,
     handleOnClick: handleOnClick,
+    handleOnClickNotification: handleOnClickNotification,
   };
 };
 

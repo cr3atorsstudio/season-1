@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 
 const SET_LOADING = "SET_LOADING" as const;
+const SET_MINT_PROCESS = "SET_MINT_PROCESS" as const;
 const SET_LAST_WORD = "SET_LAST_WORD" as const;
 const SET_INPUT_WORD = "SET_INPUT_WORD" as const;
 const VERIFY_JAPANESE_WORD = "VERIFY_JAPANESE_WORD" as const;
@@ -14,6 +15,10 @@ const SET_NEXT_TOKEN_ID = "SET_NEXT_TOKEN_ID" as const;
 
 const setLoading = (isLoading: boolean) => {
   return { type: SET_LOADING, isLoading: isLoading };
+};
+
+const setMintProcess = (process: { show: boolean; message: string }) => {
+  return { type: SET_MINT_PROCESS, process: process };
 };
 
 const setLastWord = (word: string) => {
@@ -68,6 +73,7 @@ export const actions = {
   setCurrentWordNum,
   setContract,
   setNextTokenId,
+  setMintProcess,
 };
 
 export type Actions =
@@ -81,7 +87,8 @@ export type Actions =
   | ReturnType<typeof setCurrentWordNum>
   | ReturnType<typeof setLoading>
   | ReturnType<typeof setContract>
-  | ReturnType<typeof setNextTokenId>;
+  | ReturnType<typeof setNextTokenId>
+  | ReturnType<typeof setMintProcess>;
 
 export type State = {
   lastWord: string;
@@ -95,6 +102,7 @@ export type State = {
   isLoading: boolean;
   contract: ethers.Contract | null;
   nextTokenId: number;
+  process: { show: boolean; message: string };
 };
 
 export const initialState: State = {
@@ -109,6 +117,7 @@ export const initialState: State = {
   isLoading: false,
   contract: null,
   nextTokenId: 0,
+  process: { show: false, message: "" },
 };
 
 export const reducer = (state: State, action: Actions): State => {
@@ -157,6 +166,11 @@ export const reducer = (state: State, action: Actions): State => {
       return {
         ...state,
         isLoading: action.isLoading,
+      };
+    case SET_MINT_PROCESS:
+      return {
+        ...state,
+        process: action.process,
       };
     case SET_CONTRACT:
       return {
