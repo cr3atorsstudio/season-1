@@ -49,8 +49,13 @@ contract Shiritori is ERC1155, Ownable {
         );
         _mint(msg.sender, nextTokenId, 1, "");
 
-        // 変数を更新
-        authWord = lastWord;
+        // 最初のmintの時は、authWordを渡されたwordにする。それ以降は前の単語をアサイン
+        if (nextTokenId == 0) {
+            authWord = word;
+        } else {
+            authWord = lastWord;
+        }
+        
         nextTokenId += 1;
         lastWord = word;
 
