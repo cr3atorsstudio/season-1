@@ -320,7 +320,7 @@ const useHandleAction = () => {
       dispatch(
         setMintProcess({
           show: true,
-          message: "WalletでAcceptを押すとミントが始まります！",
+          message: "WalletでConfirmを押すとミントが始まります！",
         })
       );
       const isMinted = await mintNFT(
