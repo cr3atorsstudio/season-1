@@ -9,7 +9,7 @@ const schema = {
   properties: {
     PORT: {
       type: "string",
-      default: 3000,
+      default: 8080,
     },
   },
 };
@@ -46,8 +46,14 @@ server.post<{
   return { success: true, word: lastLastWord };
 });
 
-server.listen({ port: 8080 }, (err, address) => {
+const port = process.env.PORT || 8080;
+const IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined;
+const host = IS_GOOGLE_CLOUD_RUN ? "0.0.0.0" : undefined;
+
+//@ts-ignore
+server.listen({ port: port, host: host }, (err, address) => {
   if (err) {
+    console.log("error!!!");
     console.error(err);
     process.exit(1);
   }

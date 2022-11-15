@@ -37,6 +37,7 @@ export const encode = (word: string) => {
   return encoded;
 };
 
+//@ts-ignore
 const decode = (encoded: number) => {
   if (encoded === -1) {
     return "";

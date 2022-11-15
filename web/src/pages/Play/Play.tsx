@@ -27,20 +27,20 @@ const Play = () => {
   return (
     <>
       <Navbar />
-      <div className='flex flex-col items-center justify-center'>
-        <div className='mt-20'>
-          <p className='mb-10 text-center md:text-xl'>
+      <div className="flex flex-col items-center justify-center">
+        <div className="mt-20">
+          <p className="mb-10 text-center md:text-xl">
             現在繋がっている単語数：{nextTokenId - 1}単語
           </p>
-          <p className='text-center md:text-xl'>現在の最後の単語は...</p>
-          <p className='font-nico text-[80px] md:text-[128px]'>{lastWord}</p>
+          <p className="text-center md:text-xl">現在の最後の単語は...</p>
+          <p className="font-nico text-[80px] md:text-[128px]">{lastWord}</p>
         </div>
         <img
-          src='public/images/arrow.png'
-          alt='arrow'
-          className='h-20 md:h-auto'
+          src="public/images/arrow.png"
+          alt="arrow"
+          className="h-20 md:h-auto"
         />
-        <div className='flex flex-col items-center justify-center'>
+        <div className="flex flex-col items-center justify-center">
           {isLoading ? (
             <LoadingSpinner />
           ) : (
@@ -50,7 +50,7 @@ const Play = () => {
                 lastWord={lastWord}
               />
               {hasWordError && (
-                <p className='mt-5 text-left text-red-500 md:text-xl'>
+                <p className="mt-5 text-left text-red-500 md:text-xl">
                   {errorTexts}
                 </p>
               )}
