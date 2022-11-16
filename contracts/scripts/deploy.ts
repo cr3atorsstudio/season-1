@@ -5,7 +5,7 @@ async function main() {
   const nft = await NFT.deploy(
     "test",
     "symbol",
-    "https://shiriitori.s3.us-east-1.amazonaws.com/metadata/${id}.json",
+    "https://shiriitori.s3.us-east-1.amazonaws.com/metadata/{id}.json",
     0,
     0,
     0
@@ -19,8 +19,6 @@ async function main() {
 
   txn = await nft.mint(132776, 0); // くすり
   await txn.wait();
-
-  const lastWordNum = await nft.lastWord();
 }
 
 main()
