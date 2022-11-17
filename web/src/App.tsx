@@ -6,6 +6,7 @@ import { LoadingSpinner } from "components/Spinner";
 
 import "./index.css";
 import "@rainbow-me/rainbowkit/styles.css";
+import "./polyfills";
 
 import {
   getDefaultWallets,
