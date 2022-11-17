@@ -55,9 +55,9 @@ const Play = () => {
                 lastWord={lastWord}
               />
               {hasWordError && (
-                <p className="mt-5 text-left text-red-500 md:text-xl">
+                <div className="mt-5 text-left text-red-500 md:text-xl">
                   {errorTexts}
-                </p>
+                </div>
               )}
               <Button text={"つなげる"} onClick={handleOnClick} />
             </>

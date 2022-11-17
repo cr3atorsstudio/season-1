@@ -24,6 +24,8 @@ const maxLength = 5;
 
 const useHandleAction = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  // 前の単語が特殊文字で終了する場合の最終文字の変形処理
+  const lastCharacter = useTransformSpecialCharacter(state.lastWord);
 
   const handleWordChange = (input: string) => {
     dispatch(checkWordError(false));
@@ -35,9 +37,6 @@ const useHandleAction = () => {
     if (state.lastWord) {
       dispatch(setLoading(true));
       let hiraganaInputWord: string = "";
-
-      // 前の単語が特殊文字で終了する場合の最終文字の変形処理
-      const lastCharacter = useTransformSpecialCharacter(state.lastWord);
 
       const changeToHiragana = (text: string) => {
         return new Promise<string>((resolve, reject) => {
@@ -58,6 +57,7 @@ const useHandleAction = () => {
                       "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
                     )
                   );
+                  dispatch(setInputWord(""));
                   return;
                 }
                 if (tokens[0].word_type === "UNKNOWN") {
@@ -68,6 +68,7 @@ const useHandleAction = () => {
                       "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
                     )
                   );
+                  dispatch(setInputWord(""));
                   return;
                 }
                 if (!tokens[0].reading) {
@@ -78,6 +79,7 @@ const useHandleAction = () => {
                       "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
                     )
                   );
+                  dispatch(setInputWord(""));
                   return;
                 }
                 let reading: string = tokens[0].reading;
@@ -97,7 +99,9 @@ const useHandleAction = () => {
       // 入力が無い場合のエラー
       if (!state.inputWord) {
         dispatch(checkWordError(true));
+        dispatch(setLoading(false));
         dispatch(setWordErrorMessage("単語を入力してください。"));
+        return;
       }
       // 前の単語の最終語句と続いているか確認し、繋がっていればstateをtrueに変更する
       if (state.inputWord) {
@@ -112,6 +116,7 @@ const useHandleAction = () => {
               dispatch(
                 setWordErrorMessage("6文字以上の単語は入力できません。")
               );
+              dispatch(setInputWord(""));
               dispatch(setLoading(false));
               return;
             }
@@ -122,6 +127,7 @@ const useHandleAction = () => {
                   "最後が「ん」で終わる単語は入力できません。"
                 )
               );
+              dispatch(setInputWord(""));
               dispatch(setLoading(false));
               return;
             }
@@ -142,6 +148,7 @@ const useHandleAction = () => {
             if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
               dispatch(checkWordError(true));
               dispatch(setWordErrorMessage("前の単語につながりません。"));
+              dispatch(setInputWord(""));
               dispatch(setLoading(false));
             }
           });
