@@ -16,6 +16,7 @@ const Play = () => {
     isLoading,
     nextTokenId,
     process,
+    isConnected,
   } = useHandleAction();
 
   const errorTexts = wordErrorMessage.split("\n").map((text, index) => {
@@ -32,11 +33,21 @@ const Play = () => {
       <Navbar />
       <div className="flex flex-col items-center justify-center">
         <div className="mt-20">
-          <p className="mb-10 text-center md:text-xl">
-            現在繋がっている単語数：{nextTokenId > 0 ? nextTokenId - 1 : 0}単語
-          </p>
-          <p className="text-center md:text-xl">現在の最後の単語は...</p>
-          <p className="font-nico text-[80px] md:text-[128px]">{lastWord}</p>
+          {isConnected ? (
+            <div>
+              <p className="mb-10 text-center md:text-xl">
+                  現在繋がっている単語数：{nextTokenId > 0 ? nextTokenId - 1 : 0}単語
+              </p>
+              <p className="text-center md:text-xl">現在の最後の単語は...</p>
+              <p className="font-nico text-[80px] md:text-[128px]">{lastWord}</p>
+            </div>
+            ) : (
+            <div>
+              <p>
+                まずはあなたのWalletにつなげてください！
+              </p>
+            </div>
+            )}
         </div>
         <img
           src="public/images/arrow.png"

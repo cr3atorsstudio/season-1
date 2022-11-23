@@ -17,6 +17,7 @@ const {
   setContract,
   setNextTokenId,
   setMintProcess,
+  setConnected,
 } = actions;
 
 const maxLength = 5;
@@ -268,19 +269,27 @@ const useHandleAction = () => {
   };
 
   useEffect(() => {
-    const { ethereum } = window;
-    if (ethereum) {
-      const provider = new ethers.providers.Web3Provider(ethereum as any);
-      const signer = provider.getSigner();
-      const shiritori = new ethers.Contract(
-        contractAddress,
-        contractABI,
-        signer
-      );
+    (async() => {
+      const { ethereum } = window;
 
-      dispatch(setContract(shiritori));
-    }
-  }, []);
+      const provider = new ethers.providers.Web3Provider(ethereum as any);
+      const accounts = await provider.listAccounts();
+
+      if (accounts.length === 0) {
+        dispatch(setConnected(false));
+      } else {
+        const signer = provider.getSigner();
+        const shiritori = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        );
+
+        dispatch(setContract(shiritori));
+        dispatch(setConnected(true));
+      }
+    })()
+  }, [window.ethereum]);
 
   useEffect(() => {
     const onMintComplete = (nextTokenId: number) => {
