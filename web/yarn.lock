@@ -1947,6 +1947,13 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
+"@lottiefiles/react-lottie-player@^3.4.9":
+  "integrity" "sha512-DDhXPGwn29bGZIJvajWNbVJNMr50esKS2nsxZ7j/tu47U+qdJ40qJMLuYFCd8gr4alYpOG1NrgACWvGW7HBrcg=="
+  "resolved" "https://registry.npmjs.org/@lottiefiles/react-lottie-player/-/react-lottie-player-3.4.9.tgz"
+  "version" "3.4.9"
+  dependencies:
+    "lottie-web" "^5.7.8"
+
 "@mapbox/node-pre-gyp@^1.0.0":
   "integrity" "sha512-4ySo4CjzStuprMwk35H5pPbkymjv1SF3jGLj6rAHp/xT/RF7TL7bd9CTm1xDY49K2qF7jmR/g7k+SkLETP6opA=="
   "resolved" "https://registry.npmjs.org/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.10.tgz"
@@ -7128,6 +7135,11 @@
   dependencies:
     "js-tokens" "^3.0.0 || ^4.0.0"
 
+"lottie-web@^5.7.8":
+  "integrity" "sha512-q2hfqKrGXNkwjSSZjKxf3fWMi0e3ZBc03qBkVWoGbwUJ7BcG+9YXjMPtmmhitzk8Nc6VQ5PRnh9yInPdfq0PZg=="
+  "resolved" "https://registry.npmjs.org/lottie-web/-/lottie-web-5.10.0.tgz"
+  "version" "5.10.0"
+
 "lru-cache@^6.0.0":
   "integrity" "sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA=="
   "resolved" "https://registry.npmjs.org/lru-cache/-/lru-cache-6.0.0.tgz"
@@ -8856,7 +8868,7 @@
     "invariant" "^2.2.4"
     "tslib" "^2.0.0"
 
-"react@*", "react@^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18.0.0", "react@^18", "react@^18.0.0", "react@^18.2.0", "react@>= 16", "react@>=16.8", "react@>=16.8.0", "react@>=17", "react@>=17.0.0":
+"react@*", "react@^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18.0.0", "react@^18", "react@^18.0.0", "react@^18.2.0", "react@>= 16", "react@>=16.8", "react@>=16.8.0", "react@>=17", "react@>=17.0.0", "react@16 - 18":
   "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   "version" "18.2.0"
