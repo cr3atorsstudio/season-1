@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const Navbar = () => {
+
+
   return (
     <div>
       <nav className="px-2 py-8 sm:px-4">
