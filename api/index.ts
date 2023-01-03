@@ -2,6 +2,8 @@ import fastify from "fastify";
 import { saveImage } from "./saveImage";
 import fastifyEnv from "@fastify/env";
 import cors from "@fastify/cors";
+import { tokenize, getTokenizer } from "kuromojin";
+import { QueryString } from "aws-sdk/clients/cloudwatchlogs";
 
 const schema = {
   type: "object",
@@ -45,6 +47,19 @@ server.post<{
   );
   return { success: true, word: lastLastWord };
 });
+
+server.get<{ Querystring: { word: string } }>(
+  "/validate",
+  async (request, reply) => {
+    const { word } = request.query;
+    await getTokenizer({
+      dicPath: "./dict",
+    });
+    console.log(word);
+    const tokens = await tokenize(word);
+    return { success: true, tokens: tokens };
+  }
+);
 
 const port = process.env.PORT || 8080;
 const IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined;

@@ -1,6 +1,5 @@
 import { useEffect, useReducer } from "react";
 import { actions, initialState, reducer } from "reducers/play";
-import kuromoji from "kuromoji";
 import { mintNFT } from "lib/mint";
 import { encode, decode } from "constants/encodeDecode";
 import { contractAddress } from "constants/contract";
@@ -37,64 +36,122 @@ const useHandleAction = () => {
     if (state.lastWord) {
       dispatch(setLoading(true));
       let hiraganaInputWord: string = "";
+      const changeToHiragana = async (text: string) => {
+        const res = await window.fetch(
+          `${import.meta.env.VITE_API_URL}/validate?word=${text}`,
+          {
+            method: "get",
+            headers: {
+              "content-type": "application/json;charset=UTF-8",
+            },
+          }
+        );
 
-      const changeToHiragana = (text: string) => {
-        return new Promise<string>((resolve, reject) => {
-          kuromoji
-            .builder({ dicPath: "/dict" })
-            .build((error: Error, tokenizer: any) => {
-              if (error) {
-                reject(error);
-                return;
-              } else {
-                const tokens: any[] = tokenizer.tokenize(text);
-                console.log(tokens);
-                if (tokens.length === 0 || tokens.length > 1) {
-                  dispatch(checkWordError(true));
-                  dispatch(setLoading(false));
-                  dispatch(
-                    setWordErrorMessage(
-                      "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
-                    )
-                  );
-                  dispatch(setInputWord(""));
-                  return;
-                }
-                if (tokens[0].word_type === "UNKNOWN") {
-                  dispatch(checkWordError(true));
-                  dispatch(setLoading(false));
-                  dispatch(
-                    setWordErrorMessage(
-                      "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
-                    )
-                  );
-                  dispatch(setInputWord(""));
-                  return;
-                }
-                if (!tokens[0].reading) {
-                  dispatch(checkWordError(true));
-                  dispatch(setLoading(false));
-                  dispatch(
-                    setWordErrorMessage(
-                      "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
-                    )
-                  );
-                  dispatch(setInputWord(""));
-                  return;
-                }
-                let reading: string = tokens[0].reading;
-                const hiragana: string = reading.replace(
-                  /[\u30a1-\u30f6]/g,
-                  function (match: string) {
-                    const chr = match.charCodeAt(0) - 0x60;
-                    return String.fromCharCode(chr);
-                  }
-                );
-                resolve(hiragana);
-              }
-            });
-        });
+        const { tokens } = await res.json();
+        console.log(tokens);
+        if (tokens.length === 0 || tokens.length > 1) {
+          dispatch(checkWordError(true));
+          dispatch(setLoading(false));
+          dispatch(
+            setWordErrorMessage(
+              "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
+            )
+          );
+          return;
+        }
+        if (tokens[0].word_type === "UNKNOWN") {
+          dispatch(checkWordError(true));
+          dispatch(setLoading(false));
+          dispatch(
+            setWordErrorMessage(
+              "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
+            )
+          );
+          return;
+        }
+        if (!tokens[0].reading) {
+          dispatch(checkWordError(true));
+          dispatch(setLoading(false));
+          dispatch(
+            setWordErrorMessage(
+              "単語が認識できませんでした。以下のことを試してください。\n-　ひらがなとカタカナを入れ替える（×: ごりら、◯: ゴリラ）\n-　複数単語の場合は一単語にする（×: ごまだんご、◯: ごま）\n-　別の単語を入力する"
+            )
+          );
+          return;
+        }
+        console.log(tokens[0]);
+        let reading: string = tokens[0].reading;
+        const hiragana: string = reading.replace(
+          /[\u30a1-\u30f6]/g,
+          function (match: string) {
+            const chr = match.charCodeAt(0) - 0x60;
+            return String.fromCharCode(chr);
+          }
+        );
+        return hiragana;
       };
+
+      // 入力が無い場合のエラー
+      if (!state.inputWord) {
+        dispatch(checkWordError(true));
+        dispatch(setWordErrorMessage("単語を入力してください。"));
+      }
+      // 前の単語の最終語句と続いているか確認し、繋がっていればstateをtrueに変更する
+      if (state.inputWord) {
+        changeToHiragana(state.inputWord)
+          .then((data: string | undefined): void => {
+            if (data === undefined) {
+              dispatch(checkWordError(true));
+              dispatch(setLoading(false));
+              dispatch(
+                setWordErrorMessage(
+                  "単語が認識できませんでした。ネットワーク状況を確認し、再度試してみてください"
+                )
+              );
+              return;
+            }
+            hiraganaInputWord = data;
+          })
+          .then(async (): Promise<void> => {
+            if (hiraganaInputWord.length > 5) {
+              dispatch(checkWordError(true));
+              dispatch(
+                setWordErrorMessage("6文字以上の単語は入力できません。")
+              );
+              dispatch(setLoading(false));
+              return;
+            }
+            if (hiraganaInputWord.slice(-1) === "ん") {
+              dispatch(checkWordError(true));
+              dispatch(
+                setWordErrorMessage(
+                  "最後が「ん」で終わる単語は入力できません。"
+                )
+              );
+              dispatch(setLoading(false));
+              return;
+            }
+            // 成功の場合ここにくる
+            if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
+              console.log("hiraganaInputWord", hiraganaInputWord);
+
+              dispatch(verifyJapaneseWord(true));
+              console.log("hiraganaInputWord", hiraganaInputWord);
+              const wordNum = encode(hiraganaInputWord, maxLength);
+              console.log("decoded", decode(wordNum, maxLength));
+
+              console.log("the input word can follow the previous word!");
+
+              await mint(hiraganaInputWord, wordNum);
+            }
+            console.log("lastCharactoer", lastCharacter);
+            if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
+              dispatch(checkWordError(true));
+              dispatch(setWordErrorMessage("前の単語につながりません。"));
+              dispatch(setLoading(false));
+            }
+          });
+      }
 
       // 入力が無い場合のエラー
       if (!state.inputWord) {
