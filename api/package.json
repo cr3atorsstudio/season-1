@@ -16,6 +16,7 @@
     "@fastify/cors": "^8.2.0",
     "@fastify/env": "^4.1.0",
     "@pinata/sdk": "^2.1.0",
+    "@types/hepburn": "^1.2.0",
     "@types/merge-images": "^1.2.1",
     "@types/node": "^18.11.9",
     "aws-sdk": "^2.1250.0",
@@ -30,7 +31,6 @@
     "node-p5": "^1.0.4",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
-    "@types/hepburn": "^1.2.0",
     "typescript": "^4.8.4"
   },
   "devDependencies": {
