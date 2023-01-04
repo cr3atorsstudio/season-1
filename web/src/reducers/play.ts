@@ -12,6 +12,7 @@ const SET_CURRENT_WORD = "SET_CURRENT_WORD" as const;
 const SET_CURRENT_WORD_NUM = "SET_CURRENT_WORD_NUM" as const;
 const SET_CONTRACT = "SET_CONTRACT" as const;
 const SET_NEXT_TOKEN_ID = "SET_NEXT_TOKEN_ID" as const;
+const SET_CONNECTED = "SET_CONNECTED" as const;
 
 const setLoading = (isLoading: boolean) => {
   return { type: SET_LOADING, isLoading: isLoading };
@@ -53,12 +54,16 @@ const setCurrentWordNum = (currentWordNum: number) => {
   return { type: SET_CURRENT_WORD_NUM, currentWordNum: currentWordNum };
 };
 
-const setContract = (contract: ethers.Contract) => {
+const setContract = (contract: ethers.Contract | null) => {
   return { type: SET_CONTRACT, contract: contract };
 };
 
 const setNextTokenId = (nextTokenId: number) => {
   return { type: SET_NEXT_TOKEN_ID, nextTokenId: nextTokenId };
+};
+
+const setConnected = (isConnected: boolean) => {
+  return { type: SET_CONNECTED, isConnected: isConnected };
 };
 
 export const actions = {
@@ -74,6 +79,7 @@ export const actions = {
   setContract,
   setNextTokenId,
   setMintProcess,
+  setConnected,
 };
 
 export type Actions =
@@ -88,7 +94,8 @@ export type Actions =
   | ReturnType<typeof setLoading>
   | ReturnType<typeof setContract>
   | ReturnType<typeof setNextTokenId>
-  | ReturnType<typeof setMintProcess>;
+  | ReturnType<typeof setMintProcess>
+  | ReturnType<typeof setConnected>;
 
 export type State = {
   lastWord: string;
@@ -103,6 +110,7 @@ export type State = {
   contract: ethers.Contract | null;
   nextTokenId: number;
   process: { show: boolean; message: string };
+  isConnected: boolean;
 };
 
 export const initialState: State = {
@@ -118,6 +126,7 @@ export const initialState: State = {
   contract: null,
   nextTokenId: 0,
   process: { show: false, message: "" },
+  isConnected: false,
 };
 
 export const reducer = (state: State, action: Actions): State => {
@@ -181,6 +190,11 @@ export const reducer = (state: State, action: Actions): State => {
       return {
         ...state,
         nextTokenId: action.nextTokenId,
+      };
+    case SET_CONNECTED:
+      return {
+        ...state,
+        isConnected: action.isConnected,
       };
     default:
       return state;
