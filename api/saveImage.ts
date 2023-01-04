@@ -31,16 +31,17 @@ export const saveImage = async (
     .toString()
     .slice(0, 2);
   const metadataUrl = `https://shiriitori.s3.amazonaws.com/metadata/${tokenId}.json`;
-  console.log(lastWordNumber);
-  console.log(currentWordNumber);
+
+
   await generateBackgroundImage(
     lastWordNumber,
     currentWordNumber,
     backgroundFileName
   );
+
   await generatePinkyImage(lastWord, currentWord, pinkyFileName);
 
-  await delay(3000);
+  await delay(8000);
   const b64 = await mergeImages(
     [
       `${backgroundFileName}.png`,

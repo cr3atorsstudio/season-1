@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules/
-generative_art/dist/
+generative_art/dist/*.png
 dist-ssr
 *.local
 .env

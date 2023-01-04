@@ -32,6 +32,30 @@ const useHandleAction = () => {
     dispatch(setInputWord(input));
   };
 
+  const attemptFetch = (body: any, signal?: AbortSignal) =>
+    fetch(`${import.meta.env.VITE_API_URL}/generate`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(body),
+      signal,
+    }).then((response) => {
+      return response;
+    });
+
+  const fetchWithTimeout = (body: any, ms: number) => {
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), ms);
+    return attemptFetch(body, controller.signal).catch((e) => {
+      if (e instanceof DOMException && e.name === "AbortError") {
+        throw new Error("Fetch timeout");
+      }
+      throw e;
+    });
+  };
+
   const handleOnClick = async () => {
     if (state.lastWord) {
       dispatch(setLoading(true));
@@ -43,6 +67,7 @@ const useHandleAction = () => {
             method: "get",
             headers: {
               "content-type": "application/json;charset=UTF-8",
+              "Access-Control-Allow-Origin": "*",
             },
           }
         );
@@ -133,10 +158,7 @@ const useHandleAction = () => {
             }
             // 成功の場合ここにくる
             if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
-              console.log("hiraganaInputWord", hiraganaInputWord);
-
               dispatch(verifyJapaneseWord(true));
-              console.log("hiraganaInputWord", hiraganaInputWord);
               const wordNum = encode(hiraganaInputWord, maxLength);
               console.log("decoded", decode(wordNum, maxLength));
 
@@ -148,64 +170,6 @@ const useHandleAction = () => {
             if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
               dispatch(checkWordError(true));
               dispatch(setWordErrorMessage("前の単語につながりません。"));
-              dispatch(setLoading(false));
-            }
-          });
-      }
-
-      // 入力が無い場合のエラー
-      if (!state.inputWord) {
-        dispatch(checkWordError(true));
-        dispatch(setLoading(false));
-        dispatch(setWordErrorMessage("単語を入力してください。"));
-        return;
-      }
-      // 前の単語の最終語句と続いているか確認し、繋がっていればstateをtrueに変更する
-      if (state.inputWord) {
-        changeToHiragana(state.inputWord)
-          .then((data: string): void => {
-            console.log("changeToHiragana", data);
-            hiraganaInputWord = data;
-          })
-          .then(async (): Promise<void> => {
-            if (hiraganaInputWord.length > 5) {
-              dispatch(checkWordError(true));
-              dispatch(
-                setWordErrorMessage("6文字以上の単語は入力できません。")
-              );
-              dispatch(setInputWord(""));
-              dispatch(setLoading(false));
-              return;
-            }
-            if (hiraganaInputWord.slice(-1) === "ん") {
-              dispatch(checkWordError(true));
-              dispatch(
-                setWordErrorMessage(
-                  "最後が「ん」で終わる単語は入力できません。"
-                )
-              );
-              dispatch(setInputWord(""));
-              dispatch(setLoading(false));
-              return;
-            }
-            // 成功の場合ここにくる
-            if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
-              console.log("hiraganaInputWord", hiraganaInputWord);
-
-              dispatch(verifyJapaneseWord(true));
-              console.log("hiraganaInputWord", hiraganaInputWord);
-              const wordNum = encode(hiraganaInputWord, maxLength);
-              console.log("decoded", decode(wordNum, maxLength));
-
-              console.log("the input word can follow the previous word!");
-
-              await mint(hiraganaInputWord, wordNum);
-            }
-            console.log("lastCharactoer", lastCharacter);
-            if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
-              dispatch(checkWordError(true));
-              dispatch(setWordErrorMessage("前の単語につながりません。"));
-              dispatch(setInputWord(""));
               dispatch(setLoading(false));
             }
           });
@@ -235,6 +199,7 @@ const useHandleAction = () => {
           : new ethers.Contract(contractAddress, contractABI, signer);
 
         const wordBigInt = await shiritori.lastWord();
+        console.log(wordBigInt);
         const lastWordNum: number = wordBigInt.toNumber();
         const lastWord: string = decode(lastWordNum, maxLength);
         console.log("lastword", lastWord);
@@ -272,6 +237,8 @@ const useHandleAction = () => {
     if (ethereum) {
       const provider = new ethers.providers.Web3Provider(ethereum as any);
       const signer = provider.getSigner();
+      console.log(contractAddress);
+      console.log(contractABI);
       const shiritori = new ethers.Contract(
         contractAddress,
         contractABI,
@@ -325,16 +292,8 @@ const useHandleAction = () => {
     };
 
     console.log(body, ">>>");
-    const response = await window.fetch(
-      `${import.meta.env.VITE_API_URL}/generate`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json;charset=UTF-8",
-        },
-        body: JSON.stringify(body),
-      }
-    );
+
+    const response = await fetchWithTimeout(body, 20000);
 
     const { word: lastLastWord, errors } = await response.json();
     if (!response.ok) {
