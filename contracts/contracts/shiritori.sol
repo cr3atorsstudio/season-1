@@ -6,16 +6,11 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Shiritori is ERC1155, Ownable {
-    // TODO: 「ん」で終わったとき: フロントと相談、isUsedNFlag?的なbooleanを渡す?
-
     string public name;
     string public symbol;
 
-    // 認証用の単語（一つ前の単語）
     uint256 private authWord;
-    /* 最後のテキストを返す */
     uint256 public lastWord;
-    // 次に使われるTokenIdを返す
     uint256 public nextTokenId;
 
     constructor(
@@ -34,7 +29,6 @@ contract Shiritori is ERC1155, Ownable {
     }
 
     event NFTMinted(uint256 nextTokenId);
-
 
     // setURI
     function setURI(string memory newURI) public onlyOwner {
@@ -55,7 +49,7 @@ contract Shiritori is ERC1155, Ownable {
         } else {
             authWord = lastWord;
         }
-        
+
         nextTokenId += 1;
         lastWord = word;
 

@@ -38,11 +38,7 @@ const Play = () => {
           <p className="text-center md:text-xl">現在の最後の単語は...</p>
           <p className="font-nico text-[80px] md:text-[128px]">{lastWord}</p>
         </div>
-        <img
-          src="public/images/arrow.png"
-          alt="arrow"
-          className="h-20 md:h-auto"
-        />
+        <img src="/images/arrow.png" alt="arrow" className="h-20 md:h-auto" />
         <div className="flex flex-col items-center justify-center">
           {isLoading ? (
             <>

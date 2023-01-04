@@ -22,7 +22,13 @@ const options = {
 };
 
 const server = fastify().register(fastifyEnv, options);
-server.register(cors, { origin: true });
+server.register(cors, {
+  origin: [
+    "https://shiritori-web.web.app",
+    "https://shiritori.cr3ators.studio",
+    "http://localhost:5173",
+  ],
+});
 
 server.post<{
   Body: {
@@ -55,7 +61,6 @@ server.get<{ Querystring: { word: string } }>(
     await getTokenizer({
       dicPath: "./dict",
     });
-    console.log(word);
     const tokens = await tokenize(word);
     return { success: true, tokens: tokens };
   }
@@ -63,7 +68,7 @@ server.get<{ Querystring: { word: string } }>(
 
 const port = process.env.PORT || 8080;
 const IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined;
-const host = IS_GOOGLE_CLOUD_RUN ? "0.0.0.0" : undefined;
+const host = IS_GOOGLE_CLOUD_RUN ? "0.0.0.0" : "127.0.0.1";
 
 //@ts-ignore
 server.listen({ port: port, host: host }, (err, address) => {
