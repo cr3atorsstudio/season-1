@@ -24,7 +24,6 @@
     "dayjs": "^1.11.6",
     "fastify": "^4.9.2",
     "hepburn": "github:rlho/hepburn",
-    "kuromojin": "^3.0.0",
     "merge-image": "^1.0.0",
     "merge-images": "^2.0.0",
     "node-p5": "^1.0.4",
@@ -34,6 +33,5 @@
     "typescript": "^4.8.4"
   },
   "devDependencies": {
-    "typescript": "^4.8.4"
   }
 }
