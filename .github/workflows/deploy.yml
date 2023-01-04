@@ -2,7 +2,7 @@ name: deploy_firebase_hosting
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   FrontDeploy:
     name: FrontDeploy
