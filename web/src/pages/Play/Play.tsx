@@ -59,6 +59,13 @@ const Play = () => {
             </>
           )}
         </div>
+        <a
+          href="https://opensea.io/collection/shiritorinft"
+          target="_blank"
+          className="mt-10 underline"
+        >
+          いままでに繋がったShiritori NFTをみる
+        </a>
 
         {process.show && (
           <Notification
