@@ -13,7 +13,7 @@ export const Navbar = () => {
               className="ml-10 mr-5 h-full rounded-lg object-contain sm:h-11"
             />
             <Link
-              className="self-center whitespace-nowrap text-xl text-white"
+              className="self-center whitespace-nowrap font-poppins text-xl text-white"
               to={"/"}
             >
               Creators Studio
@@ -26,7 +26,7 @@ export const Navbar = () => {
                   className="flex w-40 items-center px-9 py-2 text-white hover:opacity-75"
                   to={"/about"}
                 >
-                  説明
+                  遊び方
                 </Link>
               </li>
               <li>
@@ -34,7 +34,7 @@ export const Navbar = () => {
                   className="flex w-40 items-center px-9 py-2 text-white hover:opacity-75"
                   to={"/play"}
                 >
-                  参加する
+                  やってみる
                 </Link>
               </li>
             </ul>

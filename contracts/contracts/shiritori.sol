@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -35,7 +34,6 @@ contract Shiritori is ERC1155, Ownable {
         _setURI(newURI);
     }
 
-    // 単語と認証用の単語を受け取る -> mintする
     function mint(uint256 word, uint256 authenticationWords) public {
         require(
             authenticationWords == authWord,
@@ -43,7 +41,6 @@ contract Shiritori is ERC1155, Ownable {
         );
         _mint(msg.sender, nextTokenId, 1, "");
 
-        // 最初のmintの時は、authWordを渡されたwordにする。それ以降は前の単語をアサイン
         if (nextTokenId == 0) {
             authWord = word;
         } else {
