@@ -23,6 +23,8 @@ module.exports = {
       fontFamily: {
         default: ["Noto Sans"],
         nico: ["Nico Moji"],
+        poppins: ["Poppins"],
+        zenkaku: ["Press Start 2P"],
       },
       colors: {
         background: "#10032B",
