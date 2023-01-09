@@ -124,7 +124,64 @@ const Home = () => {
           )}
         </div>
       </div>
-
+        <div className="font-sans-serif p-8 text-gray-900">
+          <h1 className="mb-4 text-center font-poppins text-6xl font-bold text-white">
+            Team
+          </h1>
+          <div className="flex flex-col items-center justify-center text-center md:flex-row">
+            <div className="flex flex-col items-center">
+              <img src="/images/riho.png" width={480} height={480} />
+              <span className="font-poppins text-lg font-bold text-white">
+                Riho
+              </span>
+              <span className="mb-1 block font-poppins text-white">
+                Software Engineer / Founder
+              </span>
+              <a href="https://twitter.com/rllllho" target="_blank">
+                <img
+                  src="/images/twitter.svg"
+                  alt="Twitter Logo"
+                  width={29.72}
+                  height={24.14}
+                />
+              </a>
+            </div>
+            <div className="flex flex-col items-center">
+              <img src="/images/risa.png" width={480} height={480} />
+              <span className="font-poppins text-lg font-bold text-white">
+                Risa
+              </span>
+              <span className="mb-1 block font-poppins  text-white">
+                Software Developer / wannabe crypto witch
+              </span>
+              <a href="https://twitter.com/risacan_eth" target="_blank">
+                <img
+                  src="/images/twitter.svg"
+                  alt="Twitter Logo"
+                  width={29.72}
+                  height={24.14}
+                />
+              </a>
+            </div>
+            <div className="flex flex-col items-center text-white">
+              <img src="/images/miho.png" width={480} height={480} />
+              <span className="font-poppins text-lg font-bold">Miho</span>
+              <span className="mb-1 block font-poppins  text-white">
+                Software Developer
+              </span>
+              <a href="https://twitter.com/pluto_04" target="_blank">
+                <img
+                  src="/images/twitter.svg"
+                  alt="Twitter Logo"
+                  className="text-white"
+                  width={29.72}
+                  height={24.14}
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
       <div className="mt-24 w-full transform xl:mt-28">
         <Swiper
           autoplay={{
@@ -142,6 +199,15 @@ const Home = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+      </div>
+      <div className="p-6 text-center text-white">
+        <span>© 2022 Copyright: </span>
+        <a
+          className="font-semibold text-white"
+          href="https://tailwind-elements.com/"
+        >
+          Creators Studio
+        </a>
       </div>
     </>
   );
