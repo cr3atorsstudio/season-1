@@ -32,7 +32,6 @@ export const saveImage = async (
     .slice(0, 2);
   const metadataUrl = `https://shiriitori.s3.amazonaws.com/metadata/${tokenId}.json`;
 
-
   await generateBackgroundImage(
     lastWordNumber,
     currentWordNumber,
@@ -71,5 +70,7 @@ export const saveImage = async (
     `https://shiriitori.s3.us-east-1.amazonaws.com/metadata/${lastTokenId}.json`
   );
   const data = await response.json();
+  console.log(`word: ${lastWordNumber}`);
+  console.log(`authenticationWord: ${data.word}`);
   return data.word;
 };

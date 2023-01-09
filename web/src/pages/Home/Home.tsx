@@ -3,6 +3,7 @@ import { EmojiContainer } from "components/EmojiContainer";
 import { EMOJIS } from "constants/emoji";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
+import abi from "../../utils/Shiritori.json";
 
 // Import Swiper styles
 import "swiper/css";
@@ -11,9 +12,35 @@ import "swiper/css";
 import { Autoplay } from "swiper";
 
 import { useWindowSize } from "hooks/useWindowSize";
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { contractAddress } from "constants/contract";
+import { ShiritoriNftContainer } from "components/ShiriitoriNftContainer";
 
 const Home = () => {
   const width = useWindowSize();
+  const { ethereum } = window;
+
+  const [tokenId, SetTokenId] = useState();
+
+  useEffect(() => {
+    const getToken = async () => {
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum as any);
+        const contractABI = abi.abi;
+        const shiritori = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          provider
+        );
+
+        const tokenId = await shiritori.nextTokenId();
+        SetTokenId(tokenId.toNumber());
+      }
+    };
+    getToken();
+  }, [ethereum]);
+
   return (
     <>
       <Navbar />
@@ -58,19 +85,45 @@ const Home = () => {
             <br />
             ”しりとり”をつなげて、世界とあなただけのジェネラティブNFTを手に入れてみましょう😍
             <br />
-            <br />
-            <br />
-            <a
-              href="https://opensea.io/collection/shiritorinft"
-              target="_blank"
-              className="underline"
-            >
-              いままでに繋がったShiritori NFTをみる
-            </a>
           </p>
         </div>
+        <div className="my-24 flex flex-col items-center justify-center  ">
+          <a
+            href="https://opensea.io/collection/shiritorinft"
+            target="_blank"
+            className="text-center font-poppins text-6xl font-bold text-white"
+          >
+            Shiritori NFTs
+          </a>
+          <p className="mt-16 mr-10 text-[20px] leading-10">
+            これまでに繋がったShiritori NFT
+          </p>
+          {tokenId && (
+            <div className=" mt-10 flex w-3/4 flex-wrap justify-center">
+              {[...Array(tokenId - 1)].map((id, index) => {
+                console.log(index);
+                return (
+                  <ShiritoriNftContainer>
+                    <a
+                      target="_blank  "
+                      href={`https://opensea.io/assets/matic/${contractAddress}/${
+                        index + 1
+                      }`}
+                    >
+                      <img
+                        src={`https://shiriitori.s3.us-east-1.amazonaws.com/images/${
+                          index + 1
+                        }.png`}
+                        alt=""
+                      />
+                    </a>
+                  </ShiritoriNftContainer>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
-      <section>
         <div className="font-sans-serif p-8 text-gray-900">
           <h1 className="mb-4 text-center font-poppins text-6xl font-bold text-white">
             Team
