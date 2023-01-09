@@ -123,56 +123,50 @@ const useHandleAction = () => {
       }
       // 前の単語の最終語句と続いているか確認し、繋がっていればstateをtrueに変更する
       if (state.inputWord) {
-        changeToHiragana(state.inputWord)
-          .then((data: string | undefined): void => {
-            if (data === undefined) {
-              dispatch(checkWordError(true));
-              dispatch(setLoading(false));
-              dispatch(
-                setWordErrorMessage(
-                  "単語が認識できませんでした。ネットワーク状況を確認し、再度試してみてください"
-                )
-              );
-              return;
-            }
-            hiraganaInputWord = data;
-          })
-          .then(async (): Promise<void> => {
-            if (hiraganaInputWord.length > 5) {
-              dispatch(checkWordError(true));
-              dispatch(
-                setWordErrorMessage("6文字以上の単語は入力できません。")
-              );
-              dispatch(setLoading(false));
-              return;
-            }
-            if (hiraganaInputWord.slice(-1) === "ん") {
-              dispatch(checkWordError(true));
-              dispatch(
-                setWordErrorMessage(
-                  "最後が「ん」で終わる単語は入力できません。"
-                )
-              );
-              dispatch(setLoading(false));
-              return;
-            }
-            // 成功の場合ここにくる
-            if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
-              dispatch(verifyJapaneseWord(true));
-              const wordNum = encode(hiraganaInputWord, maxLength);
-              console.log("decoded", decode(wordNum, maxLength));
+        const data: string | undefined = await changeToHiragana(
+          state.inputWord
+        );
+        if (data === undefined) {
+          dispatch(checkWordError(true));
+          dispatch(setLoading(false));
+          //dispatch(
+          //  setWordErrorMessage(
+          //    "単語が認識できませんでした。ネットワーク状況を確認し、再度試してみてください"
+          //  )
+          //);
+          return;
+        }
+        hiraganaInputWord = data;
+        if (hiraganaInputWord.length > 5) {
+          dispatch(checkWordError(true));
+          dispatch(setWordErrorMessage("6文字以上の単語は入力できません。"));
+          dispatch(setLoading(false));
+          return;
+        }
+        if (hiraganaInputWord.slice(-1) === "ん") {
+          dispatch(checkWordError(true));
+          dispatch(
+            setWordErrorMessage("最後が「ん」で終わる単語は入力できません。")
+          );
+          dispatch(setLoading(false));
+          return;
+        }
+        // 成功の場合ここにくる
+        if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
+          dispatch(verifyJapaneseWord(true));
+          const wordNum = encode(hiraganaInputWord, maxLength);
+          console.log("decoded", decode(wordNum, maxLength));
 
-              console.log("the input word can follow the previous word!");
+          console.log("the input word can follow the previous word!");
 
-              await mint(hiraganaInputWord, wordNum);
-            }
-            console.log("lastCharactoer", lastCharacter);
-            if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
-              dispatch(checkWordError(true));
-              dispatch(setWordErrorMessage("前の単語につながりません。"));
-              dispatch(setLoading(false));
-            }
-          });
+          await mint(hiraganaInputWord, wordNum);
+        }
+        console.log("lastCharactoer", lastCharacter);
+        if (lastCharacter !== hiraganaInputWord.slice(0, 1)) {
+          dispatch(checkWordError(true));
+          dispatch(setWordErrorMessage("前の単語につながりません。"));
+          dispatch(setLoading(false));
+        }
       }
     }
   };
@@ -304,13 +298,18 @@ const useHandleAction = () => {
       dispatch(
         setMintProcess({
           show: false,
-          message: "",
+          message:
+            "エラーが発生しました。通信環境のよいところで再度試してください。",
         })
       );
       return Promise.reject(error);
     }
-
-    if (lastLastWord !== undefined && currentWordNum && state.contract) {
+    if (
+      response.ok &&
+      lastLastWord !== undefined &&
+      currentWordNum &&
+      state.contract
+    ) {
       dispatch(
         setMintProcess({
           show: true,
