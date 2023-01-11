@@ -4,7 +4,7 @@ import { WordInput } from "components/WordInput";
 import useHandleAction from "./hooks";
 import { LoadingSpinner } from "components/Spinner";
 import { Notification } from "components/Notification";
-import { Player } from '@lottiefiles/react-lottie-player';
+import { Player } from "@lottiefiles/react-lottie-player";
 
 const Play = () => {
   const {
@@ -36,7 +36,8 @@ const Play = () => {
         <div className="flex flex-col items-center justify-center">
           <div className="mt-20">
             <p className="mb-10 text-center md:text-xl">
-              現在繋がっている単語数：{nextTokenId > 0 ? nextTokenId - 1 : 0}単語
+              現在繋がっている単語数：{nextTokenId > 0 ? nextTokenId - 1 : 0}
+              単語
             </p>
             <p className="text-center md:text-xl">現在の最後の単語は...</p>
             <p className="font-nico text-[80px] md:text-[128px]">{lastWord}</p>
@@ -79,7 +80,7 @@ const Play = () => {
         </div>
       ) : (
         <>
-          <div className="flex justify-end mr-24">
+          <div className="mr-24 flex justify-end">
             <Player
               src="https://assets7.lottiefiles.com/packages/lf20_0oummbbk.json"
               className="player"
@@ -89,7 +90,7 @@ const Play = () => {
             />
           </div>
           <div className="mt-20">
-            <p　className="text-center mt-10 mb-20 text-[30px] font-bold md:text-[60px]">
+            <p className="mt-10 mb-20 text-center text-[30px] font-bold md:text-[60px]">
               まずはあなたのWalletにつなげてみましょう！
             </p>
           </div>

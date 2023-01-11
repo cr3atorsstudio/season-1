@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ROUTES } from "constants/routes";
 import { LoadingSpinner } from "components/Spinner";
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
 
 import "./index.css";
 import "@rainbow-me/rainbowkit/styles.css";
@@ -38,6 +40,16 @@ const wagmiClient = createClient({
   autoConnect: true,
   connectors,
   provider,
+});
+
+Sentry.init({
+  dsn: "https://ab55a7c7d1db4b1db18e1665ac9180bd@o4504487671234560.ingest.sentry.io/4504487727988736",
+  integrations: [new BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
 });
 
 const App = () => (
