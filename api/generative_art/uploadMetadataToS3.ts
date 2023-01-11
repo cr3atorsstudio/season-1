@@ -28,11 +28,13 @@ export const uploadMetadataToS3 = (currentWord: number, id: number) => {
     ACL: "public-read",
     ContentType: "text/plain",
   };
-  bucket.upload(param, (err: Error, data: S3.ManagedUpload.SendData) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log("Successfully uploaded file.", data);
-    }
-  });
+  bucket
+    .upload(param, (err: Error, data: S3.ManagedUpload.SendData) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log("Successfully uploaded file.", data);
+      }
+    })
+    .promise();
 };

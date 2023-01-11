@@ -20,11 +20,13 @@ export const uploadImageToS3 = (image: any, id: number) => {
     ACL: "public-read",
     ContentType: "image/png",
   };
-  bucket.upload(param, (err: Error, data: S3.ManagedUpload.SendData) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log("Successfully uploaded file.", data);
-    }
-  });
+  bucket
+    .upload(param, (err: Error, data: S3.ManagedUpload.SendData) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log("Successfully uploaded file.", data);
+      }
+    })
+    .promise();
 };
