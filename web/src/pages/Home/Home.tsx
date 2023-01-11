@@ -100,8 +100,7 @@ const Home = () => {
           </p>
           {tokenId && (
             <div className=" mt-10 flex w-3/4 flex-wrap justify-center">
-              {[...Array(tokenId - 1)].map((id, index) => {
-                console.log(index);
+              {[...Array(tokenId - 1)].map((_, index) => {
                 return (
                   <ShiritoriNftContainer>
                     <a
@@ -124,6 +123,7 @@ const Home = () => {
           )}
         </div>
       </div>
+      <section>
         <div className="font-sans-serif p-8 text-gray-900">
           <h1 className="mb-4 text-center font-poppins text-6xl font-bold text-white">
             Team
@@ -170,6 +170,19 @@ const Home = () => {
                 Software Developer
               </span>
               <a href="https://twitter.com/pluto_04" target="_blank">
+                <img
+                  src="/images/twitter.svg"
+                  alt="Twitter Logo"
+                  className="text-white"
+                  width={29.72}
+                  height={24.14}
+                />
+              </a>
+            </div>
+            <div className="flex flex-col items-center text-white">
+              <img src="/images/maoh.png" width={480} height={480} />
+              <span className="font-poppins text-lg font-bold">Mami</span>
+              <a href="https://twitter.com/maoh_design" target="_blank">
                 <img
                   src="/images/twitter.svg"
                   alt="Twitter Logo"
