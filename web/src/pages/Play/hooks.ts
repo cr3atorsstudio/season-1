@@ -30,14 +30,16 @@ const useHandleAction = () => {
   // サイトがWalletにConnectされているかどうかを確認し、
   // Connectしていれば、最後の単語と単語入力欄のUIを表示
   // Connectしていなければ、WalletのConnectを促すUIを表示
-  window.ethereum
-    .request({ method: 'eth_accounts' })
-    .then(handleAccountsChanged)
-    .catch((err: Error) => {
-      console.error(err);
-    });
+  if (window.ethereum) {
+    window.ethereum
+      .request({ method: "eth_accounts" })
+      .then(handleAccountsChanged)
+      .catch((err: Error) => {
+        console.error(err);
+      });
 
-  window.ethereum.on('accountsChanged', handleAccountsChanged);
+    window.ethereum.on("accountsChanged", handleAccountsChanged);
+  }
 
   function handleAccountsChanged(accounts: Array<string>) {
     if (accounts.length === 0) {
