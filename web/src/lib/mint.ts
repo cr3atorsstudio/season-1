@@ -10,11 +10,11 @@ export const mintNFT = async (
   try {
     const { ethereum } = window;
     if (ethereum) {
-      await shiritori.mint(word, authenticationWord, {
+      const transaction = await shiritori.mint(word, authenticationWord, {
         gasLimit: 300000,
       });
 
-      return true;
+      return transaction;
     } else {
       console.log("wallet is not connected");
       return false;

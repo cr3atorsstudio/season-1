@@ -274,7 +274,7 @@ const useHandleAction = () => {
       dispatch(
         setMintProcess({
           show: true,
-          message: "ミントが完了しました！",
+          message: `ミントが完了しました！<br><a target="_blank" href="https://opensea.io/assets/matic/${contractAddress}/${nextTokenId}">NFTをみる</a>`,
         })
       );
 
@@ -339,20 +339,21 @@ const useHandleAction = () => {
           message: "WalletでAcceptを押すとミントが始まります！",
         })
       );
-      const isMinted = await mintNFT(
+      const transaction = await mintNFT(
         state.contract,
         lastLastWord,
         currentWordNum
       );
+      console.log(transaction);
 
       dispatch(
         setMintProcess({
           show: true,
-          message: "ミント中...",
+          message: `ミント中...<br><br><a target="_blank" href="https://polygonscan.com/address/0x3bc638059e64d1f653f6dd196ee78d62764b5ad9">トランザクションを見る</a>`,
         })
       );
 
-      if (!isMinted) {
+      if (!transaction) {
         dispatch(setLoading(false));
         dispatch(
           setMintProcess({
