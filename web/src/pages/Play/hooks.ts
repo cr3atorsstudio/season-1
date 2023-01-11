@@ -230,7 +230,7 @@ const useHandleAction = () => {
     }
   };
 
-  const getTokenId = async (): Promise<number> => {
+  const getTokenId = async (): Promise<number | undefined> => {
     const { ethereum } = window;
     if (ethereum) {
       const provider = new ethers.providers.Web3Provider(ethereum as any);
