@@ -43,7 +43,7 @@ const wagmiClient = createClient({
 });
 
 Sentry.init({
-  dsn: "https://ab55a7c7d1db4b1db18e1665ac9180bd@o4504487671234560.ingest.sentry.io/4504487727988736",
+  dsn: import.meta.env.SENTRY_DSN,
   integrations: [new BrowserTracing()],
 
   // Set tracesSampleRate to 1.0 to capture 100%
