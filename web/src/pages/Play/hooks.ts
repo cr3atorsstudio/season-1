@@ -17,6 +17,7 @@ const {
   setContract,
   setNextTokenId,
   setMintProcess,
+  setConnected,
 } = actions;
 
 const maxLength = 5;
@@ -25,6 +26,28 @@ const useHandleAction = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   // 前の単語が特殊文字で終了する場合の最終文字の変形処理
   const lastCharacter = useTransformSpecialCharacter(state.lastWord);
+
+  // サイトがWalletにConnectされているかどうかを確認し、
+  // Connectしていれば、最後の単語と単語入力欄のUIを表示
+  // Connectしていなければ、WalletのConnectを促すUIを表示
+  if (window.ethereum) {
+    window.ethereum
+      .request({ method: "eth_accounts" })
+      .then(handleAccountsChanged)
+      .catch((err: Error) => {
+        console.error(err);
+      });
+
+    window.ethereum.on("accountsChanged", handleAccountsChanged);
+  }
+
+  function handleAccountsChanged(accounts: Array<string>) {
+    if (accounts.length === 0) {
+      dispatch(setConnected(false));
+    } else {
+      dispatch(setConnected(true));
+    }
+  }
 
   const handleWordChange = (input: string) => {
     dispatch(checkWordError(false));

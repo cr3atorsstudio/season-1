@@ -5,3 +5,7 @@ interface ImportMetaEnv {
   VITE_API_URL: string;
   VITE_CONTRACT_ADDRESS: string;
 }
+
+interface Window {
+  ethereum: any;
+}
