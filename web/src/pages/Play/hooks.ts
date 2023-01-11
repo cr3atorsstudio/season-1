@@ -245,7 +245,7 @@ const useHandleAction = () => {
       dispatch(setNextTokenId(id));
       return id;
     } else {
-      throw new Error("wallet is not connected");
+      console.log("wallet is not connected");
     }
   };
 
