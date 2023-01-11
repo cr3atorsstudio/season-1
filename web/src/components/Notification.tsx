@@ -1,5 +1,7 @@
+import parse from "html-react-parser";
+
 export interface Props {
-  process: { show: boolean; message: string };
+  process: { show: boolean; message: any };
   onClickAction: () => void;
 }
 
@@ -15,7 +17,7 @@ export const Notification = ({ process, onClickAction }: Props) => {
         role="alert"
       >
         <span className="mr-2 flex-auto text-left font-semibold">
-          {process.message}
+          {parse(process.message)}
         </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
