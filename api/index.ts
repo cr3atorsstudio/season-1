@@ -4,6 +4,11 @@ import fastifyEnv from "@fastify/env";
 import cors from "@fastify/cors";
 import { tokenize, getTokenizer } from "kuromojin";
 import { QueryString } from "aws-sdk/clients/cloudwatchlogs";
+const Sentry = require("@sentry/node");
+// or use es6 import statements
+// import * as Sentry from '@sentry/node';
+
+const Tracing = require("@sentry/tracing");
 
 const schema = {
   type: "object",
@@ -30,6 +35,10 @@ server.register(cors, {
   ],
 });
 
+server.register(require("@immobiliarelabs/fastify-sentry"), {
+  dsn: process.env.SENTRY_DSN,
+});
+
 server.post<{
   Body: {
     lastWord: string;
@@ -38,20 +47,24 @@ server.post<{
     tokenId: string;
   };
 }>("/generate", async (request, reply) => {
-  const { lastWord, currentWord, currentWordNum, tokenId } = request.body;
-  console.log(currentWordNum);
-  if (!lastWord && !currentWord) {
-    //TODO: return 4xx error
-    throw new Error("Wrong words");
+  try {
+    const { lastWord, currentWord, currentWordNum, tokenId } = request.body;
+    console.log(currentWordNum);
+    if (!lastWord && !currentWord) {
+      //TODO: return 4xx error
+      throw new Error("Wrong words");
+    }
+    //TODO: Confirmation of existence of tokenId's metadata
+    const lastLastWord: any = await saveImage(
+      lastWord,
+      currentWord,
+      currentWordNum,
+      parseInt(tokenId)
+    );
+    return { success: true, word: lastLastWord };
+  } catch (e) {
+    Sentry.captureException(e);
   }
-  //TODO: Confirmation of existence of tokenId's metadata
-  const lastLastWord: any = await saveImage(
-    lastWord,
-    currentWord,
-    currentWordNum,
-    parseInt(tokenId)
-  );
-  return { success: true, word: lastLastWord };
 });
 
 server.get<{ Querystring: { word: string } }>(
@@ -75,6 +88,8 @@ server.listen({ port: port, host: host }, (err, address) => {
   if (err) {
     console.log("error!!!");
     console.error(err);
+    server.log.error(err);
+    Sentry.captureException(err);
     process.exit(1);
   }
   console.log(`Server listening at ${address}`);

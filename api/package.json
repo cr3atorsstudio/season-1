@@ -15,7 +15,10 @@
   "dependencies": {
     "@fastify/cors": "^8.2.0",
     "@fastify/env": "^4.1.0",
+    "@immobiliarelabs/fastify-sentry": "^5.0.1",
     "@pinata/sdk": "^2.1.0",
+    "@sentry/react": "^7.30.0",
+    "@sentry/tracing": "^7.30.0",
     "@types/hepburn": "^1.2.0",
     "@types/merge-images": "^1.2.1",
     "@types/node": "^18.11.9",
