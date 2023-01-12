@@ -110,9 +110,9 @@ const Home = () => {
                       }`}
                     >
                       <img
-                        src={`https://shiriitori.s3.us-east-1.amazonaws.com/images/${
-                          index + 1
-                        }.png`}
+                        src={`https://${
+                          process.env.BUCKET_NAME
+                        }.s3.us-east-1.amazonaws.com/images/${index + 1}.png`}
                         alt=""
                       />
                     </a>

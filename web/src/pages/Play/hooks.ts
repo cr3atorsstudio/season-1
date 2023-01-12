@@ -18,6 +18,8 @@ const {
   setNextTokenId,
   setMintProcess,
   setConnected,
+  setBody,
+  setAuthenticationWord,
 } = actions;
 
 const maxLength = 5;
@@ -84,8 +86,9 @@ const useHandleAction = () => {
       dispatch(setLoading(true));
       let hiraganaInputWord: string = "";
       const changeToHiragana = async (text: string) => {
+        const id = await getTokenId();
         const res = await window.fetch(
-          `${import.meta.env.VITE_API_URL}/validate?word=${text}`,
+          `${import.meta.env.VITE_API_URL}/validate?word=${text}&tokenId=${id}`,
           {
             method: "get",
             headers: {
@@ -95,7 +98,8 @@ const useHandleAction = () => {
           }
         );
 
-        const { tokens } = await res.json();
+        const { tokens, authenticationWord } = await res.json();
+        setAuthenticationWord(authenticationWord);
         console.log(tokens);
         if (tokens.length === 0 || tokens.length > 1) {
           dispatch(checkWordError(true));
@@ -267,7 +271,9 @@ const useHandleAction = () => {
   }, []);
 
   useEffect(() => {
-    const onMintComplete = (nextTokenId: number) => {
+    const onMintComplete = async (nextTokenId: number) => {
+      const response = await fetchWithTimeout(state.body, 20000);
+      console.log(response);
       getLastWord();
       dispatch(setNextTokenId(nextTokenId));
       dispatch(setLoading(false));
@@ -301,38 +307,14 @@ const useHandleAction = () => {
 
   const mint = async (currentWord: string, currentWordNum: number) => {
     const id = await getTokenId();
-    const body = {
+    setBody({
       lastWord: state.lastWord,
       currentWord: currentWord,
       currentWordNum: currentWordNum,
       tokenId: id,
-    };
+    });
 
-    console.log(body, ">>>");
-
-    const response = await fetchWithTimeout(body, 20000);
-
-    const { word: lastLastWord, errors } = await response.json();
-    if (!response.ok) {
-      const error = new Error(
-        errors?.map((e: any) => e.message).join("\n") ?? "unknown"
-      );
-      dispatch(setLoading(false));
-      dispatch(
-        setMintProcess({
-          show: false,
-          message:
-            "エラーが発生しました。通信環境のよいところで再度試してください。",
-        })
-      );
-      return Promise.reject(error);
-    }
-    if (
-      response.ok &&
-      lastLastWord !== undefined &&
-      currentWordNum &&
-      state.contract
-    ) {
+    if (state.authenticationWord !== 0 && currentWordNum && state.contract) {
       dispatch(
         setMintProcess({
           show: true,
@@ -341,7 +323,7 @@ const useHandleAction = () => {
       );
       const transaction = await mintNFT(
         state.contract,
-        lastLastWord,
+        state.authenticationWord,
         currentWordNum
       );
       console.log(transaction);

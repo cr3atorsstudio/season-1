@@ -30,7 +30,7 @@ export const saveImage = async (
   const currentWordNumber = encode(currentWord, MAX_LENGTH)
     .toString()
     .slice(0, 2);
-  const metadataUrl = `https://shiriitori.s3.amazonaws.com/metadata/${tokenId}.json`;
+  const metadataUrl = `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/metadata/${tokenId}.json`;
 
   await generateBackgroundImage(
     lastWordNumber,
@@ -67,7 +67,7 @@ export const saveImage = async (
   });
   const lastTokenId = tokenId > 2 ? tokenId - 2 : 0;
   const response = await fetch(
-    `https://shiriitori.s3.us-east-1.amazonaws.com/metadata/${lastTokenId}.json`
+    `https://${process.env.BUCKET_NAME}.s3.us-east-1.amazonaws.com/metadata/${lastTokenId}.json`
   );
   const data = await response.json();
   console.log(`word: ${lastWordNumber}`);

@@ -67,15 +67,28 @@ server.post<{
   }
 });
 
-server.get<{ Querystring: { word: string } }>(
+server.get<{ Querystring: { word: string; tokenId: number } }>(
   "/validate",
   async (request, reply) => {
-    const { word } = request.query;
+    const { word, tokenId } = request.query;
     await getTokenizer({
       dicPath: "./dict",
     });
     const tokens = await tokenize(word);
-    return { success: true, tokens: tokens };
+
+    const lastTokenId = tokenId > 2 ? tokenId - 2 : 0;
+    const response = await fetch(
+      `https://${process.env.BUCKET_NAME}.s3.us-east-1.amazonaws.com/metadata/${lastTokenId}.json`
+    );
+    const data = await response.json();
+    const authenticationWord = data.word;
+    console.log(`authenticationWord: ${data.word}`);
+
+    return {
+      success: true,
+      tokens: tokens,
+      authenticationWord: authenticationWord,
+    };
   }
 );
 
@@ -92,5 +105,6 @@ server.listen({ port: port, host: host }, (err, address) => {
     Sentry.captureException(err);
     process.exit(1);
   }
+  console.log(process.env.BUCKET_NAME);
   console.log(`Server listening at ${address}`);
 });
