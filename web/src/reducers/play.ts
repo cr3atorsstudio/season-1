@@ -14,7 +14,8 @@ const SET_CONTRACT = "SET_CONTRACT" as const;
 const SET_NEXT_TOKEN_ID = "SET_NEXT_TOKEN_ID" as const;
 const SET_CONNECTED = "SET_CONNECTED" as const;
 const SET_BODY = "SET_BODY" as const;
-const SET_AUTHENTICATION_WORD = "SET_AUTHENTICATION_WORD" as const;
+const SET_AUTHENTICATION_WORD_NUM = "SET_AUTHENTICATION_WORD_NUM" as const;
+const SET_LAST_WORD_NUM = "SET_LAST_WORD_NUM" as const;
 
 const setLoading = (isLoading: boolean) => {
   return { type: SET_LOADING, isLoading: isLoading };
@@ -72,10 +73,17 @@ const setBody = (body: bodyType) => {
   return { type: SET_BODY, body: body };
 };
 
-const setAuthenticationWord = (authenticationWord: number) => {
+const setAuthenticationWordNum = (authenticationWordNum: number) => {
   return {
-    type: SET_AUTHENTICATION_WORD,
-    authenticationWord: authenticationWord,
+    type: SET_AUTHENTICATION_WORD_NUM,
+    authenticationWordNum: authenticationWordNum,
+  };
+};
+
+const setLastWordNum = (lastWordNum: number) => {
+  return {
+    type: SET_LAST_WORD_NUM,
+    lastWordNum: lastWordNum,
   };
 };
 
@@ -94,7 +102,8 @@ export const actions = {
   setMintProcess,
   setConnected,
   setBody,
-  setAuthenticationWord,
+  setAuthenticationWordNum,
+  setLastWordNum,
 };
 
 type bodyType = {
@@ -118,7 +127,8 @@ export type Actions =
   | ReturnType<typeof setMintProcess>
   | ReturnType<typeof setConnected>
   | ReturnType<typeof setBody>
-  | ReturnType<typeof setAuthenticationWord>;
+  | ReturnType<typeof setAuthenticationWordNum>
+  | ReturnType<typeof setLastWordNum>;
 
 export type State = {
   lastWord: string;
@@ -135,7 +145,8 @@ export type State = {
   process: { show: boolean; message: string };
   isConnected: boolean;
   body: bodyType;
-  authenticationWord: number;
+  authenticationWordNum: number;
+  lastWordNum: number;
 };
 
 export const initialState: State = {
@@ -153,7 +164,8 @@ export const initialState: State = {
   process: { show: false, message: "" },
   isConnected: false,
   body: { lastWord: "", currentWord: "", currentWordNum: 0, tokenId: 0 },
-  authenticationWord: 0,
+  authenticationWordNum: 0,
+  lastWordNum: 0,
 };
 
 export const reducer = (state: State, action: Actions): State => {
@@ -233,11 +245,17 @@ export const reducer = (state: State, action: Actions): State => {
         ...state,
         body: action.body,
       };
-    case SET_AUTHENTICATION_WORD:
+    case SET_AUTHENTICATION_WORD_NUM:
       return {
         ...state,
-        authenticationWord: action.authenticationWord,
+        authenticationWordNum: action.authenticationWordNum,
       };
+    case SET_LAST_WORD_NUM:
+      return {
+        ...state,
+        lastWordNum: action.lastWordNum,
+      };
+
     default:
       return state;
   }
