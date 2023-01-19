@@ -30,7 +30,6 @@ export const saveImage = async (
   const currentWordNumber = encode(currentWord, MAX_LENGTH)
     .toString()
     .slice(0, 2);
-  const metadataUrl = `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/metadata/${tokenId}.json`;
 
   await generateBackgroundImage(
     lastWordNumber,
@@ -62,8 +61,9 @@ export const saveImage = async (
     } else {
       const readableStreamForFile = fs.createReadStream(`${fileName}.png`);
       await uploadImageToS3(readableStreamForFile, tokenId);
-      await uploadMetadataToS3(currentWordNum, tokenId);
+      await uploadMetadataToS3(currentWordNum, tokenId, currentWord, lastWord);
     }
   });
+  await delay(20000);
   return tokenId;
 };

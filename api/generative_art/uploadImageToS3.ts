@@ -15,7 +15,7 @@ export const uploadImageToS3 = (image: any, id: number) => {
   if (bucketName) {
     const param: S3.Types.PutObjectRequest = {
       Bucket: bucketName,
-      Key: `images/${id}.png`,
+      Key: `v2/images/${id}.png`,
       Body: image,
       ACL: "public-read",
       ContentType: "image/png",

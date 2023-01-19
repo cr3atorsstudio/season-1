@@ -3,9 +3,9 @@ const hre = require("hardhat");
 async function main() {
   const NFT = await hre.ethers.getContractFactory("Shiritori");
   const nft = await NFT.deploy(
-    "test",
-    "test",
-    "https://shiriitori-dev.s3.us-east-1.amazonaws.com/metadata/{id}.json",
+    "ShiritoriNFT",
+    "shiritori",
+    "https://shiriitori.s3.us-east-1.amazonaws.com/v2/metadata/{id}.json",
     0,
     0,
     0
