@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { contractAddress } from "constants/contract";
 import { ShiritoriNftContainer } from "components/ShiriitoriNftContainer";
+import { Footer } from "components/Footer";
 
 const Home = () => {
   const width = useWindowSize();
@@ -216,15 +217,7 @@ const Home = () => {
           ))}
         </Swiper>
       </div>
-      <div className="p-6 text-center text-white">
-        <span>© 2022 Copyright: </span>
-        <a
-          className="font-semibold text-white"
-          href="https://tailwind-elements.com/"
-        >
-          Creators Studio
-        </a>
-      </div>
+      <Footer />
     </>
   );
 };

@@ -4,6 +4,7 @@ import {
   ArrowRightCircleIcon,
 } from "@heroicons/react/24/solid";
 import { Navbar } from "components/Navbar";
+import { Footer } from "components/Footer";
 
 const About = () => {
   return (
@@ -122,7 +123,7 @@ const About = () => {
                   生成されたジェネラティブNFTを手に入れよう！
                 </p>
                 <div className="flex w-3/4 flex-col items-start justify-center md:flex-row">
-                  <p className="text-[12px] leading-8 md:mr-10 md:text-[24px]">
+                  <p className="Gtext-[12px] leading-8 md:mr-10 md:text-[24px]">
                     しりとりをつなげることができましたか？
                     <br />
                     おめでとうございます！！
@@ -155,6 +156,7 @@ const About = () => {
           </Carousel>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

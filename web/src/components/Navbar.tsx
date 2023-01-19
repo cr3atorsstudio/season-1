@@ -6,12 +6,14 @@ export const Navbar = () => {
     <div className="text-sm md:text-lg">
       <nav className="px-2 py-8 sm:px-4">
         <div className="flex w-full flex-nowrap items-center justify-between md:px-2">
-          <div className="flex w-10 items-center md:w-56">
-            <img
-              src="/images/creatorsstudio.jpeg"
-              alt="Creators Studio Logo"
-              className="mr-5 h-full rounded-lg object-contain sm:h-11 md:ml-10"
-            />
+          <div className="flex w-10 items-center md:w-80">
+            <Link to={"/"}>
+              <img
+                src="/images/creatorsstudio.jpeg"
+                alt="Creators Studio Logo"
+                className="mr-5 h-full rounded-lg object-contain sm:h-11 md:ml-10"
+              />
+            </Link>
             <Link
               className="hidden self-center whitespace-nowrap font-poppins text-xl text-white md:block"
               to={"/"}

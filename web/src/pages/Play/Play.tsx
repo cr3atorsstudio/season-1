@@ -6,6 +6,7 @@ import { LoadingSpinner } from "components/Spinner";
 import { Notification } from "components/Notification";
 import { Player } from "@lottiefiles/react-lottie-player";
 import parse from "html-react-parser";
+import { Footer } from "components/Footer";
 
 const Play = () => {
   const {
@@ -101,6 +102,7 @@ const Play = () => {
           </div>
         </>
       )}
+      <Footer />
     </>
   );
 };
