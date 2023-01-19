@@ -293,7 +293,7 @@ const useHandleAction = () => {
         currentWordNum: lastWordNum,
         tokenId: nextTokenId - 1,
       };
-      const response = await fetchWithTimeout(body, 20000);
+      const response = await fetchWithTimeout(body, 40000);
       console.log(response);
       if (!response.ok) {
         dispatch(setLoading(false));
@@ -339,6 +339,8 @@ const useHandleAction = () => {
 
   const mint = async (currentWord: string, currentWordNum: number) => {
     const id = await getTokenId();
+    if (!id) return;
+
     dispatch(
       setBody({
         lastWord: state.lastWord,
@@ -365,7 +367,7 @@ const useHandleAction = () => {
       dispatch(
         setMintProcess({
           show: true,
-          message: `ミント中...<br><br>数分かかります。この画面のままお待ちください<br><br><a target="_blank" href="https://polygonscan.com/address/${contractAddress}">トランザクションを見る</a>`,
+          message: `ミント中...<br><br>最大5分ほどかかります。この画面のままお待ちください<br><br><a target="_blank" href="https://polygonscan.com/address/${contractAddress}">トランザクションを見る</a>`,
         })
       );
 

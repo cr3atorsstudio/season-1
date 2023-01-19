@@ -128,8 +128,25 @@ const Home = () => {
         </div>
       </div>
       <section>
+        <div className="flex flex-col items-center">
+          <h1 className="my-6 text-center font-poppins text-[30px] font-bold text-white md:text-6xl">
+            Tutorial
+          </h1>
+          <div className="">
+            <iframe
+              className="md:h-[380px] md:w-[800px]"
+              src="https://www.youtube.com/embed/jjyHo5hmuSw"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
+      <section>
         <div className="font-sans-serif p-8 text-gray-900">
-          <h1 className="mb-4 text-center font-poppins text-[30px] font-bold text-white md:text-6xl">
+          <h1 className="my-10 text-center font-poppins text-[30px] font-bold text-white md:text-6xl">
             Team
           </h1>
           <div className="flex flex-col items-center justify-center text-center md:flex-row">
