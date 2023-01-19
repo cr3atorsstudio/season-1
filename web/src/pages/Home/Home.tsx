@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { contractAddress } from "constants/contract";
 import { ShiritoriNftContainer } from "components/ShiriitoriNftContainer";
+import { Footer } from "components/Footer";
 
 const Home = () => {
   const width = useWindowSize();
@@ -35,6 +36,7 @@ const Home = () => {
         );
 
         const tokenId = await shiritori.nextTokenId();
+        console.log(tokenId.toNumber());
         SetTokenId(tokenId.toNumber());
       }
     };
@@ -66,7 +68,7 @@ const Home = () => {
 
       <div className="flex flex-col items-center justify-center">
         <div className="">
-          <p className="mt-16 mr-10 text-[20px] leading-10">
+          <p className="text-md mx-4 mt-16 leading-10 md:mr-10 md:text-[20px]">
             このアプリでは、誰もが知っている”しりとり”ゲームからジェネラティブNFTを手に入れることができます。
             <br />
             <br />
@@ -91,15 +93,15 @@ const Home = () => {
           <a
             href="https://rarible.com/shiritorinft"
             target="_blank"
-            className="text-center font-poppins text-6xl font-bold text-white"
+            className="text-center font-poppins text-[30px] font-bold text-white md:text-6xl"
           >
             Shiritori NFTs
           </a>
-          <p className="mt-16 mr-10 text-[20px] leading-10">
+          <p className="leading-10 md:mr-10 md:mt-16 md:text-[20px]">
             これまでに繋がったShiritori NFT
           </p>
           {tokenId && (
-            <div className=" mt-10 flex w-3/4 flex-wrap justify-center">
+            <div className=" mt-10 flex flex-wrap justify-center md:w-3/4">
               {[...Array(tokenId - 1)].map((_, index) => {
                 return (
                   <ShiritoriNftContainer>
@@ -111,7 +113,7 @@ const Home = () => {
                     >
                       <img
                         src={`https://${
-                          process.env.BUCKET_NAME
+                          import.meta.env.VITE_BUCKET_NAME
                         }.s3.us-east-1.amazonaws.com/v2/images/${
                           index + 1
                         }.png`}
@@ -127,7 +129,7 @@ const Home = () => {
       </div>
       <section>
         <div className="font-sans-serif p-8 text-gray-900">
-          <h1 className="mb-4 text-center font-poppins text-6xl font-bold text-white">
+          <h1 className="mb-4 text-center font-poppins text-[30px] font-bold text-white md:text-6xl">
             Team
           </h1>
           <div className="flex flex-col items-center justify-center text-center md:flex-row">
@@ -215,15 +217,7 @@ const Home = () => {
           ))}
         </Swiper>
       </div>
-      <div className="p-6 text-center text-white">
-        <span>© 2022 Copyright: </span>
-        <a
-          className="font-semibold text-white"
-          href="https://tailwind-elements.com/"
-        >
-          Creators Studio
-        </a>
-      </div>
+      <Footer />
     </>
   );
 };

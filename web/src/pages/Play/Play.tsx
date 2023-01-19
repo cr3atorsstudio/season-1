@@ -5,6 +5,8 @@ import useHandleAction from "./hooks";
 import { LoadingSpinner } from "components/Spinner";
 import { Notification } from "components/Notification";
 import { Player } from "@lottiefiles/react-lottie-player";
+import parse from "html-react-parser";
+import { Footer } from "components/Footer";
 
 const Play = () => {
   const {
@@ -35,6 +37,9 @@ const Play = () => {
       {isConnected ? (
         <div className="flex flex-col items-center justify-center">
           <div className="mt-20">
+            <p className="mb-10 text-center md:text-xl">
+              {process.show && parse(process.message)}
+            </p>
             <p className="mb-10 text-center md:text-xl">
               現在繋がっている単語数：{nextTokenId > 0 ? nextTokenId - 1 : 0}
               単語
@@ -81,21 +86,23 @@ const Play = () => {
       ) : (
         <>
           <div className="mr-24 flex justify-end">
-            <Player
-              src="https://assets7.lottiefiles.com/packages/lf20_0oummbbk.json"
-              className="player"
-              loop
-              autoplay
-              style={{ height: "150px", width: "150px" }}
-            />
+            <div className="w-10 md:h-[150px] md:w-[150px]">
+              <Player
+                src="https://assets7.lottiefiles.com/packages/lf20_0oummbbk.json"
+                className="player"
+                loop
+                autoplay
+              />
+            </div>
           </div>
           <div className="mt-20">
-            <p className="mt-10 mb-20 text-center text-[30px] font-bold md:text-[60px]">
+            <p className="mx-10 mt-10 mb-20 text-center text-[20px] font-bold md:text-[60px]">
               まずはあなたのWalletにつなげてみましょう！
             </p>
           </div>
         </>
       )}
+      <Footer />
     </>
   );
 };

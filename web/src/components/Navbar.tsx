@@ -3,17 +3,19 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const Navbar = () => {
   return (
-    <div>
+    <div className="text-sm md:text-lg">
       <nav className="px-2 py-8 sm:px-4">
-        <div className="flex flex-nowrap items-center justify-between px-2">
-          <div className="flex w-56 items-center">
-            <img
-              src="/images/creatorsstudio.jpeg"
-              alt="Creators Studio Logo"
-              className="ml-10 mr-5 h-full rounded-lg object-contain sm:h-11"
-            />
+        <div className="flex w-full flex-nowrap items-center justify-between md:px-2">
+          <div className="flex w-10 items-center md:w-80">
+            <Link to={"/"}>
+              <img
+                src="/images/creatorsstudio.jpeg"
+                alt="Creators Studio Logo"
+                className="mr-5 h-full rounded-lg object-contain sm:h-11 md:ml-10"
+              />
+            </Link>
             <Link
-              className="self-center whitespace-nowrap font-poppins text-xl text-white"
+              className="hidden self-center whitespace-nowrap font-poppins text-xl text-white md:block"
               to={"/"}
             >
               Creators Studio
@@ -23,7 +25,7 @@ export const Navbar = () => {
             <ul className="ml-auto flex list-none lg:flex-row">
               <li>
                 <Link
-                  className="flex w-40 items-center px-9 py-2 text-white hover:opacity-75"
+                  className="flex items-center py-2 px-2 text-white hover:opacity-75 md:w-40 md:px-9"
                   to={"/about"}
                 >
                   遊び方
@@ -31,7 +33,7 @@ export const Navbar = () => {
               </li>
               <li>
                 <Link
-                  className="flex w-40 items-center px-9 py-2 text-white hover:opacity-75"
+                  className="md:w-50 flex items-center py-2 text-white hover:opacity-75 md:px-9"
                   to={"/play"}
                 >
                   やってみる
@@ -39,7 +41,7 @@ export const Navbar = () => {
               </li>
             </ul>
           </div>
-          <div className="w-56">
+          <div className="md:w-80">
             <ConnectButton.Custom>
               {({
                 account,
@@ -117,9 +119,13 @@ export const Navbar = () => {
 
                             <button onClick={openAccountModal} type="button">
                               {account.displayName}
-                              {account.displayBalance
-                                ? ` (${account.displayBalance})`
-                                : ""}
+                              {account.displayBalance ? (
+                                <div className="hidden md:block">
+                                  (${account.displayBalance})
+                                </div>
+                              ) : (
+                                ""
+                              )}
                             </button>
                           </div>
                         );

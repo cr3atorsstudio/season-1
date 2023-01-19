@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   VITE_CONTRACT_ADDRESS: string;
   SENTRY_AUTH_TOKEN: string;
   VITE_SENTRY_DSN: string;
+  VITE_BUCKET_NAME: string;
 }
 
 interface Window {

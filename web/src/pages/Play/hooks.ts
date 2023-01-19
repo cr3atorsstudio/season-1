@@ -361,12 +361,11 @@ const useHandleAction = () => {
         state.lastWordNum,
         currentWordNum
       );
-      console.log(transaction);
 
       dispatch(
         setMintProcess({
           show: true,
-          message: `ミント中...<br><br>数分かかります。この画面のままお待ちください<br><br><a target="_blank" href="https://polygonscan.com/address/0x3bc638059e64d1f653f6dd196ee78d62764b5ad9">トランザクションを見る</a>`,
+          message: `ミント中...<br><br>数分かかります。この画面のままお待ちください<br><br><a target="_blank" href="https://polygonscan.com/address/${contractAddress}">トランザクションを見る</a>`,
         })
       );
 
