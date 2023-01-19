@@ -16,7 +16,7 @@ export const mintNFT = async (
         lastLastWordNum,
         lastWordNum,
         {
-          gasLimit: 300000,
+          gasLimit: 600000,
         }
       );
 
