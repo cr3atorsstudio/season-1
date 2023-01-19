@@ -50,7 +50,7 @@ const Home = () => {
         </div>
 
         <a
-          href="https://opensea.io/collection/shiritorinft"
+          href="https://rarible.com/shiritorinft"
           target="_blank"
           className="mb-20 font-poppins text-[30px] font-bold hover:underline md:text-[60px]"
         >
@@ -89,7 +89,7 @@ const Home = () => {
         </div>
         <div className="my-24 flex flex-col items-center justify-center  ">
           <a
-            href="https://opensea.io/collection/shiritorinft"
+            href="https://rarible.com/shiritorinft"
             target="_blank"
             className="text-center font-poppins text-6xl font-bold text-white"
           >
@@ -105,12 +105,14 @@ const Home = () => {
                   <ShiritoriNftContainer>
                     <a
                       target="_blank  "
-                      href={`https://opensea.io/assets/matic/${contractAddress}/${
+                      href={`https://rarible.com/token/polygon/${contractAddress}:${
                         index + 1
                       }`}
                     >
                       <img
-                        src={`https://shiriitori.s3.us-east-1.amazonaws.com/images/${
+                        src={`https://${
+                          process.env.BUCKET_NAME
+                        }.s3.us-east-1.amazonaws.com/v2/images/${
                           index + 1
                         }.png`}
                         alt=""

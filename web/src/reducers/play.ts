@@ -13,6 +13,10 @@ const SET_CURRENT_WORD_NUM = "SET_CURRENT_WORD_NUM" as const;
 const SET_CONTRACT = "SET_CONTRACT" as const;
 const SET_NEXT_TOKEN_ID = "SET_NEXT_TOKEN_ID" as const;
 const SET_CONNECTED = "SET_CONNECTED" as const;
+const SET_BODY = "SET_BODY" as const;
+const SET_LAST_LAST_WORD = "SET_LAST_LAST_WORD" as const;
+const SET_LAST_LAST_WORD_NUM = "SET_LAST_LAST_WORD_NUM" as const;
+const SET_LAST_WORD_NUM = "SET_LAST_WORD_NUM" as const;
 
 const setLoading = (isLoading: boolean) => {
   return { type: SET_LOADING, isLoading: isLoading };
@@ -66,6 +70,31 @@ const setConnected = (isConnected: boolean) => {
   return { type: SET_CONNECTED, isConnected: isConnected };
 };
 
+const setBody = (body: bodyType) => {
+  return { type: SET_BODY, body: body };
+};
+
+const setLastLastWord = (lastLastWord: string) => {
+  return {
+    type: SET_LAST_LAST_WORD,
+    lastLastWord: lastLastWord,
+  };
+};
+
+const setLastLastWordNum = (lastLastWordNum: number) => {
+  return {
+    type: SET_LAST_LAST_WORD_NUM,
+    lastLastWordNum: lastLastWordNum,
+  };
+};
+
+const setLastWordNum = (lastWordNum: number) => {
+  return {
+    type: SET_LAST_WORD_NUM,
+    lastWordNum: lastWordNum,
+  };
+};
+
 export const actions = {
   setLoading,
   setLastWord,
@@ -80,8 +109,18 @@ export const actions = {
   setNextTokenId,
   setMintProcess,
   setConnected,
+  setBody,
+  setLastLastWord,
+  setLastLastWordNum,
+  setLastWordNum,
 };
 
+type bodyType = {
+  lastWord: string;
+  currentWord: string;
+  currentWordNum: number;
+  tokenId: number;
+};
 export type Actions =
   | ReturnType<typeof setLastWord>
   | ReturnType<typeof setInputWord>
@@ -95,7 +134,11 @@ export type Actions =
   | ReturnType<typeof setContract>
   | ReturnType<typeof setNextTokenId>
   | ReturnType<typeof setMintProcess>
-  | ReturnType<typeof setConnected>;
+  | ReturnType<typeof setConnected>
+  | ReturnType<typeof setBody>
+  | ReturnType<typeof setLastLastWord>
+  | ReturnType<typeof setLastLastWordNum>
+  | ReturnType<typeof setLastWordNum>;
 
 export type State = {
   lastWord: string;
@@ -111,6 +154,10 @@ export type State = {
   nextTokenId: number;
   process: { show: boolean; message: string };
   isConnected: boolean;
+  body: bodyType;
+  lastLastWord: string;
+  lastLastWordNum: number;
+  lastWordNum: number;
 };
 
 export const initialState: State = {
@@ -127,6 +174,10 @@ export const initialState: State = {
   nextTokenId: 0,
   process: { show: false, message: "" },
   isConnected: false,
+  body: { lastWord: "", currentWord: "", currentWordNum: 0, tokenId: 0 },
+  lastLastWord: "",
+  lastLastWordNum: 0,
+  lastWordNum: 0,
 };
 
 export const reducer = (state: State, action: Actions): State => {
@@ -196,6 +247,32 @@ export const reducer = (state: State, action: Actions): State => {
         ...state,
         isConnected: action.isConnected,
       };
+    case SET_CONNECTED:
+      return {
+        ...state,
+        isConnected: action.isConnected,
+      };
+    case SET_BODY:
+      return {
+        ...state,
+        body: action.body,
+      };
+    case SET_LAST_LAST_WORD:
+      return {
+        ...state,
+        lastLastWord: action.lastLastWord,
+      };
+    case SET_LAST_LAST_WORD_NUM:
+      return {
+        ...state,
+        lastLastWordNum: action.lastLastWordNum,
+      };
+    case SET_LAST_WORD_NUM:
+      return {
+        ...state,
+        lastWordNum: action.lastWordNum,
+      };
+
     default:
       return state;
   }

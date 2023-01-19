@@ -4,15 +4,21 @@ import { ethers } from "ethers";
 
 export const mintNFT = async (
   shiritori: ethers.Contract,
-  authenticationWord: number,
+  lastLastWordNum: number,
+  lastWordNum: number,
   word: number
 ) => {
   try {
     const { ethereum } = window;
     if (ethereum) {
-      const transaction = await shiritori.mint(word, authenticationWord, {
-        gasLimit: 300000,
-      });
+      const transaction = await shiritori.mint(
+        word,
+        lastLastWordNum,
+        lastWordNum,
+        {
+          gasLimit: 300000,
+        }
+      );
 
       return transaction;
     } else {

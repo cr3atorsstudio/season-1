@@ -54,28 +54,34 @@ server.post<{
       //TODO: return 4xx error
       throw new Error("Wrong words");
     }
-    //TODO: Confirmation of existence of tokenId's metadata
-    const lastLastWord: any = await saveImage(
+
+    const resultTokenId: any = await saveImage(
       lastWord,
       currentWord,
       currentWordNum,
       parseInt(tokenId)
     );
-    return { success: true, word: lastLastWord };
+    return { success: true, tokenId: resultTokenId };
   } catch (e) {
     Sentry.captureException(e);
   }
 });
 
-server.get<{ Querystring: { word: string } }>(
+server.get<{ Querystring: { word: string; tokenId: number } }>(
   "/validate",
   async (request, reply) => {
-    const { word } = request.query;
+    const { word, tokenId } = request.query;
     await getTokenizer({
       dicPath: "./dict",
     });
     const tokens = await tokenize(word);
-    return { success: true, tokens: tokens };
+
+    const lastTokenId = tokenId > 2 ? tokenId - 2 : 0;
+
+    return {
+      success: true,
+      tokens: tokens,
+    };
   }
 );
 
@@ -92,5 +98,6 @@ server.listen({ port: port, host: host }, (err, address) => {
     Sentry.captureException(err);
     process.exit(1);
   }
+  console.log(process.env.BUCKET_NAME);
   console.log(`Server listening at ${address}`);
 });

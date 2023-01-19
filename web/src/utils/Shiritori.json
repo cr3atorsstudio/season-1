@@ -20,7 +20,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "_authWord",
+          "name": "_lastLastWord",
           "type": "uint256"
         },
         {
@@ -261,6 +261,19 @@
     },
     {
       "inputs": [],
+      "name": "lastLastWord",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "lastWord",
       "outputs": [
         {
@@ -281,7 +294,12 @@
         },
         {
           "internalType": "uint256",
-          "name": "authenticationWords",
+          "name": "lastLastWords",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "lastWords",
           "type": "uint256"
         }
       ],
