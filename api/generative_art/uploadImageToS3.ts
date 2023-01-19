@@ -3,9 +3,8 @@ import S3 from "aws-sdk/clients/s3";
 
 AWS.config.logger = console;
 
-const bucketName = process.env.BUCKET_NAME;
-
 export const uploadImageToS3 = (image: any, id: number) => {
+  const bucketName = process.env.BUCKET_NAME;
   const accessKeyId = process.env.AWS_ACCESS_KEY;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   const bucket = new S3({

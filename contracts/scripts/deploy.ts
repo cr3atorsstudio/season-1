@@ -3,9 +3,9 @@ const hre = require("hardhat");
 async function main() {
   const NFT = await hre.ethers.getContractFactory("Shiritori");
   const nft = await NFT.deploy(
-    "Shiritori",
-    "shiritori",
-    "https://shiriitori.s3.us-east-1.amazonaws.com/metadata/{id}.json",
+    "test",
+    "test",
+    "https://shiriitori-dev.s3.us-east-1.amazonaws.com/metadata/{id}.json",
     0,
     0,
     0
@@ -17,7 +17,7 @@ async function main() {
 
   let txn;
 
-  txn = await nft.mint(132776, 0); // くすり
+  txn = await nft.mint(132776, 0, 0); // くすり
   await txn.wait();
 }
 

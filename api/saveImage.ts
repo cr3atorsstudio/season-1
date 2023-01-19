@@ -61,16 +61,9 @@ export const saveImage = async (
       return new Error(err);
     } else {
       const readableStreamForFile = fs.createReadStream(`${fileName}.png`);
-      uploadImageToS3(readableStreamForFile, tokenId);
-      uploadMetadataToS3(currentWordNum, tokenId);
+      await uploadImageToS3(readableStreamForFile, tokenId);
+      await uploadMetadataToS3(currentWordNum, tokenId);
     }
   });
-  const lastTokenId = tokenId > 2 ? tokenId - 2 : 0;
-  const response = await fetch(
-    `https://${process.env.BUCKET_NAME}.s3.us-east-1.amazonaws.com/metadata/${lastTokenId}.json`
-  );
-  const data = await response.json();
-  console.log(`word: ${lastWordNumber}`);
-  console.log(`authenticationWord: ${data.word}`);
-  return data.word;
+  return tokenId;
 };

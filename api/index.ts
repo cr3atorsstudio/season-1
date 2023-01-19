@@ -54,14 +54,14 @@ server.post<{
       //TODO: return 4xx error
       throw new Error("Wrong words");
     }
-    //TODO: Confirmation of existence of tokenId's metadata
-    const lastLastWord: any = await saveImage(
+
+    const resultTokenId: any = await saveImage(
       lastWord,
       currentWord,
       currentWordNum,
       parseInt(tokenId)
     );
-    return { success: true, word: lastLastWord };
+    return { success: true, tokenId: resultTokenId };
   } catch (e) {
     Sentry.captureException(e);
   }
@@ -77,17 +77,10 @@ server.get<{ Querystring: { word: string; tokenId: number } }>(
     const tokens = await tokenize(word);
 
     const lastTokenId = tokenId > 2 ? tokenId - 2 : 0;
-    const response = await fetch(
-      `https://${process.env.BUCKET_NAME}.s3.us-east-1.amazonaws.com/metadata/${lastTokenId}.json`
-    );
-    const data = await response.json();
-    const authenticationWord = data.word;
-    console.log(`authenticationWord: ${data.word}`);
 
     return {
       success: true,
       tokens: tokens,
-      authenticationWord: authenticationWord,
     };
   }
 );

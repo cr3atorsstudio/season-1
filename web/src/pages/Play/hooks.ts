@@ -18,8 +18,11 @@ const {
   setNextTokenId,
   setMintProcess,
   setConnected,
+  setCurrentWord,
   setBody,
-  setAuthenticationWord,
+  setLastLastWord,
+  setLastLastWordNum,
+  setLastWordNum,
 } = actions;
 
 const maxLength = 5;
@@ -57,8 +60,8 @@ const useHandleAction = () => {
     dispatch(setInputWord(input));
   };
 
-  const attemptFetch = (body: any, signal?: AbortSignal) =>
-    fetch(`${import.meta.env.VITE_API_URL}/generate`, {
+  const generateRequest = async (body: any, signal?: AbortSignal) => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/generate`, {
       method: "POST",
       headers: {
         "content-type": "application/json;charset=UTF-8",
@@ -66,19 +69,20 @@ const useHandleAction = () => {
       },
       body: JSON.stringify(body),
       signal,
-    }).then((response) => {
-      return response;
     });
+    return response;
+  };
 
-  const fetchWithTimeout = (body: any, ms: number) => {
+  const fetchWithTimeout = async (body: any, ms: number) => {
     const controller = new AbortController();
     setTimeout(() => controller.abort(), ms);
-    return attemptFetch(body, controller.signal).catch((e) => {
+    const res = await generateRequest(body, controller.signal).catch((e) => {
       if (e instanceof DOMException && e.name === "AbortError") {
         throw new Error("Fetch timeout");
       }
       throw e;
     });
+    return res;
   };
 
   const handleOnClick = async () => {
@@ -98,8 +102,7 @@ const useHandleAction = () => {
           }
         );
 
-        const { tokens, authenticationWord } = await res.json();
-        setAuthenticationWord(authenticationWord);
+        const { tokens } = await res.json();
         console.log(tokens);
         if (tokens.length === 0 || tokens.length > 1) {
           dispatch(checkWordError(true));
@@ -181,6 +184,7 @@ const useHandleAction = () => {
         // 成功の場合ここにくる
         if (lastCharacter === hiraganaInputWord.slice(0, 1)) {
           dispatch(verifyJapaneseWord(true));
+          dispatch(setCurrentWord(hiraganaInputWord));
           const wordNum = encode(hiraganaInputWord, maxLength);
           console.log("decoded", decode(wordNum, maxLength));
 
@@ -220,12 +224,20 @@ const useHandleAction = () => {
           : new ethers.Contract(contractAddress, contractABI, signer);
 
         const wordBigInt = await shiritori.lastWord();
+        const lastLastWordBigInt = await shiritori.lastLastWord();
         console.log(wordBigInt);
         const lastWordNum: number = wordBigInt.toNumber();
+        const lastLastWordNum: number = lastLastWordBigInt.toNumber();
         const lastWord: string = decode(lastWordNum, maxLength);
+        const lastLastWord: string = decode(lastLastWordNum, maxLength);
         console.log("lastword", lastWord);
+        console.log("lastword", lastLastWord);
 
         dispatch(setLastWord(lastWord));
+        dispatch(setLastWordNum(lastWordNum));
+        dispatch(setLastLastWord(lastLastWord));
+        dispatch(setLastLastWordNum(lastLastWordNum));
+        return { lastWord, lastWordNum, lastLastWord, lastLastWordNum };
       } else {
         console.log("wallet is not connected");
       }
@@ -272,17 +284,35 @@ const useHandleAction = () => {
 
   useEffect(() => {
     const onMintComplete = async (nextTokenId: number) => {
-      const response = await fetchWithTimeout(state.body, 20000);
+      //@ts-ignore
+      const { lastWord, lastWordNum, lastLastWord, lastLastWordNum } =
+        await getLastWord();
+      const body = {
+        lastWord: lastLastWord,
+        currentWord: lastWord,
+        currentWordNum: lastWordNum,
+        tokenId: nextTokenId - 1,
+      };
+      const response = await fetchWithTimeout(body, 20000);
       console.log(response);
-      getLastWord();
-      dispatch(setNextTokenId(nextTokenId));
-      dispatch(setLoading(false));
-      dispatch(
-        setMintProcess({
-          show: true,
-          message: `ミントが完了しました！<br><a target="_blank" href="https://opensea.io/assets/matic/${contractAddress}/${nextTokenId}">NFTをみる</a>`,
-        })
-      );
+      if (!response.ok) {
+        dispatch(setLoading(false));
+        dispatch(
+          setMintProcess({
+            show: true,
+            message: `エラーが発生しました。お手数ですが運営にご連絡ください。(yancanfm@gmail.com)`,
+          })
+        );
+      } else {
+        dispatch(setNextTokenId(nextTokenId));
+        dispatch(setLoading(false));
+        dispatch(
+          setMintProcess({
+            show: true,
+            message: `ミントが完了しました！<br><a target="_blank" href="https://opensea.io/assets/matic/${contractAddress}/${nextTokenId}">NFTをみる</a>`,
+          })
+        );
+      }
 
       setTimeout(() => {
         dispatch(setMintProcess({ show: false, message: "" }));
@@ -307,14 +337,16 @@ const useHandleAction = () => {
 
   const mint = async (currentWord: string, currentWordNum: number) => {
     const id = await getTokenId();
-    setBody({
-      lastWord: state.lastWord,
-      currentWord: currentWord,
-      currentWordNum: currentWordNum,
-      tokenId: id,
-    });
+    dispatch(
+      setBody({
+        lastWord: state.lastWord,
+        currentWord: currentWord,
+        currentWordNum: currentWordNum,
+        tokenId: id,
+      })
+    );
 
-    if (state.authenticationWord !== 0 && currentWordNum && state.contract) {
+    if (state.lastLastWordNum !== 0 && currentWordNum && state.contract) {
       dispatch(
         setMintProcess({
           show: true,
@@ -323,7 +355,8 @@ const useHandleAction = () => {
       );
       const transaction = await mintNFT(
         state.contract,
-        state.authenticationWord,
+        state.lastLastWordNum,
+        state.lastWordNum,
         currentWordNum
       );
       console.log(transaction);
@@ -331,7 +364,7 @@ const useHandleAction = () => {
       dispatch(
         setMintProcess({
           show: true,
-          message: `ミント中...<br><br><a target="_blank" href="https://polygonscan.com/address/0x3bc638059e64d1f653f6dd196ee78d62764b5ad9">トランザクションを見る</a>`,
+          message: `ミント中...<br><br>数分かかります。この画面のままお待ちください<br><br><a target="_blank" href="https://polygonscan.com/address/0x3bc638059e64d1f653f6dd196ee78d62764b5ad9">トランザクションを見る</a>`,
         })
       );
 

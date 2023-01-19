@@ -8,7 +8,7 @@ contract Shiritori is ERC1155, Ownable {
     string public name;
     string public symbol;
 
-    uint256 private authWord;
+    uint256 public lastLastWord;
     uint256 public lastWord;
     uint256 public nextTokenId;
 
@@ -16,13 +16,13 @@ contract Shiritori is ERC1155, Ownable {
         string memory _name,
         string memory _symbol,
         string memory _uri,
-        uint256 _authWord,
+        uint256 _lastLastWord,
         uint256 _lastWord,
         uint256 _nextTokenId
     ) ERC1155(_uri) {
         name = _name;
         symbol = _symbol;
-        authWord = _authWord;
+        lastLastWord = _lastLastWord;
         lastWord = _lastWord;
         nextTokenId = _nextTokenId;
     }
@@ -34,17 +34,21 @@ contract Shiritori is ERC1155, Ownable {
         _setURI(newURI);
     }
 
-    function mint(uint256 word, uint256 authenticationWords) public {
+    function mint(
+        uint256 word,
+        uint256 lastLastWords,
+        uint256 lastWords
+    ) public {
         require(
-            authenticationWords == authWord,
+            lastLastWords == lastLastWord && lastWord == lastWords,
             "Shiritori: Authentication failed."
         );
         _mint(msg.sender, nextTokenId, 1, "");
 
         if (nextTokenId == 0) {
-            authWord = word;
+            lastLastWord = word;
         } else {
-            authWord = lastWord;
+            lastLastWord = lastWord;
         }
 
         nextTokenId += 1;
