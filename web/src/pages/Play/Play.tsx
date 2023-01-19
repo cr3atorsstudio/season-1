@@ -85,16 +85,17 @@ const Play = () => {
       ) : (
         <>
           <div className="mr-24 flex justify-end">
-            <Player
-              src="https://assets7.lottiefiles.com/packages/lf20_0oummbbk.json"
-              className="player"
-              loop
-              autoplay
-              style={{ height: "150px", width: "150px" }}
-            />
+            <div className="w-10 md:h-[150px] md:w-[150px]">
+              <Player
+                src="https://assets7.lottiefiles.com/packages/lf20_0oummbbk.json"
+                className="player"
+                loop
+                autoplay
+              />
+            </div>
           </div>
           <div className="mt-20">
-            <p className="mt-10 mb-20 text-center text-[30px] font-bold md:text-[60px]">
+            <p className="mx-10 mt-10 mb-20 text-center text-[20px] font-bold md:text-[60px]">
               まずはあなたのWalletにつなげてみましょう！
             </p>
           </div>
