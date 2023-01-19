@@ -309,7 +309,9 @@ const useHandleAction = () => {
         dispatch(
           setMintProcess({
             show: true,
-            message: `ミントが完了しました！<br><a target="_blank" href="https://rarible.com/token/polygon/${contractAddress}:${nextTokenId}">NFTをみる</a>`,
+            message: `ミントが完了しました！<br><a target="_blank" href="https://rarible.com/token/polygon/${contractAddress}:${
+              nextTokenId - 1
+            }">NFTをみる</a>`,
           })
         );
       }
