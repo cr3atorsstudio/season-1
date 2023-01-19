@@ -5,6 +5,7 @@ import useHandleAction from "./hooks";
 import { LoadingSpinner } from "components/Spinner";
 import { Notification } from "components/Notification";
 import { Player } from "@lottiefiles/react-lottie-player";
+import parse from "html-react-parser";
 
 const Play = () => {
   const {
@@ -35,6 +36,9 @@ const Play = () => {
       {isConnected ? (
         <div className="flex flex-col items-center justify-center">
           <div className="mt-20">
+            <p className="mb-10 text-center md:text-xl">
+              {process.show && parse(process.message)}
+            </p>
             <p className="mb-10 text-center md:text-xl">
               現在繋がっている単語数：{nextTokenId > 0 ? nextTokenId - 1 : 0}
               単語
