@@ -37,9 +37,11 @@ const Play = () => {
       {isConnected ? (
         <div className="flex flex-col items-center justify-center">
           <div className="mt-20">
-            <p className="mb-10  bg-indigo-800 text-center md:text-xl">
-              {process.show && parse(process.message)}
-            </p>
+            {process.show && process.message.includes("NFT") && (
+              <p className="mb-10 bg-indigo-800 p-5 text-center md:text-xl">
+                {parse(process.message)}
+              </p>
+            )}
             <p className="mb-10 text-center md:text-xl">
               現在繋がっている単語数：{nextTokenId > 0 ? nextTokenId - 1 : 0}
               単語

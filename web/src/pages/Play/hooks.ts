@@ -293,7 +293,7 @@ const useHandleAction = () => {
         currentWordNum: lastWordNum,
         tokenId: nextTokenId - 1,
       };
-      const response = await fetchWithTimeout(body, 20000);
+      const response = await fetchWithTimeout(body, 40000);
       console.log(response);
       if (!response.ok) {
         dispatch(setLoading(false));
