@@ -35,6 +35,7 @@ const Home = () => {
         );
 
         const tokenId = await shiritori.nextTokenId();
+        console.log(tokenId.toNumber());
         SetTokenId(tokenId.toNumber());
       }
     };
@@ -111,7 +112,7 @@ const Home = () => {
                     >
                       <img
                         src={`https://${
-                          process.env.BUCKET_NAME
+                          import.meta.env.VITE_BUCKET_NAME
                         }.s3.us-east-1.amazonaws.com/v2/images/${
                           index + 1
                         }.png`}
