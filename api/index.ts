@@ -92,8 +92,6 @@ const host = IS_GOOGLE_CLOUD_RUN ? "0.0.0.0" : "127.0.0.1";
 //@ts-ignore
 server.listen({ port: port, host: host }, (err, address) => {
   if (err) {
-    console.log("error!!!");
-    console.error(err);
     server.log.error(err);
     Sentry.captureException(err);
     process.exit(1);

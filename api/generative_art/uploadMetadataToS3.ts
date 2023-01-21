@@ -18,9 +18,9 @@ export const uploadMetadataToS3 = (
     region: "ap-northeast-1",
   });
   const data = {
-    name: "Shiritori Art App",
+    name: `Shiritori NFT #${id}`,
     description:
-      "Shiritori Art App is an application to play Shiritori using Japanese words on the blockchain. Generative art based on Shiritori words is generated and distributed as NFT.",
+      "Shiritori NFT is an application to play Shiritori using Japanese words on the blockchain. Generative art based on Shiritori words is generated and distributed as NFT.",
     image: `https://${process.env.BUCKET_NAME}.s3.us-east-1.amazonaws.com/v2/images/${id}.png`,
     word_number: currentWordNum,
     currentWord: currentWord,
