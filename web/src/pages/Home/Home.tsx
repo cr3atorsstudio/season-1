@@ -22,7 +22,7 @@ const Home = () => {
   const width = useWindowSize();
   const { ethereum } = window;
 
-  const [tokenId, SetTokenId] = useState();
+  const [tokenId, SetTokenId] = useState(16);
 
   useEffect(() => {
     const getToken = async () => {
@@ -52,7 +52,7 @@ const Home = () => {
         </div>
 
         <a
-          href="https://rarible.com/shiritorinft"
+          href="https://opensea.io/collection/shiritorinft-1"
           target="_blank"
           className="mb-20 font-poppins text-[30px] font-bold hover:underline md:text-[60px]"
         >
@@ -91,7 +91,7 @@ const Home = () => {
         </div>
         <div className="my-24 flex flex-col items-center justify-center  ">
           <a
-            href="https://rarible.com/shiritorinft"
+            href="https://opensea.io/collection/shiritorinft-1"
             target="_blank"
             className="text-center font-poppins text-[30px] font-bold text-white md:text-6xl"
           >
@@ -101,28 +101,41 @@ const Home = () => {
             これまでに繋がったShiritori NFT
           </p>
           {tokenId && (
-            <div className=" mt-10 flex flex-wrap justify-center md:w-3/4">
-              {[...Array(tokenId - 1)].map((_, index) => {
-                return (
-                  <ShiritoriNftContainer>
-                    <a
-                      target="_blank  "
-                      href={`https://rarible.com/token/polygon/${contractAddress}:${
-                        index + 1
-                      }`}
-                    >
-                      <img
-                        src={`https://${
-                          import.meta.env.VITE_BUCKET_NAME
-                        }.s3.us-east-1.amazonaws.com/v2/images/${
-                          index + 1
-                        }.png`}
-                        alt=""
-                      />
-                    </a>
-                  </ShiritoriNftContainer>
-                );
-              })}
+            <div className=" mt-10 w-[1000px] transform ">
+              <Swiper
+                autoplay={{
+                  delay: 0,
+                }}
+                speed={width < 1400 ? 2500 : 3000}
+                modules={[Autoplay]}
+                slidesPerView={6}
+                loop={true}
+                allowTouchMove={false}
+              >
+                {[...Array(tokenId - 1)].map((_, index) => {
+                  return (
+                    <SwiperSlide key={`shiritori_${index}`} className="m-2">
+                      <ShiritoriNftContainer>
+                        <a
+                          target="_blank  "
+                          href={`https://opensea.io/assets/matic/${contractAddress}/${
+                            index + 1
+                          }`}
+                        >
+                          <img
+                            src={`https://${
+                              import.meta.env.VITE_BUCKET_NAME
+                            }.s3.us-east-1.amazonaws.com/v2/images/${
+                              index + 1
+                            }.png`}
+                            alt=""
+                          />
+                        </a>
+                      </ShiritoriNftContainer>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
             </div>
           )}
         </div>
