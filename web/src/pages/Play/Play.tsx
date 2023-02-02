@@ -71,7 +71,7 @@ const Play = () => {
             )}
           </div>
           <a
-            href="https://rarible.com/shiritorinft"
+            href="https://opensea.io/collection/shiritorinft-1"
             target="_blank"
             className="my-10 underline"
           >
